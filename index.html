@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hệ thống Dữ liệu Kinh tế tỉnh Khánh Hòa</title>
+  
+  <!-- Modern Typography Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- External Stylesheets (Monochromatic Oceanic Azure Design System) -->
+  <link rel="stylesheet" href="css/main.css?v=2026082011">
+  <link rel="stylesheet" href="css/components.css?v=2026082011">
+  <link rel="stylesheet" href="css/dashboard.css?v=2026082011">
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- SIDEBAR NAVIGATION (DYNAMICALLY RENDERED PER DOMAIN / PORTAL) -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <div class="logo-badge">
+          <i data-lucide="database"></i>
+        </div>
+        <div class="logo-text">
+          <h2>Dữ liệu Kinh tế</h2>
+          <span>Tỉnh Khánh Hòa</span>
+        </div>
+      </div>
+
+      <!-- DYNAMIC NAVIGATION LINKS -->
+      <nav class="sidebar-nav" id="dynamicSidebarNav">
+        <!-- Rendered via dept_workspaces.js -->
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="system-status-card">
+          <div class="status-row">
+            <span><span class="pulse-dot" style="width:7px;height:7px;"></span> Luồng thời gian thực:</span>
+            <strong style="color: #15803d;">Trực tuyến 24/7</strong>
+          </div>
+          <div class="status-row" style="color: #64748b; font-size: 10.5px;">
+            <span>CSDL quốc gia Bộ Tài chính:</span>
+            <span style="color: #002B8C; font-weight: 600;">09 API đồng bộ</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT WRAPPER -->
+    <main class="app-main">
+      
+      <!-- TOPBAR WITH USER SWITCHER & REALTIME STATUS -->
+      <header class="app-topbar">
+        <div class="topbar-left">
+          <div class="page-title">
+            <h1>Hệ thống dữ liệu kinh tế tỉnh Khánh Hòa</h1>
+            <p>Phân hệ điều hành và giám sát chuyên sâu từng lĩnh vực kinh tế - tài chính</p>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <!-- Department / Portal Account Switcher -->
+          <div class="role-badge-container">
+            <i data-lucide="user-check" style="color: #002B8C; width: 16px; height: 16px;"></i>
+            <span class="role-select-label">Phân hệ:</span>
+            <select id="selectAppUserAccount" class="role-select">
+              <optgroup label="A. Khối điều hành và giám sát Sở Tài chính">
+                <option value="lanhdao">1. Ban Giám đốc Sở</option>
+                <option value="ktns">2. Phòng Kinh tế và ngân sách</option>
+                <option value="dtc">3. Phòng Quản lý đầu tư công</option>
+                <option value="dtns">4. Phòng Quản lý đầu tư ngoài ngân sách</option>
+                <option value="doanhnghiep">5. Phòng Quản lý doanh nghiệp</option>
+                <option value="giacongsan">6. Phòng Quản lý giá và công sản</option>
+                <option value="hcsn">7. Phòng Tài chính hành chính sự nghiệp</option>
+                <option value="phapche">8. Phòng Pháp chế</option>
+                <option value="admin">9. Quản trị hệ thống</option>
+              </optgroup>
+              <optgroup label="B. Cổng thông tin kê khai dữ liệu">
+                <option value="portal">10. Cổng kê khai báo cáo định kỳ</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <!-- User Profile Display -->
+          <div class="user-profile">
+            <div class="user-avatar" id="userAvatarDisplay">H</div>
+            <div class="user-info">
+              <span class="user-name" id="userNameDisplay">Nguyễn Đình Hùng</span>
+              <span class="user-dept" id="userDeptDisplay">Ban Giám đốc Sở</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- REAL-TIME TICKER CONTAINER INJECTED HERE -->
+      <div id="realtimeTickerContainer"></div>
+
+      <!-- DYNAMIC DEPARTMENT / PORTAL WORKSPACE CONTAINER -->
+      <div class="app-content" id="departmentWorkspaceContainer">
+        <!-- Rendered completely via dept_workspaces.js & external_portal.js -->
+      </div>
+    </main>
+  </div>
+
+  <!-- GENERIC MODAL FOR DOCUMENT VIEWER & PAYLOAD INSPECTION -->
+  <div class="modal-overlay" id="modalGeneric">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalGenericTitle"><i data-lucide="info"></i> Chi tiết</h3>
+        <button class="modal-close" onclick="App.closeModal('modalGeneric')">&times;</button>
+      </div>
+      <div class="modal-body" id="modalGenericBody">
+        <!-- Injected via JavaScript -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="App.closeModal('modalGeneric')">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- APP SCRIPTS (with Cache Buster) -->
+  <script src="js/data.js?v=2026082013"></script>
+  <script src="js/dept_configs.js?v=2026082013"></script>
+  <script src="js/charts.js?v=2026082013"></script>
+  <script src="js/api_gateway.js?v=2026082013"></script>
+  <script src="js/data_entry.js?v=2026082013"></script>
+  <script src="js/archive_viewer.js?v=2026082013"></script>
+  <script src="js/mdm_catalog.js?v=2026082013"></script>
+  <script src="js/survey_reporting.js?v=2026082013"></script>
+  <script src="js/advanced_visualization.js?v=2026082013"></script>
+  <script src="js/system_analytics.js?v=2026082013"></script>
+  <script src="js/external_portal.js?v=2026082013"></script>
+  <script src="js/realtime_engine.js?v=2026082013"></script>
+  <script src="js/dept_workspaces.js?v=2026082013"></script>
+  <script src="js/app.js?v=2026082013"></script>
+
+  <!-- Lucide Icons Rendering -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+      if (window.RealtimeEngine) {
+        RealtimeEngine.init();
+      }
+    });
+  </script>
+</body>
+</html>

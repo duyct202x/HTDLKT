@@ -1,0 +1,226 @@
+/* ==========================================================================
+   DASHBOARD CSS - MONOCHROMATIC OCEANIC AZURE (#002B8C)
+   Palette:
+   - Oceanic Azure: #002B8C
+   - Dusk Blue:     #3E5D8E
+   - Sapphire:      #0F52BA
+   - Azure:         #F0FFFF
+   - Indigo Blue:   #282888
+   ========================================================================== */
+
+/* 1. REAL-TIME LIVE TICKER BAR */
+.realtime-ticker-bar {
+  background: #ffffff;
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 8px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  box-shadow: 0 1px 3px rgba(0, 43, 140, 0.03);
+  z-index: 80;
+}
+
+.ticker-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--c-oceanic-azure);
+  white-space: nowrap;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+}
+
+.ticker-content {
+  flex: 1;
+  font-size: 12px;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ticker-actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn-ticker-toggle {
+  background: var(--c-azure);
+  color: var(--c-oceanic-azure);
+  border: 1px solid var(--c-dusk-blue);
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: var(--transition-fast);
+}
+
+.btn-ticker-toggle:hover {
+  background: var(--c-oceanic-azure);
+  color: #ffffff;
+  border-color: var(--c-oceanic-azure);
+}
+
+/* 2. REAL-TIME EVENT CARDS */
+.realtime-event-card {
+  background: #ffffff;
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  border: 1px solid var(--border-card);
+  border-left: 3px solid var(--c-oceanic-azure);
+  transition: var(--transition-fast);
+  box-shadow: var(--shadow-xs);
+}
+
+.realtime-event-card:hover {
+  background: var(--c-azure);
+  border-color: var(--c-sapphire);
+}
+
+.realtime-event-card.border-emerald { border-left-color: var(--success); }
+.realtime-event-card.border-cyan    { border-left-color: var(--c-sapphire); }
+.realtime-event-card.border-purple  { border-left-color: var(--c-indigo-blue); }
+.realtime-event-card.border-gold    { border-left-color: var(--warning); }
+.realtime-event-card.border-rose    { border-left-color: var(--danger); }
+
+/* 3. MAP CONTAINER - KHÁNH HÒA 9 ĐỊA BÀN */
+.khanhhoa-map-container {
+  min-height: 260px;
+  position: relative;
+  background: #f8fbfe;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-card);
+  overflow: hidden;
+}
+
+.map-svg-frame {
+  width: 100%;
+  height: 100%;
+  min-height: 250px;
+}
+
+.district-path {
+  fill: #e1ebf7;
+  stroke: var(--c-dusk-blue);
+  stroke-width: 1.2;
+  transition: var(--transition-fast);
+  cursor: pointer;
+}
+
+.district-path:hover {
+  fill: var(--c-azure);
+  stroke: var(--c-oceanic-azure);
+  stroke-width: 1.8;
+}
+
+.district-path.active {
+  fill: #bfdbfe;
+  stroke: var(--c-oceanic-azure);
+  stroke-width: 2;
+}
+
+.map-tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: var(--c-indigo-blue);
+  color: #ffffff;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(40, 40, 136, 0.3);
+  display: none;
+  z-index: 10;
+}
+
+/* 4. CHARTS WRAPPER */
+.chart-wrapper {
+  position: relative;
+  width: 100%;
+  height: 270px;
+}
+
+.chart-legend-custom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 10px;
+  justify-content: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: var(--c-dusk-blue);
+  font-weight: 500;
+}
+
+.legend-color-box {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+/* 5. SANKEY DIAGRAM NODES */
+.sankey-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px;
+  background: #f8fbfe;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-card);
+}
+
+.sankey-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.sankey-node {
+  background: #ffffff;
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  box-shadow: var(--shadow-xs);
+}
+
+.sankey-node-title {
+  font-size: 11px;
+  color: var(--c-dusk-blue);
+  font-weight: 600;
+}
+
+.sankey-node-value {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--c-oceanic-azure);
+  font-family: 'Outfit', sans-serif;
+}
+
+.sankey-connector {
+  color: var(--c-sapphire);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+}
