@@ -16,7 +16,7 @@ const RealtimeEngine = {
       timestamp: "13:25:40",
       source: "KHO BẠC NHÀ NƯỚC (TABMIS)",
       category: "GIẢI NGÂN ĐTC",
-      content: "Kho bạc thanh toán giải ngân 14.85 Tỷ VND cho Dự án Đường Vành Đai 2 TP. Nha Trang (Ban Quản lý dự án Giao thông).",
+      content: "Kho bạc thanh toán giải ngân 14.85 Tỷ VND cho Dự án Đường Vành đai 2 Nha Trang (Ban Quản lý dự án Giao thông).",
       amount: "+14.85 Tỷ",
       impact: "Tỷ lệ giải ngân ĐTC tỉnh tăng lên 68.51%",
       color: "emerald"
@@ -46,7 +46,7 @@ const RealtimeEngine = {
       timestamp: "13:20:18",
       source: "CỔNG BÁO CÁO Quyết định số 2071 (PORTAL)",
       category: "BÁO CÁO ĐỊNH KỲ",
-      content: "UBND Thị xã Ninh Hòa vừa nộp Báo cáo Bộ chỉ số chỉ đạo điều hành Quý III/2026 kèm chữ ký số.",
+      content: "UBND Phường Ninh Hòa vừa nộp Báo cáo Bộ chỉ số chỉ đạo điều hành Quý III/2026 kèm chữ ký số.",
       amount: "Chờ Duyệt",
       impact: "Tiến độ nộp báo cáo toàn tỉnh đạt 30/34 đơn vị (88.2%)",
       color: "gold"

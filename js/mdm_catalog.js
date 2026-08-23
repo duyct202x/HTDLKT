@@ -44,7 +44,7 @@ const MdmCatalogManager = {
       recordsCount: "42.350",
       frequency: "Hằng tháng",
       ddmMasked: "CCCD, Tên chủ hộ (Masked)",
-      description: "Danh bạ hộ kinh doanh cá thể phân rã theo 8 đơn vị hành chính cấp huyện trên toàn tỉnh.",
+      description: "Danh bạ hộ kinh doanh cá thể phân rã theo 65 đơn vị hành chính cấp xã, phường, đặc khu trên toàn tỉnh.",
       schema: [
         { col: "MA_HO_KINH_DOANH", type: "VARCHAR(30)", pk: true, fk: false, masked: false, desc: "Mã số thuế hộ kinh doanh" },
         { col: "TEN_HO_KINH_DOANH", type: "NVARCHAR(300)", pk: false, fk: false, masked: false, desc: "Tên cơ sở / cửa hàng kinh doanh" },
@@ -118,7 +118,7 @@ const MdmCatalogManager = {
         { col: "TONG_MUC_DAU_TU", type: "DECIMAL(18,2)", pk: false, fk: false, masked: false, desc: "Tổng mức đầu tư được duyệt (VNĐ)" }
       ],
       sampleRows: [
-        { c1: "DA-79-001", c2: "Đường Vành đai 2 TP. Nha Trang", c3: "Ban QLDA Giao thông Khánh Hòa", c4: "Nhóm A", c5: "---", c6: "1.450.000.000.000 đ", c7: "Tiến độ 78.5%" },
+        { c1: "DA-79-001", c2: "Đường Vành đai 2 Nha Trang", c3: "Ban QLDA Giao thông Khánh Hòa", c4: "Nhóm A", c5: "---", c6: "1.450.000.000.000 đ", c7: "Tiến độ 78.5%" },
         { c1: "DA-79-002", c2: "Kè & Nạo vét khơi thông luồng Sông Tắc - Sông Quán Trường", c3: "Ban QLDA Nông nghiệp & PTNT", c4: "Nhóm B", c5: "---", c6: "820.000.000.000 đ", c7: "Tiến độ 92.0%" }
       ]
     },
@@ -221,8 +221,8 @@ const MdmCatalogManager = {
         { col: "PHUONG_AN_SAP_XEP", type: "VARCHAR(100)", pk: false, fk: false, masked: false, desc: "Giữ lại tiếp tục sử dụng / Bán đấu giá / Điều chuyển" }
       ],
       sampleRows: [
-        { c1: "CSND-NTR-001", c2: "Số 26 đường Trần Phú, TP. Nha Trang", c3: "Khuôn viên 4.250 m²", c4: "Sở Giáo dục và Đào tạo", c5: "---", c6: "Giữ lại sử dụng", c7: "Đã duyệt PA" },
-        { c1: "CSND-CR-002", c2: "Số 18 đường Hùng Vương, TP. Cam Ranh", c3: "Khuôn viên 1.800 m²", c4: "Trung tâm Dạy nghề Cam Ranh cũ", c5: "---", c6: "Bán đấu giá tài sản", c7: "Chờ phê duyệt" }
+        { c1: "CSND-NTR-001", c2: "Số 26 đường Trần Phú, Phường Nha Trang", c3: "Khuôn viên 4.250 m²", c4: "Sở Giáo dục và Đào tạo", c5: "---", c6: "Giữ lại sử dụng", c7: "Đã duyệt PA" },
+        { c1: "CSND-CR-002", c2: "Số 18 đường Hùng Vương, Phường Cam Ranh", c3: "Khuôn viên 1.800 m²", c4: "Trung tâm Dạy nghề Cam Ranh cũ", c5: "---", c6: "Bán đấu giá tài sản", c7: "Chờ phê duyệt" }
       ]
     },
     {
@@ -360,21 +360,21 @@ const MdmCatalogManager = {
     },
     {
       code: "MD.DANH_MUC_DIA_BAN_HANH_CHINH",
-      name: "Danh mục Địa bàn Hành chính (Tỉnh, Huyện, Xã)",
+      name: "Danh mục Địa bàn Hành chính (Tỉnh, Xã/Phường/Đặc khu)",
       group: "5. Danh mục Chuẩn hóa & Kho bạc",
-      provider: "Tổng cục Thống kê (Mã định danh địa bàn)",
-      recordsCount: "142",
-      frequency: "Chuẩn quốc gia",
+      provider: "Sở Nội vụ tỉnh Khánh Hòa & Tổng cục Thống kê",
+      recordsCount: "66",
+      frequency: "NQ 1667/NQ-UBTVQH15",
       ddmMasked: "Không",
-      description: "8 đơn vị hành chính cấp huyện và 139 xã, phường, thị trấn trực thuộc tỉnh Khánh Hòa.",
+      description: "65 đơn vị hành chính cấp xã (48 xã, 16 phường, 01 đặc khu) trực thuộc tỉnh Khánh Hòa theo Nghị quyết số 1667/NQ-UBTVQH15.",
       schema: [
-        { col: "MA_DIA_BAN", type: "VARCHAR(20)", pk: true, fk: false, masked: false, desc: "Mã địa bàn hành chính (Mã 79...)" },
+        { col: "MA_DIA_BAN", type: "VARCHAR(20)", pk: true, fk: false, masked: false, desc: "Mã địa bàn hành chính chuẩn hóa" },
         { col: "TEN_DIA_BAN", type: "NVARCHAR(255)", pk: false, fk: false, masked: false, desc: "Tên đơn vị hành chính" },
-        { col: "CAP_HANH_CHINH", type: "VARCHAR(20)", pk: false, fk: false, masked: false, desc: "Tỉnh / Huyện, TX, TP / Xã, Phường" }
+        { col: "CAP_HANH_CHINH", type: "VARCHAR(20)", pk: false, fk: false, masked: false, desc: "Cấp Tỉnh / Cấp Xã, Phường, Đặc khu (Chính quyền 2 cấp)" }
       ],
       sampleRows: [
         { c1: "79", c2: "Tỉnh Khánh Hòa", c3: "Cấp Tỉnh", c4: "Trung ương", c5: "---", c6: "Mã Vùng 79", c7: "Chuẩn TCTK" },
-        { c1: "7901", c2: "Thành phố Nha Trang", c3: "Cấp Huyện / Đô thị loại I", c4: "Tỉnh Khánh Hòa", c5: "---", c6: "27 Xã/Phường", c7: "Chuẩn TCTK" }
+        { c1: "KH65_49", c2: "Phường Nha Trang", c3: "Cấp Xã (Phường)", c4: "Tỉnh Khánh Hòa", c5: "---", c6: "STT 49 / 65 Đơn vị", c7: "NQ 1667" }
       ]
     },
     {
@@ -437,7 +437,7 @@ const MdmCatalogManager = {
       recordsCount: "42",
       frequency: "Chuẩn quốc gia",
       ddmMasked: "Không",
-      description: "Vốn ngân sách trung ương, Vốn ngân sách cấp tỉnh, Vốn ngân sách huyện, Vốn ODA, Vốn vay lại...",
+      description: "Vốn ngân sách trung ương, Vốn ngân sách cấp tỉnh, Vốn ngân sách cấp xã/phường/đặc khu, Vốn ODA, Vốn vay lại...",
       schema: [
         { col: "MA_NGUON_VON", type: "VARCHAR(20)", pk: true, fk: false, masked: false, desc: "Mã nguồn vốn" },
         { col: "TEN_NGUON_VON", type: "NVARCHAR(300)", pk: false, fk: false, masked: false, desc: "Tên nguồn vốn đầu tư" }
@@ -474,7 +474,7 @@ const MdmCatalogManager = {
       recordsCount: "18",
       frequency: "Khi cấp API Key mới",
       ddmMasked: "API Key (Masked)",
-      description: "Danh bạ các sở, ban, ngành, Trung tâm IOC tỉnh, UBND các huyện được cấp quyền truy xuất API DaaS.",
+      description: "Danh bạ các sở, ban, ngành, Trung tâm IOC tỉnh, UBND các xã, phường, đặc khu được cấp quyền truy xuất API DaaS.",
       schema: [
         { col: "MA_DOI_TAC", type: "VARCHAR(30)", pk: true, fk: false, masked: false, desc: "Mã đối tác sử dụng DaaS" },
         { col: "TEN_CO_QUAN", type: "NVARCHAR(500)", pk: false, fk: false, masked: false, desc: "Tên cơ quan, đơn vị khai thác" }
@@ -836,7 +836,7 @@ const MdmCatalogManager = {
       { code: 'TERM-NSNN-01', term: 'Dự toán Thu NSNN', standard: 'QĐ 1323/QĐ-BTC', privacy: 'Public', desc: 'Dự toán thu ngân sách nhà nước được cấp có thẩm quyền giao đầu năm hoặc điều chỉnh trong năm.' },
       { code: 'TERM-DTC-04', term: 'Tổng mức Đầu tư được duyệt', standard: 'Luật Đầu tư công', privacy: 'Public', desc: 'Toàn bộ chi phí đầu tư xây dựng của dự án được xác định trong Quyết định phê duyệt dự án.' },
       { code: 'TERM-DN-12', term: 'Số Định danh Cá nhân / CCCD Đại diện', standard: 'NĐ 356/2025/NĐ-CP', privacy: 'Sensitive (DDM Masked)', desc: 'Mã định danh cá nhân 12 số của người đại diện pháp luật, bắt buộc che mờ khi xuất ra bên ngoài.' },
-      { code: 'TERM-HKD-01', term: 'Mã định danh Hộ kinh doanh', standard: 'Nghị định 01/2021/NĐ-CP', privacy: 'Sensitive (DDM Masked)', desc: 'Mã số thuế 10-13 số của hộ kinh doanh cá thể liên thông giữa cơ quan ĐKKD cấp huyện và Thuế.' },
+      { code: 'TERM-HKD-01', term: 'Mã định danh Hộ kinh doanh', standard: 'Nghị định 01/2021/NĐ-CP', privacy: 'Sensitive (DDM Masked)', desc: 'Mã số thuế 10-13 số của hộ kinh doanh cá thể liên thông giữa cơ quan ĐKKD cấp cơ sở và Thuế.' },
       { code: 'TERM-HTX-02', term: 'Hợp tác xã theo Luật HTX 2023', standard: 'Luật HTX 2023', privacy: 'Public', desc: 'Tổ chức kinh tế tập thể, đồng sở hữu, có tư cách pháp nhân, do ít nhất 5 thành viên tự nguyện thành lập.' },
       { code: 'TERM-QHG-01', term: 'CSDL Quốc gia về Quy hoạch', standard: 'Luật Quy hoạch 2017 & QĐ 318/QĐ-TTg', privacy: 'Public', desc: 'Hệ thống thông tin và CSDL quốc gia về quy hoạch do Bộ KH&ĐT quản lý, lưu trữ quy hoạch tỉnh Khánh Hòa.' },
       { code: 'TERM-TT-08', term: 'Số tiền Nợ Thuế & Sai phạm Thanh tra', standard: 'Luật Thanh tra & QL Thuế', privacy: 'Confidential (AES-256)', desc: 'Số tiền nợ thuế chi tiết và tiền sai phạm chưa thu hồi, mã hóa cột ở mức CSDL.' }

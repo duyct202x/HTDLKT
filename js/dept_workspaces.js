@@ -2213,10 +2213,11 @@ const DeptWorkspaceManager = {
               <div>
                 <label style="font-size: 11.5px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Địa bàn trọng điểm ưu tiên:</label>
                 <select class="form-control" style="width: 100%;">
-                  <option selected>Toàn tỉnh Khánh Hòa (Tổng hợp 8 địa bàn)</option>
-                  <option>Thành phố Nha Trang (Đô thị trung tâm)</option>
-                  <option>Khu kinh tế Vân Phong (Trọng điểm Nghị quyết 55)</option>
-                  <option>Thành phố Cam Ranh & Huyện Cam Lâm</option>
+                  <option selected>Toàn tỉnh Khánh Hòa (Tổng hợp 65 xã, phường, đặc khu)</option>
+                  <option>Khu vực Đô thị Trung tâm (16 Phường Đô thị)</option>
+                  <option>Khu kinh tế Vân Phong (Xã Vạn Ninh, Vạn Hưng, Đại Lãnh)</option>
+                  <option>Khu vực Động lực Phía Nam (Phường Cam Ranh, Cam Linh, Ba Ngòi & Xã Cam Lâm)</option>
+                  <option>Đặc khu Biển đảo (Đặc khu Trường Sa)</option>
                 </select>
               </div>
 

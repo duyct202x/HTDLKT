@@ -122,7 +122,7 @@ const DataEntryManager = {
           <div class="card-header">
             <div>
               <h3 class="card-title"><i data-lucide="file-text"></i> Cập nhật Báo cáo Phân tích Thu nộp & Nợ thuế Địa bàn</h3>
-              <p class="card-subtitle">Đối soát số liệu thu nộp thuế, phân tích số nợ thuế khó thu và khả năng thu hồi theo địa bàn cấp huyện</p>
+              <p class="card-subtitle">Đối soát số liệu thu nộp thuế, phân tích số nợ thuế khó thu và khả năng thu hồi theo 65 xã, phường, đặc khu</p>
             </div>
             <button class="btn btn-soft-primary btn-sm" onclick="DataEntryManager.downloadTemplate('Mau_BaoCao_ThuNoThue.xlsx')">
               <i data-lucide="download"></i> Tải mẫu Excel (.xlsx)
@@ -341,7 +341,7 @@ const DataEntryManager = {
                   <option value="QUY_HOACH_DO_THI">Quy hoạch chung đô thị (Nha Trang, Cam Lâm, Ninh Hòa)</option>
                   <option value="QUY_HOACH_PHAN_KHU">Quy hoạch phân khu chức năng (KKT Vân Phong, KCN)</option>
                   <option value="QUY_HOACH_NGANH">Quy hoạch ngành / lĩnh vực hạ tầng giao thông, thủy lợi</option>
-                  <option value="QUY_HOACH_DAT_DAI">Quy hoạch sử dụng đất cấp huyện</option>
+                  <option value="QUY_HOACH_DAT_DAI">Quy hoạch sử dụng đất cấp cơ sở (65 xã/phường/đặc khu)</option>
                 </select>
               </div>
               <div class="form-group">
@@ -611,7 +611,7 @@ const DataEntryManager = {
               </div>
               <div class="form-group full-width">
                 <label class="form-label">Địa bàn khảo sát & Doanh nghiệp cung ứng báo giá</label>
-                <textarea class="form-control" name="ghi_chu_gia" placeholder="Khảo sát tại 5 đại lý lớn khu vực TP. Nha Trang và Diên Khánh..."></textarea>
+                <textarea class="form-control" name="ghi_chu_gia" placeholder="Khảo sát tại 5 đại lý lớn khu vực Phường Nha Trang và Xã Diên Khánh..."></textarea>
               </div>
             </div>
             <div class="form-actions">
@@ -972,7 +972,7 @@ const DataEntryManager = {
               </div>
               <div class="form-group full-width">
                 <label class="form-label">Tóm tắt nội dung đơn thư & Kết quả xác minh trả lời</label>
-                <textarea class="form-control" name="noi_dung_don" placeholder="Nội dung khiếu nại về phương án bồi thường tài sản trên đất dự án... Sở Tài chính đã phối hợp UBND TP. Nha Trang xác minh..."></textarea>
+                <textarea class="form-control" name="noi_dung_don" placeholder="Nội dung khiếu nại về phương án bồi thường tài sản trên đất dự án... Sở Tài chính đã phối hợp UBND Phường Nha Trang xác minh..."></textarea>
               </div>
             </div>
             <div class="form-actions">

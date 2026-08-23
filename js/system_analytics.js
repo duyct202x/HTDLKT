@@ -92,9 +92,9 @@ const SystemAnalyticsManager = {
     },
     {
       partnerId: "PARTNER-UBND-NTR",
-      name: "UBND thành phố Nha Trang",
+      name: "UBND Phường Nha Trang",
       apiScope: "API-04 (Thu ngân sách địa bàn), API-05 (Bảng giá đất)",
-      apiKey: "ubnd_nhatrang_api_7718290",
+      apiKey: "ubnd_phuong_nhatrang_api_7718290",
       rateLimit: "500 req/phút",
       status: "ACTIVE",
       totalCalls: "64.120",

@@ -659,3 +659,151 @@
   100% { width: 50px; height: 50px; opacity: 0; }
 }
 
+/* ==========================================================================
+   EXECUTIVE GIS POINT MARKERS & ANNOTATION BADGES (CHUẨN ĐÁNH DẤU ĐIỂM & CHÚ THÍCH)
+   ========================================================================== */
+.gis-marker-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.gis-marker-container:hover {
+  transform: scale(1.18);
+  z-index: 1000 !important;
+}
+
+/* 1. Point Node Circle */
+.gis-point-node {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #002B8C;
+  box-shadow: 0 2px 8px rgba(0, 43, 140, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: #002B8C;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.gis-point-node.phuong {
+  background: #002B8C;
+  color: #ffffff;
+  border-color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 43, 140, 0.55);
+}
+
+.gis-point-node.xa {
+  background: #ffffff;
+  color: #15803d;
+  border-color: #15803d;
+  box-shadow: 0 2px 6px rgba(21, 128, 61, 0.35);
+}
+
+.gis-point-node.dackhu {
+  background: #0F52BA;
+  color: #ffffff;
+  border-color: #ffffff;
+  width: 24px;
+  height: 24px;
+  font-size: 12px;
+  box-shadow: 0 0 12px rgba(15, 82, 186, 0.7);
+}
+
+/* 2. Annotation Callout Pill (Nhãn Chú thích) */
+.gis-annotation-pill {
+  position: absolute;
+  left: 26px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(6px);
+  padding: 2px 8px;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.12);
+  white-space: nowrap;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: #1e293b;
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+
+.gis-annotation-pill.phuong {
+  border-color: #93c5fd;
+  color: #002B8C;
+  font-weight: 800;
+  background: rgba(239, 246, 255, 0.96);
+}
+
+.gis-annotation-pill.xa {
+  border-color: #bbf7d0;
+  color: #166534;
+}
+
+.gis-annotation-pill.dackhu {
+  border-color: #bfdbfe;
+  color: #0F52BA;
+  font-weight: 800;
+  background: rgba(239, 246, 255, 0.98);
+}
+
+.gis-annotation-pill .pill-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: #f1f5f9;
+  color: #475569;
+}
+
+/* 3. Active Point Marker Halo (Vòng tròn sáng khi được chọn) */
+.gis-active-halo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2.5px solid #f59e0b;
+  background: rgba(245, 158, 11, 0.22);
+  animation: activeHaloPulse 1.8s infinite ease-out;
+  pointer-events: none;
+}
+
+@keyframes activeHaloPulse {
+  0% { transform: translate(-50%, -50%) scale(0.85); opacity: 1; }
+  50% { transform: translate(-50%, -50%) scale(1.45); opacity: 0.45; }
+  100% { transform: translate(-50%, -50%) scale(1.75); opacity: 0; }
+}
+
+/* 4. Tooltip card styling */
+.leaflet-tooltip.executive-map-tooltip {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(8px);
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  padding: 10px 12px;
+  box-shadow: 0 8px 24px rgba(0, 43, 140, 0.16);
+  color: #1e293b;
+}
+
+.leaflet-tooltip-left:before, .leaflet-tooltip-right:before, .leaflet-tooltip-top:before, .leaflet-tooltip-bottom:before {
+  border-top-color: #bfdbfe !important;
+}
+
+

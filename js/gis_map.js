@@ -1,13 +1,13 @@
 /**
  * HỆ THỐNG DỮ LIỆU KINH TẾ TỈNH KHÁNH HÒA
  * ĐỘNG CƠ BẢN ĐỒ GIS THỰC TẾ (REAL-WORLD GIS LEAFLET ENGINE)
- * Quản lý 65 Đơn vị hành chính cấp Xã/Phường/Đặc khu theo chuẩn Sở Nội vụ tỉnh Khánh Hòa
- * (Chính quyền địa phương 2 cấp: Tỉnh và Xã/Phường/Đặc khu - Không còn cấp Thành phố/Thị xã/Huyện)
+ * Quản lý 65 Đơn vị hành chính cấp Xã/Phường/Đặc khu theo chuẩn Sở Nội vụ tỉnh Khánh Hòa & NQ 1667/NQ-UBTVQH15
+ * (Chính quyền địa phương 2 cấp: Tỉnh và Xã/Phường/Đặc khu - Sử dụng Đánh dấu Điểm & Chú thích trực quan)
  */
 
 window.GisMapManager = {
   maps: {},
-  geoLayers: {},
+  markerLayers: {},
   currentLayers: {},
   selectedDistricts: {},
   activeFilter: 'all', // 'all' | 'phuong' | 'xa' | 'dackhu'
@@ -29,17 +29,21 @@ window.GisMapManager = {
 
     const layerType = options.initialLayer || 'revenue';
     this.currentLayers[containerId] = layerType;
-    this.selectedDistricts[containerId] = 'KH65_49'; // Default: Phường Nha Trang
+    this.selectedDistricts[containerId] = 'KH65_49'; // Mặc định: Phường Nha Trang
 
     // Tạo cấu trúc khung bản đồ Leaflet
     container.innerHTML = `
       <div id="${containerId}_leaflet" style="width: 100%; height: 100%; min-height: 390px; position: relative; border-radius: var(--radius-md); overflow: hidden; background: #e2e8f0;"></div>
       
       <!-- Top Left Layer Badge -->
-      <div id="${containerId}_badge" style="position: absolute; top: 12px; left: 12px; z-index: 1000; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); padding: 8px 14px; border-radius: 8px; border: 1px solid #bfdbfe; box-shadow: 0 4px 12px rgba(0, 43, 140, 0.12); pointer-events: none;">
-        <div style="font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase;">Bản đồ GIS 65 Đơn Vị Cấp Xã/Phường:</div>
-        <div id="${containerId}_layerTitle" style="font-size: 12.5px; font-weight: 800; color: #002B8C;">Thu ngân sách nhà nước theo xã, phường, đặc khu</div>
+      <div id="${containerId}_badge" style="position: absolute; top: 12px; left: 12px; z-index: 1000; background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(8px); padding: 8px 14px; border-radius: 8px; border: 1px solid #bfdbfe; box-shadow: 0 4px 12px rgba(0, 43, 140, 0.12); pointer-events: none;">
+        <div style="font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase; display: flex; align-items: center; gap: 6px;">
+          <span>65 Đơn Vị Cấp Xã (48 Xã, 16 Phường, 01 Đặc khu)</span>
+          <span style="background: #eff6ff; color: #1d4ed8; font-size: 9px; padding: 1px 5px; border-radius: 4px; border: 1px solid #bfdbfe;">NQ 1667/NQ-UBTVQH15</span>
+        </div>
+        <div id="${containerId}_layerTitle" style="font-size: 12.5px; font-weight: 800; color: #002B8C; margin-top: 2px;">Thu ngân sách nhà nước theo xã, phường, đặc khu</div>
         <div id="${containerId}_layerLead" style="font-size: 11px; color: #15803d; font-weight: 700; margin-top: 2px;">Điểm dẫn đầu: 3.850 Tỷ (Phường Nha Trang) & 1.650 Tỷ (Phường Phan Rang)</div>
+        <div style="font-size: 10px; color: #64748b; margin-top: 2px; font-weight: 500;">Diện tích: <strong>8.555,86 km²</strong> • Dân số: <strong>2.243.554 người</strong> • Đánh dấu điểm & Chú thích</div>
       </div>
 
       <!-- Floating Controls & Category Filter -->
@@ -69,7 +73,7 @@ window.GisMapManager = {
     const mapElement = document.getElementById(`${containerId}_leaflet`);
     if (!mapElement) return false;
 
-    // Tọa độ trung tâm tỉnh Khánh Hòa mới (bao trùm toàn bộ 65 xã/phường từ Bắc đến Nam)
+    // Tọa độ trung tâm tỉnh Khánh Hòa (bao trùm toàn bộ 65 xã/phường từ Bắc đến Nam)
     const defaultCenter = [11.95, 109.00];
     const defaultZoom = options.zoom || 8.5;
 
@@ -94,10 +98,9 @@ window.GisMapManager = {
 
     this.maps[containerId] = map;
 
-    // Render ranh giới thực tế từ GeoJSON
+    // Render các điểm đánh dấu và chú thích
     this.renderChoropleth(containerId, layerType);
 
-    // Resize invalidate
     setTimeout(() => {
       map.invalidateSize();
     }, 150);
@@ -105,7 +108,7 @@ window.GisMapManager = {
     return true;
   },
 
-  // 2. Render các lớp chuyên đề địa lý thực tế (Choropleth GeoJSON) cho 65 xã/phường/đặc khu
+  // 2. Render Đánh dấu điểm (Point Markers) và Chú thích (Annotations) cho 65 xã/phường/đặc khu
   renderChoropleth(containerId, layerType = 'revenue') {
     const map = this.maps[containerId];
     if (!map) return;
@@ -131,9 +134,9 @@ window.GisMapManager = {
       }
     }
 
-    // Xóa layer cũ nếu có
-    if (this.geoLayers[containerId]) {
-      map.removeLayer(this.geoLayers[containerId]);
+    // Xóa marker layer cũ nếu có
+    if (this.markerLayers[containerId]) {
+      map.removeLayer(this.markerLayers[containerId]);
     }
 
     const geoData = window.khanhHoa65UnitsGeoJson || window.khanhHoaRealGeoJson;
@@ -144,110 +147,164 @@ window.GisMapManager = {
 
     const self = this;
     const selectedId = this.selectedDistricts[containerId] || 'KH65_49';
+    const markerGroup = L.featureGroup();
 
-    const geoLayer = L.geoJSON(geoData, {
-      filter: (feature) => {
-        if (self.activeFilter === 'all') return true;
-        if (self.activeFilter === 'phuong') return feature.properties.type === 'Phường';
-        if (self.activeFilter === 'xa') return feature.properties.type === 'Xã';
-        if (self.activeFilter === 'dackhu') return feature.properties.type === 'Đặc khu';
-        return true;
-      },
-      style: (feature) => {
-        const props = feature.properties;
-        const isSelected = props.id === selectedId;
-        const color = self.getDistrictColor(props, layerType);
+    geoData.features.forEach((feat) => {
+      const p = feat.properties;
+      if (!p || !p.center) return;
 
-        return {
-          fillColor: color,
-          weight: isSelected ? 3.5 : (props.type === 'Phường' ? 2.0 : 1.2),
-          opacity: 1,
-          color: isSelected ? '#002B8C' : '#ffffff',
-          dashArray: isSelected ? '' : (props.type === 'Phường' ? '' : '2'),
-          fillOpacity: isSelected ? 0.90 : 0.68
-        };
-      },
-      onEachFeature: (feature, layer) => {
-        const p = feature.properties;
+      // Áp dụng bộ lọc
+      if (self.activeFilter === 'phuong' && p.type !== 'Phường') return;
+      if (self.activeFilter === 'xa' && p.type !== 'Xã') return;
+      if (self.activeFilter === 'dackhu' && p.type !== 'Đặc khu') return;
 
-        // Tooltip hiển thị chỉ tiêu kinh tế chi tiết
-        const tooltipHtml = `
-          <div style="font-family: 'Be Vietnam Pro', sans-serif; min-width: 220px; padding: 4px;">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;">
-              <span style="font-size: 13px; font-weight: 800; color: #002B8C;">${p.name}</span>
-              <span style="font-size: 9.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: ${p.type === 'Phường' ? '#eff6ff' : '#f0fdf4'}; color: ${p.type === 'Phường' ? '#1d4ed8' : '#15803d'}; border: 1px solid currentColor;">STT ${p.stt}: ${p.type}</span>
-            </div>
-            <div style="font-size: 10.5px; color: #64748b; margin-bottom: 6px;">Đơn vị hành chính cấp cơ sở trực thuộc tỉnh Khánh Hòa</div>
-            <div style="font-size: 11.5px; border-top: 1px solid #f1f5f9; padding-top: 5px; display: flex; flex-direction: column; gap: 3px;">
-              <div><span style="color: #64748b;">Thu NSNN:</span> <strong style="color: #002B8C;">${p.revenue.toLocaleString('vi-VN')} Tỷ (${p.revenue_rate})</strong></div>
-              <div><span style="color: #64748b;">Chi ngân sách:</span> <strong style="color: #475569;">${p.exp.toLocaleString('vi-VN')} Tỷ</strong></div>
-              <div><span style="color: #64748b;">Giải ngân ĐTC:</span> <strong style="color: #15803d;">${p.dtc_rate}% (${p.dtc_amount})</strong></div>
-              <div><span style="color: #64748b;">DN & Hộ kinh doanh:</span> <strong style="color: #7e22ce;">${p.enterprises.toLocaleString('vi-VN')} đơn vị</strong></div>
-              <div><span style="color: #64748b;">Hệ số điều chỉnh K:</span> <strong style="color: #b45309;">K = ${p.land_k}</strong></div>
-            </div>
-            <div style="font-size: 10px; color: #0284c7; margin-top: 6px; font-weight: 700;">👉 Nhấp chuột để ghim số liệu chi tiết</div>
+      const isSelected = p.id === selectedId;
+      const metricColor = self.getDistrictColor(p, layerType);
+
+      // Giá trị hiển thị trên nhãn chú thích
+      let metricBadgeText = '';
+      if (layerType === 'investment') {
+        metricBadgeText = `${p.dtc_rate}%`;
+      } else if (layerType === 'enterprises') {
+        metricBadgeText = `${p.enterprises} DN`;
+      } else if (layerType === 'land_price') {
+        metricBadgeText = `K=${p.land_k}`;
+      } else {
+        metricBadgeText = `${p.revenue.toLocaleString('vi-VN')} Tỷ`;
+      }
+
+      // Icon loại hình
+      const typeClass = p.type === 'Phường' ? 'phuong' : p.type === 'Đặc khu' ? 'dackhu' : 'xa';
+      const iconSymbol = p.type === 'Phường' ? '🏛️' : p.type === 'Đặc khu' ? '⚓' : '📍';
+
+      // 1. Concentric Data Heat Circle
+      const bubbleRadius = self.getBubbleRadius(p, layerType);
+      const circleMarker = L.circleMarker(p.center, {
+        radius: bubbleRadius,
+        fillColor: metricColor,
+        color: isSelected ? '#f59e0b' : '#ffffff',
+        weight: isSelected ? 3.5 : 2,
+        opacity: 1,
+        fillOpacity: isSelected ? 0.88 : 0.65
+      });
+
+      // 2. Custom Point Marker & Annotation Pill Badge
+      const isImportantLabel = p.type === 'Phường' || p.type === 'Đặc khu' || isSelected || [7, 12, 18, 34].includes(p.stt);
+      const markerHtml = `
+        <div class="gis-marker-container">
+          ${isSelected ? '<div class="gis-active-halo"></div>' : ''}
+          <div class="gis-point-node ${typeClass}" title="${p.name}">
+            <span>${iconSymbol}</span>
           </div>
-        `;
+          ${isImportantLabel ? `
+            <div class="gis-annotation-pill ${typeClass}">
+              <span class="pill-name">${p.name}</span>
+              <span class="pill-val">${metricBadgeText}</span>
+            </div>
+          ` : ''}
+        </div>
+      `;
 
-        layer.bindTooltip(tooltipHtml, {
-          sticky: true,
-          direction: 'auto',
-          className: 'executive-map-tooltip'
-        });
+      const customIcon = L.divIcon({
+        className: 'gis-custom-div-icon',
+        html: markerHtml,
+        iconSize: [24, 24],
+        iconAnchor: [12, 12]
+      });
 
-        // Nhãn Marker cho các Phường trọng điểm & Đặc khu
-        if (p.center && (p.type === 'Phường' || p.code === 'DK_TS' || ['X_CNA', 'X_DL', 'X_CL', 'X_DK'].includes(p.code))) {
-          const pillIcon = L.divIcon({
-            className: 'district-pill-icon',
-            html: `<div style="background: rgba(255,255,255,0.92); border: 1px solid ${p.type === 'Phường' ? '#002B8C' : '#15803d'}; padding: 1px 6px; border-radius: 10px; font-size: 9.5px; font-weight: 800; color: ${p.type === 'Phường' ? '#002B8C' : '#15803d'}; white-space: nowrap; box-shadow: 0 2px 5px rgba(0,0,0,0.12); pointer-events: none;">${p.name}</div>`,
-            iconSize: [80, 18],
-            iconAnchor: [40, 9]
-          });
-          L.marker(p.center, { icon: pillIcon, interactive: false }).addTo(map);
+      const pointMarker = L.marker(p.center, { icon: customIcon });
+
+      // Tooltip thông tin chi tiết địa bàn
+      const tooltipHtml = `
+        <div style="font-family: 'Be Vietnam Pro', sans-serif; min-width: 240px; padding: 2px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+            <span style="font-size: 13.5px; font-weight: 800; color: #002B8C;">${p.name}</span>
+            <span style="font-size: 9.5px; font-weight: 700; padding: 2px 7px; border-radius: 4px; background: ${p.type === 'Phường' ? '#eff6ff' : p.type === 'Đặc khu' ? '#f0fdf4' : '#f8fafc'}; color: ${p.type === 'Phường' ? '#1d4ed8' : p.type === 'Đặc khu' ? '#0F52BA' : '#15803d'}; border: 1px solid currentColor;">${p.type}</span>
+          </div>
+          <div style="font-size: 10.5px; color: #64748b; margin-bottom: 6px; border-bottom: 1px solid #f1f5f9; padding-bottom: 4px;">
+            Đơn vị hành chính cấp cơ sở (NQ 1667/NQ-UBTVQH15)
+          </div>
+          <div style="font-size: 11.5px; display: flex; flex-direction: column; gap: 3.5px;">
+            <div><span style="color: #64748b;">Thu NSNN:</span> <strong style="color: #002B8C;">${p.revenue.toLocaleString('vi-VN')} Tỷ (${p.revenue_rate})</strong></div>
+            <div><span style="color: #64748b;">Chi ngân sách:</span> <strong style="color: #475569;">${p.exp.toLocaleString('vi-VN')} Tỷ</strong></div>
+            <div><span style="color: #64748b;">Giải ngân ĐTC:</span> <strong style="color: #15803d;">${p.dtc_rate}% (${p.dtc_amount})</strong></div>
+            <div><span style="color: #64748b;">DN & Hộ kinh doanh:</span> <strong style="color: #7e22ce;">${p.enterprises.toLocaleString('vi-VN')} đơn vị</strong></div>
+            <div><span style="color: #64748b;">Hệ số điều chỉnh K:</span> <strong style="color: #b45309;">K = ${p.land_k}</strong></div>
+          </div>
+          <div style="font-size: 10px; color: #0284c7; margin-top: 6px; font-weight: 700; border-top: 1px solid #f1f5f9; padding-top: 4px;">
+            👉 Bấm để chọn và ghim dữ liệu địa bàn
+          </div>
+        </div>
+      `;
+
+      pointMarker.bindTooltip(tooltipHtml, {
+        sticky: true,
+        direction: 'auto',
+        className: 'executive-map-tooltip'
+      });
+
+      circleMarker.bindTooltip(tooltipHtml, {
+        sticky: true,
+        direction: 'auto',
+        className: 'executive-map-tooltip'
+      });
+
+      // Sự kiện nhấp chuột chọn đơn vị
+      const onSelect = () => {
+        self.selectedDistricts[containerId] = p.id;
+        self.renderChoropleth(containerId, layerType);
+
+        if (p.code === 'DK_TS') {
+          map.flyTo([10.5, 114.8], 7.5);
+        } else {
+          map.flyTo(p.center, Math.max(map.getZoom(), 11), { animate: true, duration: 0.8 });
         }
 
-        // Sự kiện chuột
-        layer.on({
-          mouseover: (e) => {
-            const l = e.target;
-            l.setStyle({
-              weight: 3.5,
-              color: '#002B8C',
-              fillOpacity: 0.95
-            });
-            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-              l.bringToFront();
-            }
-          },
-          mouseout: (e) => {
-            geoLayer.resetStyle(e.target);
-          },
-          click: (e) => {
-            self.selectedDistricts[containerId] = p.id;
-            geoLayer.eachLayer(l => geoLayer.resetStyle(l));
-            e.target.setStyle({
-              weight: 4,
-              color: '#002B8C',
-              fillOpacity: 0.98
-            });
+        self.selectDistrict(p.id);
+      };
 
-            // Zoom mượt vào ranh giới đơn vị
-            if (p.code === 'DK_TS') {
-              map.flyTo([10.5, 114.8], 7.5);
-            } else {
-              map.flyToBounds(e.target.getBounds(), { padding: [35, 35], maxZoom: 13 });
-            }
+      pointMarker.on('click', onSelect);
+      circleMarker.on('click', onSelect);
 
-            self.selectDistrict(p.id);
-          }
-        });
-      }
-    }).addTo(map);
+      markerGroup.addLayer(circleMarker);
+      markerGroup.addLayer(pointMarker);
+    });
 
-    this.geoLayers[containerId] = geoLayer;
+    markerGroup.addTo(map);
+    this.markerLayers[containerId] = markerGroup;
   },
 
-  // 3. Tính toán màu sắc tương ứng chỉ tiêu
+  // 3. Tính toán bán kính Bubble theo chỉ tiêu
+  getBubbleRadius(p, layerType) {
+    if (layerType === 'revenue') {
+      const rev = p.revenue;
+      if (rev >= 2000) return 22;
+      if (rev >= 1000) return 18;
+      if (rev >= 500) return 14;
+      if (rev >= 250) return 11;
+      return 8;
+    } else if (layerType === 'investment') {
+      const rate = p.dtc_rate;
+      if (rate >= 80) return 18;
+      if (rate >= 75) return 15;
+      if (rate >= 70) return 12;
+      return 9;
+    } else if (layerType === 'enterprises') {
+      const dn = p.enterprises;
+      if (dn >= 2000) return 22;
+      if (dn >= 1000) return 18;
+      if (dn >= 400) return 14;
+      return 9;
+    } else if (layerType === 'land_price') {
+      const k = p.land_k;
+      if (k >= 1.40) return 20;
+      if (k >= 1.25) return 15;
+      return 10;
+    }
+    return 12;
+  },
+
+  // 4. Tính toán màu sắc tương ứng chỉ tiêu
   getDistrictColor(p, layerType) {
     if (layerType === 'revenue') {
       const rev = p.revenue;
@@ -255,33 +312,33 @@ window.GisMapManager = {
       if (rev >= 1000) return '#0F52BA';
       if (rev >= 500) return '#0284c7';
       if (rev >= 250) return '#38bdf8';
-      return '#bae6fd';
+      return '#7dd3fc';
     } else if (layerType === 'investment') {
       const rate = p.dtc_rate;
       if (rate >= 80) return '#15803d';
       if (rate >= 75) return '#16a34a';
       if (rate >= 70) return '#22c55e';
       if (rate >= 65) return '#4ade80';
-      return '#bbf7d0';
+      return '#86efac';
     } else if (layerType === 'enterprises') {
       const dn = p.enterprises;
       if (dn >= 2000) return '#581c87';
       if (dn >= 1000) return '#7e22ce';
       if (dn >= 400) return '#a855f7';
       if (dn >= 150) return '#c084fc';
-      return '#f3e8ff';
+      return '#e9d5ff';
     } else if (layerType === 'land_price') {
       const k = p.land_k;
       if (k >= 1.40) return '#b45309';
       if (k >= 1.30) return '#d97706';
       if (k >= 1.20) return '#f59e0b';
       if (k >= 1.10) return '#fbbf24';
-      return '#fef3c7';
+      return '#fde68a';
     }
     return '#0F52BA';
   },
 
-  // 4. Cập nhật thông tin chi tiết địa bàn lên sidebar
+  // 5. Cập nhật thông tin chi tiết địa bàn lên sidebar
   selectDistrict(districtId) {
     const geoData = window.khanhHoa65UnitsGeoJson || window.khanhHoaRealGeoJson;
     if (!geoData) return;
@@ -294,15 +351,15 @@ window.GisMapManager = {
     const dtcEl = document.getElementById('overlayDistrictDTC');
     const projEl = document.getElementById('overlayDistrictProjects');
 
-    if (nameEl) nameEl.innerText = `[STT ${d.stt}] ${d.name}`;
+    if (nameEl) nameEl.innerText = `${d.name}`;
     if (revEl) revEl.innerText = `${d.revenue.toLocaleString('vi-VN')} Tỷ VNĐ (${d.revenue_rate})`;
     if (dtcEl) dtcEl.innerText = `${d.dtc_rate}% (${d.dtc_amount})`;
     if (projEl) projEl.innerText = `${d.enterprises.toLocaleString('vi-VN')} DN/Hộ KD (K = ${d.land_k})`;
 
-    App.showNotification(`Đã chọn: [STT ${d.stt}] ${d.name} (${d.type} trực thuộc tỉnh)`, 'info');
+    App.showNotification(`Đã chọn: ${d.name} (${d.type} trực thuộc tỉnh)`, 'info');
   },
 
-  // 5. Lọc hiển thị theo loại đơn vị hành chính
+  // 6. Lọc hiển thị theo loại đơn vị hành chính
   filterCategory(containerId, cat) {
     this.activeFilter = cat;
     this.renderChoropleth(containerId, this.currentLayers[containerId] || 'revenue');
@@ -310,7 +367,7 @@ window.GisMapManager = {
     App.showNotification(`Đang lọc hiển thị: ${label}`, 'info');
   },
 
-  // 6. Đặt lại góc nhìn toàn tỉnh
+  // 7. Đặt lại góc nhìn toàn tỉnh
   resetView(containerId) {
     this.activeFilter = 'all';
     this.renderChoropleth(containerId, this.currentLayers[containerId] || 'revenue');
@@ -321,17 +378,19 @@ window.GisMapManager = {
     }
   },
 
-  // 7. Điều hướng nhanh đến Đặc khu Trường Sa
+  // 8. Điều hướng nhanh đến Đặc khu Trường Sa
   flyToTruongSa(containerId) {
     const map = this.maps[containerId];
     if (map) {
       map.flyTo([10.50, 114.80], 7.5);
+      this.selectedDistricts[containerId] = 'KH65_65';
+      this.renderChoropleth(containerId, this.currentLayers[containerId] || 'revenue');
       this.selectDistrict('KH65_65');
-      App.showNotification("Đã chuyển đến [STT 65] Đặc khu Trường Sa", "info");
+      App.showNotification("Đã chuyển đến Đặc khu Trường Sa", "info");
     }
   },
 
-  // 8. Kích hoạt hiệu ứng Radar Pulse thời gian thực
+  // 9. Kích hoạt hiệu ứng Radar Pulse thời gian thực
   triggerRealtimeMarker(containerId, districtCode, eventData) {
     const map = this.maps[containerId];
     const geoData = window.khanhHoa65UnitsGeoJson || window.khanhHoaRealGeoJson;

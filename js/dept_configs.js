@@ -64,7 +64,7 @@ const DEPT_CONFIGS = {
       { label: 'Dự án chậm giải ngân', value: '5 dự án', unit: 'Giải ngân dưới 50%', trend: 'Cảnh báo', icon: 'shuffle', color: 'rose' }
     ],
     projects: [
-      { id: 'DA-DTC-001', name: 'Đường Vành đai 2 TP. Nha Trang (giai đoạn 2)', owner: 'Ban QLDA Giao thông Khánh Hòa', budget: '1.450 tỷ đ', disbursed: '1.120 tỷ đ', rate: '77,2%', status: 'Đúng tiến độ' },
+      { id: 'DA-DTC-001', name: 'Đường Vành đai 2 Nha Trang (giai đoạn 2)', owner: 'Ban QLDA Giao thông Khánh Hòa', budget: '1.450 tỷ đ', disbursed: '1.120 tỷ đ', rate: '77,2%', status: 'Đúng tiến độ' },
       { id: 'DA-DTC-002', name: 'Kè chống sạt lở bờ sông Cái Nha Trang', owner: 'Ban QLDA Nông nghiệp và PTNT', budget: '620 tỷ đ', disbursed: '480 tỷ đ', rate: '77,4%', status: 'Đúng tiến độ' },
       { id: 'DA-DTC-003', name: 'Trung tâm Kiểm soát bệnh tật (CDC) tỉnh', owner: 'Ban QLDA Dân dụng và Công nghiệp', budget: '280 tỷ đ', disbursed: '190 tỷ đ', rate: '67,8%', status: 'Đang hoàn thiện' },
       { id: 'DA-DTC-004', name: 'Hạ tầng CNTT chuyển đổi số kinh tế tỉnh', owner: 'Sở Thông tin và Truyền thông', budget: '150 tỷ đ', disbursed: '125 tỷ đ', rate: '83,3%', status: 'Vận hành' }
@@ -288,7 +288,7 @@ const DEPT_CONFIGS = {
     entityId: 'UBND-NTR',
     name: 'Trần Minh Hải',
     title: 'Chủ tịch UBND phường',
-    deptName: 'UBND phường Lộc Thọ (Nha Trang)',
+    deptName: 'UBND Phường Nha Trang (UBND cấp xã)',
     domainName: 'Cổng tiếp nhận và nộp báo cáo trực tuyến',
     badgeClass: 'badge-info',
     icon: 'landmark',

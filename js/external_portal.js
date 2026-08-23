@@ -14,10 +14,10 @@ const ExternalPortalManager = {
     'UBND-NTR': {
       id: 'UBND-NTR',
       type: 'GOV_COMMUNE',
-      name: 'Ủy ban nhân dân phường Lộc Thọ (Nha Trang)',
+      name: 'Ủy ban nhân dân Phường Nha Trang',
       code: 'CQNN-79-NTR',
       leader: 'Trần Minh Hải (Chủ tịch UBND phường)',
-      contactEmail: 'ubnd.loctho@khanhhoa.gov.vn',
+      contactEmail: 'ubnd.nhatrang@khanhhoa.gov.vn',
       phone: '0258.3822105',
       badge: 'UBND cấp xã',
       assignedTasks: [
@@ -39,7 +39,7 @@ const ExternalPortalManager = {
           status: 'COMPLETED',
           submitDate: '2026-08-14 16:30',
           score: 100,
-          feedback: 'Đã tổng hợp 32 cơ sở nhà đất trực thuộc TP. Nha Trang.'
+          feedback: 'Đã tổng hợp 32 cơ sở nhà đất trên địa bàn Phường Nha Trang và các phường phụ cận.'
         }
       ]
     },
