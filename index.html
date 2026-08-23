@@ -1,40 +1,114 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hệ thống Dữ liệu Kinh tế tỉnh Khánh Hòa</title>
-  
-  <!-- Modern Typography Fonts -->
+
+  <!-- Unified Executive Typography Font: Be Vietnam Pro (Engineered for Vietnamese) & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- External Stylesheets (Monochromatic Oceanic Azure Design System) -->
-  <link rel="stylesheet" href="main.css?v=2026082011">
-  <link rel="stylesheet" href="components.css?v=2026082011">
-  <link rel="stylesheet" href="dashboard.css?v=2026082011">
+  <!-- Leaflet GIS Map Engine (Free OpenStreetMap / CartoDB Voyager) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- External Stylesheets (Executive Design System) -->
+  <link rel="stylesheet" href="css/main.css?v=2026082340">
+  <link rel="stylesheet" href="css/components.css?v=2026082340">
+  <link rel="stylesheet" href="css/dashboard.css?v=2026082340">
+  <link rel="stylesheet" href="css/responsive.css?v=2026082340">
 </head>
+
 <body>
 
+  <!-- GLOBAL FULL-WIDTH HEADER (Executive Topbar) -->
+  <header class="app-topbar">
+    <div class="topbar-left">
+      <!-- Mobile Menu Toggle Button (Visible on < 992px) -->
+      <button id="btnToggleMobileSidebar" class="btn-mobile-sidebar-toggle" title="Mở danh mục menu" aria-label="Mở menu điều hướng">
+        <i data-lucide="menu"></i>
+      </button>
+
+      <div class="brand-logo-container" title="Biểu trưng tỉnh Khánh Hòa">
+        <img src="img/logo_khanhhoa.png" alt="Logo tỉnh Khánh Hòa" class="province-logo-img">
+      </div>
+      <div class="header-title-group">
+        <span class="header-org-title">SỞ TÀI CHÍNH TỈNH KHÁNH HÒA</span>
+        <h1 class="header-system-title">
+          <span class="title-full">HỆ THỐNG DỮ LIỆU KINH TẾ TỈNH KHÁNH HÒA</span>
+          <span class="title-short">HỆ THỐNG DỮ LIỆU KINH TẾ</span>
+        </h1>
+      </div>
+    </div>
+
+    <div class="topbar-right">
+      <!-- Real-time Status Badge -->
+      <div class="badge badge-success topbar-online-badge" title="Hệ thống trực tuyến">
+        <span class="pulse-dot"></span>
+        <span class="online-text">Trực tuyến</span>
+      </div>
+
+      <!-- Unified User Profile Card & Switcher -->
+      <div class="user-profile-card" title="Bấm để chuyển đổi tài khoản làm việc">
+        <div class="user-avatar" id="appUserAvatar">H</div>
+        <div class="user-info">
+          <div class="user-name-row">
+            <span class="user-name" id="appUserName">Nguyễn Đình Hùng</span>
+            <i data-lucide="chevron-down" style="width: 13px; height: 13px; color: #64748b;"></i>
+          </div>
+          <span class="user-dept" id="appUserTitle">Giám đốc Sở Tài chính</span>
+        </div>
+        <select id="selectAppUserAccount" class="account-select-overlay" title="Chuyển đổi tài khoản làm việc">
+          <optgroup label="I. LÃNH ĐẠO SỞ">
+            <option value="lanhdao">1. Lãnh đạo Sở (Giám đốc Sở Tài chính)</option>
+          </optgroup>
+          <optgroup label="II. CÁC PHÒNG CHUYÊN MÔN VÀ TƯƠNG ĐƯƠNG THUỘC SỞ (8 PHÒNG)">
+            <option value="vanphong">2. Văn phòng Sở</option>
+            <option value="phapche">3. Phòng Pháp chế</option>
+            <option value="ktns">4. Phòng Kinh tế và Ngân sách</option>
+            <option value="hcsn">5. Phòng Tài chính Hành chính sự nghiệp</option>
+            <option value="dtc">6. Phòng Quản lý Đầu tư công</option>
+            <option value="dtns">7. Phòng Quản lý Đầu tư ngoài ngân sách</option>
+            <option value="giacongsan">8. Phòng Quản lý Giá và Công sản</option>
+            <option value="doanhnghiep">9. Phòng Quản lý Doanh nghiệp</option>
+          </optgroup>
+          <optgroup label="III. HẠ TẦNG & QUẢN TRỊ KỸ THUẬT">
+            <option value="admin">10. Quản trị hệ thống (API Gateway & CSDLQG)</option>
+          </optgroup>
+          <optgroup label="IV. CỔNG KÊ KHAI BÁO CÁO NGOÀI (6 DOANH NGHIỆP / ĐƠN VỊ)">
+            <option value="portal_khatoco">11. Tổng Công ty Khánh Việt (KHATOCO)</option>
+            <option value="portal_yensao">12. Công ty Yến Sào Khánh Hòa</option>
+            <option value="portal_maruha">13. Maruha Nichiro Khánh Hòa (FDI)</option>
+            <option value="portal_loctho">14. UBND phường Lộc Thọ (UBND cấp xã)</option>
+            <option value="portal_gts">15. Ban QLDA Giao thông Khánh Hòa</option>
+            <option value="portal_bvdakhoa">16. Bệnh viện Đa khoa tỉnh Khánh Hòa</option>
+          </optgroup>
+        </select>
+      </div>
+    </div>
+  </header>
+
   <div class="app-container">
-    
+
     <!-- SIDEBAR NAVIGATION (DYNAMICALLY RENDERED PER DOMAIN / PORTAL) -->
     <aside class="app-sidebar">
-      <div class="sidebar-header">
-        <div class="logo-badge">
-          <i data-lucide="database"></i>
+      <div class="sidebar-workspace-banner">
+        <div class="workspace-chip-row">
+          <span class="workspace-label">KHÔNG GIAN LÀM VIỆC</span>
+          <span class="badge badge-purple" id="sidebarDeptBadge">Lãnh đạo Sở</span>
         </div>
-        <div class="logo-text">
-          <h2>Dữ liệu Kinh tế</h2>
-          <span>Tỉnh Khánh Hòa</span>
-        </div>
+        <div class="workspace-current-domain" id="sidebarDomainDesc">Điều hành kinh tế tổng thể tỉnh Khánh Hòa</div>
       </div>
 
       <!-- DYNAMIC NAVIGATION LINKS -->
@@ -42,85 +116,35 @@
         <!-- Rendered via dept_workspaces.js -->
       </nav>
 
-      <div class="sidebar-footer">
-        <div class="system-status-card">
-          <div class="status-row">
-            <span><span class="pulse-dot" style="width:7px;height:7px;"></span> Luồng thời gian thực:</span>
-            <strong style="color: #15803d;">Trực tuyến 24/7</strong>
-          </div>
-          <div class="status-row" style="color: #64748b; font-size: 10.5px;">
-            <span>CSDL quốc gia Bộ Tài chính:</span>
-            <span style="color: #002B8C; font-weight: 600;">09 API đồng bộ</span>
-          </div>
-        </div>
+      <div class="sidebar-footer" id="sidebarFooterContainer">
+        <!-- Rendered dynamically via dept_workspaces.js -->
       </div>
     </aside>
 
+    <!-- Mobile Backdrop Overlay -->
+    <div id="sidebarBackdrop" class="sidebar-backdrop" title="Đóng menu"></div>
+
     <!-- MAIN CONTENT WRAPPER -->
     <main class="app-main">
-      
-      <!-- TOPBAR WITH USER SWITCHER & REALTIME STATUS -->
-      <header class="app-topbar">
-        <div class="topbar-left">
-          <div class="page-title">
-            <h1>Hệ thống dữ liệu kinh tế tỉnh Khánh Hòa</h1>
-            <p>Phân hệ điều hành và giám sát chuyên sâu từng lĩnh vực kinh tế - tài chính</p>
-          </div>
-        </div>
 
-        <div class="topbar-right">
-          <!-- Department / Portal Account Switcher -->
-          <div class="role-badge-container">
-            <i data-lucide="user-check" style="color: #002B8C; width: 16px; height: 16px;"></i>
-            <span class="role-select-label">Phân hệ:</span>
-            <select id="selectAppUserAccount" class="role-select">
-              <optgroup label="A. Khối điều hành và giám sát Sở Tài chính">
-                <option value="lanhdao">1. Ban Giám đốc Sở</option>
-                <option value="ktns">2. Phòng Kinh tế và ngân sách</option>
-                <option value="dtc">3. Phòng Quản lý đầu tư công</option>
-                <option value="dtns">4. Phòng Quản lý đầu tư ngoài ngân sách</option>
-                <option value="doanhnghiep">5. Phòng Quản lý doanh nghiệp</option>
-                <option value="giacongsan">6. Phòng Quản lý giá và công sản</option>
-                <option value="hcsn">7. Phòng Tài chính hành chính sự nghiệp</option>
-                <option value="phapche">8. Phòng Pháp chế</option>
-                <option value="admin">9. Quản trị hệ thống</option>
-              </optgroup>
-              <optgroup label="B. Cổng thông tin kê khai dữ liệu">
-                <option value="portal">10. Cổng kê khai báo cáo định kỳ</option>
-              </optgroup>
-            </select>
-          </div>
-
-          <!-- User Profile Display -->
-          <div class="user-profile">
-            <div class="user-avatar" id="userAvatarDisplay">H</div>
-            <div class="user-info">
-              <span class="user-name" id="userNameDisplay">Nguyễn Đình Hùng</span>
-              <span class="user-dept" id="userDeptDisplay">Ban Giám đốc Sở</span>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <!-- REAL-TIME TICKER CONTAINER INJECTED HERE -->
-      <div id="realtimeTickerContainer"></div>
-
-      <!-- DYNAMIC DEPARTMENT / PORTAL WORKSPACE CONTAINER -->
-      <div class="app-content" id="departmentWorkspaceContainer">
-        <!-- Rendered completely via dept_workspaces.js & external_portal.js -->
+      <!-- DEPARTMENT / PORTAL DYNAMIC WORKSPACE -->
+      <div id="departmentWorkspaceContainer">
+        <!-- Rendered dynamically via dept_workspaces.js based on selected account -->
       </div>
     </main>
   </div>
 
-  <!-- GENERIC MODAL FOR DOCUMENT VIEWER & PAYLOAD INSPECTION -->
-  <div class="modal-overlay" id="modalGeneric">
-    <div class="modal-card">
+  <!-- MODALS -->
+  <div id="modalGeneric" class="modal-overlay">
+    <div class="modal-container">
       <div class="modal-header">
-        <h3 id="modalGenericTitle"><i data-lucide="info"></i> Chi tiết</h3>
-        <button class="modal-close" onclick="App.closeModal('modalGeneric')">&times;</button>
+        <h3 class="modal-title" id="modalGenericTitle">Chi tiết thông tin</h3>
+        <button class="modal-close" onclick="App.closeModal('modalGeneric')">
+          <i data-lucide="x"></i>
+        </button>
       </div>
       <div class="modal-body" id="modalGenericBody">
-        <!-- Injected via JavaScript -->
+        <!-- Dynamic Modal Content -->
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" onclick="App.closeModal('modalGeneric')">Đóng</button>
@@ -128,21 +152,26 @@
     </div>
   </div>
 
+  <!-- TOAST NOTIFICATIONS -->
+  <div id="toastContainer" class="toast-container"></div>
+
   <!-- APP SCRIPTS (with Cache Buster) -->
-  <script src="data.js?v=2026082013"></script>
-  <script src="dept_configs.js?v=2026082013"></script>
-  <script src="charts.js?v=2026082013"></script>
-  <script src="api_gateway.js?v=2026082013"></script>
-  <script src="data_entry.js?v=2026082013"></script>
-  <script src="archive_viewer.js?v=2026082013"></script>
-  <script src="mdm_catalog.js?v=2026082013"></script>
-  <script src="survey_reporting.js?v=2026082013"></script>
-  <script src="advanced_visualization.js?v=2026082013"></script>
-  <script src="system_analytics.js?v=2026082013"></script>
-  <script src="external_portal.js?v=2026082013"></script>
-  <script src="realtime_engine.js?v=2026082013"></script>
-  <script src="dept_workspaces.js?v=2026082013"></script>
-  <script src="app.js?v=2026082013"></script>
+  <script src="js/data.js?v=2026082340"></script>
+  <script src="js/dept_configs.js?v=2026082340"></script>
+  <script src="js/khanhhoa_real_geojson.js?v=2026082340"></script>
+  <script src="js/gis_map.js?v=2026082340"></script>
+  <script src="js/charts.js?v=2026082340"></script>
+  <script src="js/api_gateway.js?v=2026082340"></script>
+  <script src="js/data_entry.js?v=2026082340"></script>
+  <script src="js/archive_viewer.js?v=2026082340"></script>
+  <script src="js/mdm_catalog.js?v=2026082340"></script>
+  <script src="js/survey_reporting.js?v=2026082340"></script>
+  <script src="js/advanced_visualization.js?v=2026082340"></script>
+  <script src="js/system_analytics.js?v=2026082340"></script>
+  <script src="js/external_portal.js?v=2026082340"></script>
+  <script src="js/realtime_engine.js?v=2026082340"></script>
+  <script src="js/dept_workspaces.js?v=2026082340"></script>
+  <script src="js/app.js?v=2026082340"></script>
 
   <!-- Lucide Icons Rendering -->
   <script>
@@ -156,4 +185,5 @@
     });
   </script>
 </body>
+
 </html>

@@ -1,0 +1,661 @@
+/* ==========================================================================
+   DASHBOARD CSS - MONOCHROMATIC OCEANIC AZURE (#002B8C)
+   Executive Visual Architecture & Real-Time Engine Styling
+   Typography: 'Be Vietnam Pro', sans-serif
+   ========================================================================== */
+
+/* ==========================================================================
+   1. REAL-TIME LIVE TICKER BAR
+   ========================================================================== */
+.realtime-ticker-bar {
+  background: #ffffff;
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 8px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  box-shadow: 0 1px 2px rgba(0, 43, 140, 0.03);
+  z-index: 80;
+}
+
+.ticker-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  color: var(--c-oceanic-azure);
+  white-space: nowrap;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.ticker-content {
+  flex: 1;
+  font-size: 12.5px;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ticker-actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn-ticker-toggle {
+  background: #eff6ff;
+  color: var(--c-oceanic-azure);
+  border: 1px solid #bfdbfe;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition-fast);
+}
+
+.btn-ticker-toggle:hover {
+  background: var(--c-oceanic-azure);
+  color: #ffffff;
+  border-color: var(--c-oceanic-azure);
+}
+
+.btn-ticker-toggle i, .btn-ticker-toggle svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* ==========================================================================
+   2. REAL-TIME EVENT CARDS
+   ========================================================================== */
+.realtime-event-card {
+  background: #ffffff;
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  border: 1px solid var(--border-card);
+  border-left: 3.5px solid var(--c-oceanic-azure);
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-xs);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.realtime-event-card:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  border-left-color: var(--c-sapphire);
+  transform: translateX(2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.realtime-event-card.border-emerald { border-left-color: var(--success); }
+.realtime-event-card.border-cyan    { border-left-color: var(--c-cyan-accent); }
+.realtime-event-card.border-purple  { border-left-color: var(--purple); }
+.realtime-event-card.border-gold    { border-left-color: var(--warning); }
+.realtime-event-card.border-rose    { border-left-color: var(--danger); }
+
+/* ==========================================================================
+   3. PIPELINE ARCHITECTURE BOXES
+   ========================================================================== */
+.pipeline-step-card {
+  background: #ffffff;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  border-left: 3.5px solid var(--c-oceanic-azure);
+  box-shadow: var(--shadow-xs);
+  transition: all var(--transition-fast);
+}
+
+.pipeline-step-card:hover {
+  box-shadow: var(--shadow-sm);
+  background: #f8fafc;
+}
+
+.pipeline-step-card.step-1 { border-left-color: var(--c-cyan-accent); }
+.pipeline-step-card.step-2 { border-left-color: var(--success); }
+.pipeline-step-card.step-3 { border-left-color: var(--purple); }
+.pipeline-step-card.step-4 { border-left-color: var(--warning); }
+
+.pipeline-step-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 4px;
+}
+
+.pipeline-step-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* ==========================================================================
+   4. MAP CONTAINER - KHÁNH HÒA 9 ĐỊA BÀN (SPACIOUS SPLIT-PANEL ARCHITECTURE)
+   ========================================================================== */
+.khanhhoa-map-wrapper {
+  display: flex;
+  gap: 16px;
+  min-height: 310px;
+  align-items: stretch;
+}
+
+.map-svg-area {
+  flex: 1.35;
+  background: linear-gradient(135deg, #f0f7ff 0%, #e2e8f0 100%);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-md);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 310px;
+}
+
+.map-svg-frame {
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+}
+
+.district-path {
+  fill: #e2e8f0;
+  stroke: #94a3b8;
+  stroke-width: 1.2;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.district-path:hover {
+  fill: #bfdbfe;
+  stroke: var(--c-oceanic-azure);
+  stroke-width: 2;
+  filter: drop-shadow(0 2px 4px rgba(0, 43, 140, 0.15));
+}
+
+.district-path.active {
+  fill: #93c5fd;
+  stroke: #002B8C;
+  stroke-width: 2.2;
+  filter: drop-shadow(0 2px 6px rgba(0, 43, 140, 0.25));
+}
+
+.map-district-sidebar {
+  flex: 0.95;
+  min-width: 240px;
+  background: #ffffff;
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: var(--shadow-xs);
+}
+
+.district-info-header {
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+}
+
+.district-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--c-oceanic-azure);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 4px;
+}
+
+.district-name {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.district-metrics-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.district-metric-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+}
+
+.district-metric-item .metric-label {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.district-metric-item .metric-val {
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.district-metric-item .metric-val.highlight-blue  { color: #002B8C; }
+.district-metric-item .metric-val.highlight-green { color: #15803d; }
+.district-metric-item .metric-val.highlight-amber { color: #b45309; }
+
+.district-metric-item .metric-sub {
+  font-size: 10.5px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+/* ==========================================================================
+   5. CHARTS WRAPPER & PROPER PADDING
+   ========================================================================== */
+.chart-wrapper {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  padding: 4px;
+}
+
+/* ==========================================================================
+   6. SANKEY FLOW DIAGRAM (LUỒNG ĐIỀU TIẾT NGÂN SÁCH)
+   ========================================================================== */
+.sankey-flow-wrapper {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-card);
+  min-height: 240px;
+}
+
+.sankey-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.sankey-col.center-col {
+  flex: 1.2;
+  justify-content: flex-start;
+}
+
+.sankey-col-header {
+  font-size: 11px;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.sankey-card {
+  background: #ffffff;
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  border-left: 4px solid #cbd5e1;
+  box-shadow: var(--shadow-xs);
+  transition: transform var(--transition-fast);
+}
+
+.sankey-card:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.sankey-card.border-cyan   { border-left-color: #0284c7; }
+.sankey-card.border-blue   { border-left-color: #002B8C; }
+.sankey-card.border-purple { border-left-color: #7c3aed; }
+.sankey-card.border-green  { border-left-color: #16a34a; }
+.sankey-card.border-amber  { border-left-color: #d97706; }
+.sankey-card.border-rose   { border-left-color: #dc2626; }
+
+.sankey-card-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 2px;
+}
+
+.sankey-card-value {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.sankey-card-sub {
+  font-size: 10.5px;
+  color: #94a3b8;
+}
+
+/* Center Hub Card */
+.sankey-center-card {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  border: 1.5px solid #93c5fd;
+  border-radius: var(--radius-md);
+  padding: 16px 14px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 43, 140, 0.08);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.center-card-badge {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #002B8C;
+  letter-spacing: 0.4px;
+  margin-bottom: 4px;
+}
+
+.center-card-value {
+  font-size: 22px;
+  font-weight: 900;
+  color: #002B8C;
+  line-height: 1.1;
+}
+
+.center-card-unit {
+  font-size: 11px;
+  font-weight: 600;
+  color: #0284c7;
+  margin-bottom: 8px;
+}
+
+.center-card-divider {
+  width: 80%;
+  height: 1px;
+  background: #bfdbfe;
+  margin: 6px 0 10px 0;
+}
+
+.center-card-meta {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+}
+
+.center-card-meta .meta-row {
+  display: flex;
+  justify-content: space-between;
+  color: #475569;
+}
+
+/* Flow Arrow Connectors */
+.sankey-flow-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  flex-shrink: 0;
+}
+
+.flow-line {
+  width: 2px;
+  height: 40px;
+  background: linear-gradient(180deg, transparent, #93c5fd, transparent);
+  position: relative;
+  overflow: hidden;
+}
+
+.flow-line::after {
+  content: '';
+  position: absolute;
+  top: -40px;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  background: linear-gradient(180deg, transparent, #002B8C, transparent);
+  animation: streamFlowDown 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes streamFlowDown {
+  0% { top: -40px; }
+  100% { top: 40px; }
+}
+
+.flow-icon-circle {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #002B8C;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(0, 43, 140, 0.35);
+  animation: pulseIconGlow 2.5s infinite;
+}
+
+@keyframes pulseIconGlow {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 8px rgba(0, 43, 140, 0.3); }
+  50% { transform: scale(1.08); box-shadow: 0 0 16px rgba(15, 82, 186, 0.6); }
+}
+
+.flow-icon-circle i, .flow-icon-circle svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ==========================================================================
+   7. REAL-TIME LIVE CHART & KPI FLASH EFFECTS
+   ========================================================================== */
+.chart-live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #15803d;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  padding: 3px 9px;
+  border-radius: 20px;
+}
+
+.chart-live-badge .pulse-dot {
+  width: 7px;
+  height: 7px;
+  background: #16a34a;
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(22, 163, 74, 0.6);
+  animation: pulseLiveDot 1.4s infinite;
+}
+
+@keyframes pulseLiveDot {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 10px rgba(22, 163, 74, 0.9); }
+  100% { transform: scale(0.9); opacity: 0.8; }
+}
+
+/* KPI Live Update Glow Flash */
+.kpi-metric-flash {
+  animation: kpiFlashAnimation 1.2s ease-out;
+}
+
+@keyframes kpiFlashAnimation {
+  0% { background-color: rgba(2, 132, 199, 0.25); color: #002B8C; transform: scale(1.04); }
+  100% { background-color: transparent; transform: scale(1); }
+}
+
+/* GIS Radar Pin Pulse */
+.map-radar-pulse {
+  animation: radarWave 2s infinite ease-out;
+}
+
+@keyframes radarWave {
+  0% { r: 4; opacity: 1; stroke-width: 2; }
+  50% { opacity: 0.6; }
+  100% { r: 18; opacity: 0; stroke-width: 0.5; }
+}
+
+/* ==========================================================================
+   8. LEAFLET REAL-WORLD GIS STYLING (EXECUTIVE DESIGN SYSTEM)
+   ========================================================================== */
+.leaflet-container {
+  font-family: 'Be Vietnam Pro', sans-serif !important;
+  background: #eef2f6 !important;
+}
+
+/* Executive Map Tooltip */
+.executive-map-tooltip.leaflet-tooltip {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 10px !important;
+  padding: 10px 14px !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 43, 140, 0.2), 0 8px 10px -6px rgba(0, 43, 140, 0.1) !important;
+  color: #0f172a !important;
+  max-width: 280px !important;
+}
+
+.executive-map-tooltip.leaflet-tooltip::before {
+  border-top-color: #cbd5e1 !important;
+}
+
+/* Map District Name Labels */
+.map-district-label {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.district-map-pill {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(0, 43, 140, 0.25);
+  border-radius: 14px;
+  padding: 2px 8px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #002B8C;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+/* Floating Controls on Map */
+.gis-map-floating-overlay {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  z-index: 1000;
+  display: flex;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+}
+
+.btn-gis-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #002B8C;
+  background: #f0f7ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 6px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-gis-control:hover {
+  background: #002B8C;
+  color: #ffffff;
+  border-color: #002B8C;
+  transform: translateY(-1px);
+}
+
+.btn-gis-control.btn-gis-truongsa {
+  color: #0F52BA;
+  background: #eff6ff;
+  border-color: #93c5fd;
+}
+
+.btn-gis-control.btn-gis-truongsa:hover {
+  background: #0F52BA;
+  color: #ffffff;
+}
+
+/* Real-time Radar Pulse Marker on Map */
+.gis-radar-marker {
+  position: relative;
+  width: 30px;
+  height: 30px;
+}
+
+.radar-center-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #002B8C;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 8px rgba(0, 43, 140, 0.8);
+}
+
+.radar-ripple-wave {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(15, 82, 186, 0.35);
+  border: 2px solid #0F52BA;
+  animation: rippleGis 1.5s infinite ease-out;
+}
+
+@keyframes rippleGis {
+  0% { width: 10px; height: 10px; opacity: 1; }
+  100% { width: 50px; height: 50px; opacity: 0; }
+}
+
