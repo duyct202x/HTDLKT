@@ -1523,68 +1523,9 @@ const DeptWorkspaceManager = {
       const activeDept = deptMap[deptId] || 'dept-ktns';
 
       if (deptId === 'lanhdao') {
-        // Ban Giám đốc Sở: Phê duyệt hồ sơ liên ngành của tất cả các phòng ban
-        container.innerHTML = `
-          <div class="card" style="margin-bottom: 20px;">
-            <div class="tabs-nav" id="entryDeptTabs" style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">
-              <button class="tab-btn active" onclick="DataEntryManager.switchDeptTab('dept-ktns', this)">
-                <i data-lucide="pie-chart"></i> Kinh tế và Ngân sách
-              </button>
-              <button class="tab-btn" onclick="DataEntryManager.switchDeptTab('dept-dtc', this)">
-                <i data-lucide="hard-hat"></i> Quản lý Đầu tư công
-              </button>
-              <button class="tab-btn" onclick="DataEntryManager.switchDeptTab('dept-dtns', this)">
-                <i data-lucide="building-2"></i> Quản lý Đầu tư ngoài ngân sách
-              </button>
-              <button class="tab-btn" onclick="DataEntryManager.switchDeptTab('dept-giacongsan', this)">
-                <i data-lucide="home"></i> Quản lý Giá và Công sản
-              </button>
-              <button class="tab-btn" onclick="DataEntryManager.switchDeptTab('dept-doanhnghiep', this)">
-                <i data-lucide="briefcase"></i> Quản lý Doanh nghiệp
-              </button>
-              <button class="tab-btn" onclick="DataEntryManager.switchDeptTab('dept-phapche', this)">
-                <i data-lucide="gavel"></i> Pháp chế
-              </button>
-              <button class="tab-btn" onclick="DataEntryManager.switchDeptTab('dept-hcsn', this)">
-                <i data-lucide="graduation-cap"></i> Tài chính Hành chính sự nghiệp
-              </button>
-            </div>
-          </div>
-
-          <div class="card" id="dynamicDeptFormContainer" style="margin-bottom: 20px;"></div>
-
-          <!-- Pending Submissions Approval Table -->
-          <div class="card">
-            <div class="card-header">
-              <div>
-                <h3 class="card-title"><i data-lucide="check-square"></i> Hồ sơ trình Lãnh đạo Sở phê duyệt</h3>
-                <p class="card-subtitle">Thẩm định và phê duyệt các hồ sơ nghiệp vụ do chuyên viên các phòng ban trình lên</p>
-              </div>
-              <span class="badge badge-warning">6 chờ duyệt</span>
-            </div>
-            <div class="table-container">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Mã hồ sơ</th>
-                    <th>Nội dung hồ sơ</th>
-                    <th>Lĩnh vực nghiệp vụ</th>
-                    <th>Người lập</th>
-                    <th>Ngày trình</th>
-                    <th>Trạng thái</th>
-                    <th>Thao tác</th>
-                  </tr>
-                </thead>
-                <tbody id="pendingSubmissionsTableBody">
-                  <!-- Rendered via DataEntryManager -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-        `;
-        if (window.lucide) window.lucide.createIcons();
-        DataEntryManager.renderDeptForm('dept-ktns', 'tab1');
-        DataEntryManager.renderPendingTable();
+        // Ban Giám đốc Sở: Trung tâm Phê duyệt & Chỉ đạo Điều hành Liên phòng (Không hiển thị form nhập liệu của chuyên viên)
+        container.innerHTML = `<div id="dynamicDeptFormContainer"></div>`;
+        DataEntryManager.renderDirectorApprovalHub('dynamicDeptFormContainer');
         return;
       }
 
@@ -1809,22 +1750,21 @@ const DeptWorkspaceManager = {
 
     // Trigger charts and managers if applicable
     setTimeout(() => {
-      if (this.currentTab === 'dashboard') {
-        if (deptId === 'lanhdao') ChartsManager.initAll();
-        if (deptId === 'ktns') ChartsManager.renderRevenueChart();
-        if (deptId === 'dtc') ChartsManager.renderInvestmentChart();
-        if (deptId === 'doanhnghiep') ChartsManager.renderRiskScatterPlot();
+      if (document.getElementById('chartRevenueStructure')) ChartsManager.renderRevenueChart();
+      if (document.getElementById('chartInvestmentProgress')) ChartsManager.renderInvestmentChart();
+      if (document.getElementById('chartRiskScatter')) ChartsManager.renderRiskScatterPlot();
+      if (document.getElementById('chartSectorDistribution')) ChartsManager.renderSectorPieChart();
+      if (document.getElementById('sankeyFlowContainer')) ChartsManager.renderSankeyFlow();
+      if (document.getElementById('khanhHoaGisMapContainer')) ChartsManager.renderKhanhHoaMap();
+
+      if (deptId === 'admin' && window.ApiGatewayManager) {
+        ApiGatewayManager.renderApiGateway('adminApiGatewayContainer');
       }
-      if (deptId === 'admin') {
-        if (window.ApiGatewayManager) {
-          ApiGatewayManager.renderApiGateway('adminApiGatewayContainer');
-        }
-      }
-      if (this.currentTab === 'entry' || this.currentTab === 'survey') {
-        if (window.DataEntryManager) DataEntryManager.init();
+      if ((this.currentTab === 'entry' || this.currentTab === 'survey' || this.currentTab === 'data_entry') && window.DataEntryManager) {
+        DataEntryManager.init();
       }
       this.refreshIcons();
-    }, 100);
+    }, 50);
   },
 
   // 1. Màn hình Điều hành Kinh tế Tổng thể (Ban Giám đốc Sở)
@@ -1891,65 +1831,120 @@ const DeptWorkspaceManager = {
 
     return `
       <div class="dashboard-row">
-        <div class="col-6">
-          <div class="card" style="height: 100%;">
+        <div class="col-7">
+          <div class="card" style="height: 100%; display: flex; flex-direction: column;">
             <div class="card-header">
               <h3 class="card-title"><i data-lucide="map-pin"></i> Bản đồ kinh tế không gian tỉnh Khánh Hòa (GIS)</h3>
-              <span class="badge badge-info">Địa giới hành chính OpenStreetMap thực tế</span>
+              <div style="display: flex; gap: 6px; align-items: center;">
+                <span class="badge badge-purple">65 Xã/Phường/Đặc khu</span>
+                <span class="badge badge-info">OpenStreetMap</span>
+              </div>
             </div>
-            <div id="khanhHoaMapFrame">
-              <div class="khanhhoa-map-wrapper">
-                <!-- Khu vực hiển thị Bản đồ GIS Thực tế (Leaflet Map) -->
-                <div class="map-svg-area" id="khanhHoaGisMapContainer" style="position: relative; min-height: 380px; width: 100%;">
+            <div style="position: relative; width: 100%; flex: 1; min-height: 420px; border-radius: var(--radius-md); overflow: hidden; background: #e2e8f0;">
+              <!-- Leaflet GIS Map Canvas (Full Area) -->
+              <div id="khanhHoaGisMapContainer" style="width: 100%; height: 100%; min-height: 420px;"></div>
+
+              <!-- Floating Glassmorphism District Inspector Panel -->
+              <div class="map-district-floating-panel" id="mapDistrictInfo">
+                <div class="district-info-header">
+                  <div class="district-badge">
+                    <i data-lucide="map-pin" style="width: 12px; height: 12px;"></i> Cấp xã/phường cơ sở
+                  </div>
+                  <h4 id="overlayDistrictName" class="district-name">Phường Nha Trang</h4>
+                  <div class="district-meta-sub">Đơn vị hành chính trực thuộc tỉnh</div>
                 </div>
 
-                <!-- Sidebar Thông Tin Chi Tiết Địa Bàn Chọn -->
-                <div class="map-district-sidebar" id="mapDistrictInfo">
-                  <div class="district-info-header">
-                    <div class="district-badge">
-                      <i data-lucide="map-pin" style="width: 13px; height: 13px;"></i> Đơn vị cấp xã/phường
-                    </div>
-                    <h4 id="overlayDistrictName" class="district-name">[STT 49] Phường Nha Trang</h4>
+                <div class="district-metrics-list">
+                  <div class="district-metric-item">
+                    <div class="metric-label">Thu NSNN trên địa bàn:</div>
+                    <div id="overlayDistrictRevenue" class="metric-val highlight-blue">3.850,0 Tỷ VNĐ (104,2%)</div>
+                    <div class="metric-sub">Đạt 104.2% dự toán năm 2026</div>
                   </div>
 
-                  <div class="district-metrics-list">
-                    <div class="district-metric-item">
-                      <div class="metric-label">Thu ngân sách trên địa bàn:</div>
-                      <div id="overlayDistrictRevenue" class="metric-val highlight-blue">3.850,0 Tỷ VNĐ (104,2%)</div>
-                      <div class="metric-sub">Đạt 104.2% dự toán năm 2026</div>
-                    </div>
-
-                    <div class="district-metric-item">
-                      <div class="metric-label">Tỷ lệ giải ngân vốn ĐTC:</div>
-                      <div id="overlayDistrictDTC" class="metric-val highlight-green">78,5% (3.022 Tỷ)</div>
-                      <div class="metric-sub">Đúng tiến độ chỉ đạo điều hành</div>
-                    </div>
-
-                    <div class="district-metric-item">
-                      <div class="metric-label">Số DN & Hộ kinh doanh:</div>
-                      <div id="overlayDistrictProjects" class="metric-val highlight-amber">4.200 DN (Hệ số K = 1.50)</div>
-                      <div class="metric-sub">Đơn vị hành chính cấp cơ sở trực thuộc tỉnh</div>
-                    </div>
+                  <div class="district-metric-item">
+                    <div class="metric-label">Tỷ lệ giải ngân vốn ĐTC:</div>
+                    <div id="overlayDistrictDTC" class="metric-val highlight-green">78,5% (3.022 Tỷ)</div>
+                    <div class="metric-sub">Đúng tiến độ chỉ đạo điều hành</div>
                   </div>
 
-                  <button class="btn btn-soft-primary btn-sm" style="width: 100%; margin-top: 10px;" onclick="App.showNotification('Đang trích xuất báo cáo kinh tế chi tiết địa bàn...', 'info')">
-                    <i data-lucide="file-bar-chart-2"></i> Xem báo cáo địa bàn
-                  </button>
+                  <div class="district-metric-item">
+                    <div class="metric-label">Số DN & Hộ kinh doanh:</div>
+                    <div id="overlayDistrictProjects" class="metric-val highlight-amber">4.200 DN (K = 1.50)</div>
+                    <div class="metric-sub">Mật độ kinh doanh trọng điểm</div>
+                  </div>
                 </div>
+
+                <button class="btn btn-soft-primary btn-sm" style="width: 100%; margin-top: 8px;" onclick="App.showNotification('Đang trích xuất báo cáo kinh tế chi tiết địa bàn...', 'info')">
+                  <i data-lucide="file-bar-chart-2"></i> Xem báo cáo địa bàn
+                </button>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-6">
-          <div class="card" style="height: 100%;">
-            <div class="card-header">
-              <h3 class="card-title"><i data-lucide="bar-chart-3"></i> Cơ cấu thu ngân sách theo sắc thuế</h3>
-              <div style="display: flex; gap: 8px; align-items: center;">
-                <span class="chart-live-badge"><span class="pulse-dot"></span> Real-time Live</span>
-                <span class="badge badge-success">Đạt 102.3% dự toán</span>
+
+        <div class="col-5">
+          <div class="card" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div class="card-header" style="border-bottom: none; padding-bottom: 8px;">
+                <div>
+                  <h3 class="card-title"><i data-lucide="bar-chart-3"></i> Cơ cấu thu ngân sách theo sắc thuế</h3>
+                  <p class="card-subtitle" style="margin: 0;">Đối chiếu Dự toán giao 2026 và Thực thu lũy kế</p>
+                </div>
+                <div style="display: flex; gap: 6px; align-items: center;">
+                  <span class="chart-live-badge"><span class="pulse-dot"></span> Live</span>
+                  <span class="badge badge-success">102,3% KH</span>
+                </div>
+              </div>
+
+              <!-- Executive Metric Ribbon -->
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 8px 12px; background: #f8fafc; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; margin-bottom: 6px;">
+                <div style="text-align: center;">
+                  <div style="font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase;">Thu nội địa</div>
+                  <div style="font-size: 13px; font-weight: 800; color: #002B8C; margin-top: 2px;">15.420 Tỷ <small style="color: #16a34a; font-size: 10px;">(103%)</small></div>
+                </div>
+                <div style="text-align: center; border-left: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0;">
+                  <div style="font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase;">Thu XNK</div>
+                  <div style="font-size: 13px; font-weight: 800; color: #0284c7; margin-top: 2px;">3.100,6 Tỷ <small style="color: #16a34a; font-size: 10px;">(99%)</small></div>
+                </div>
+                <div style="text-align: center;">
+                  <div style="font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase;">Tổng thu NSNN</div>
+                  <div style="font-size: 13px; font-weight: 800; color: #15803d; margin-top: 2px;">18.520,6 Tỷ <small style="color: #16a34a; font-size: 10px;">(102%)</small></div>
+                </div>
+              </div>
+
+              <!-- Bar Chart Canvas -->
+              <div class="chart-wrapper" style="height: 200px; padding: 0 4px;"><canvas id="chartRevenueStructure"></canvas></div>
+            </div>
+
+            <!-- Mini Progress Breakdown (Eliminates dead space) -->
+            <div style="padding: 10px 14px; background: #f8fafc; border-top: 1px solid #e2e8f0; border-radius: 0 0 var(--radius-md) var(--radius-md); font-size: 11px;">
+              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px 14px;">
+                <div style="display: flex; justify-content: space-between;">
+                  <span style="color: #475569;">Thu DNNN: <strong>4.380 Tỷ</strong></span>
+                  <span style="color: #15803d; font-weight: 700;">104,3%</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <span style="color: #475569;">Thu FDI: <strong>2.150 Tỷ</strong></span>
+                  <span style="color: #15803d; font-weight: 700;">102,4%</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <span style="color: #475569;">Ngoài QDoanh: <strong>4.920 Tỷ</strong></span>
+                  <span style="color: #15803d; font-weight: 700;">102,5%</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <span style="color: #475569;">Thuế TNCN: <strong>1.640 Tỷ</strong></span>
+                  <span style="color: #15803d; font-weight: 700;">102,5%</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <span style="color: #475569;">Tiền SD Đất: <strong>2.330 Tỷ</strong></span>
+                  <span style="color: #b45309; font-weight: 700;">93,2%</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <span style="color: #475569;">Thuế XNK: <strong>3.100,6 Tỷ</strong></span>
+                  <span style="color: #15803d; font-weight: 700;">106,9%</span>
+                </div>
               </div>
             </div>
-            <div class="chart-wrapper"><canvas id="chartRevenueStructure"></canvas></div>
           </div>
         </div>
       </div>
@@ -2306,11 +2301,39 @@ const DeptWorkspaceManager = {
         </div>
 
         <div class="col-5">
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title"><i data-lucide="radar"></i> Ma trận định vị rủi ro tài chính doanh nghiệp</h3>
+          <div class="card" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div class="card-header" style="border-bottom: none; padding-bottom: 6px;">
+                <div>
+                  <h3 class="card-title"><i data-lucide="radar"></i> Ma trận định vị rủi ro tài chính doanh nghiệp</h3>
+                  <p class="card-subtitle" style="margin: 0;">Tương quan Tỷ suất ROA (%) vs Điểm tuân thủ Thuế & BCTC</p>
+                </div>
+                <span class="badge badge-warning">02 DN Cảnh báo</span>
+              </div>
+
+              <!-- Zone Legend Badges -->
+              <div style="display: flex; gap: 6px; padding: 6px 12px; background: #f8fafc; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; font-size: 10.5px; flex-wrap: wrap;">
+                <span style="color: #002B8C; font-weight: 700;">● An toàn (ROA > 5%)</span>
+                <span style="color: #b45309; font-weight: 700; margin-left: 8px;">● Theo dõi (0-5%)</span>
+                <span style="color: #dc2626; font-weight: 700; margin-left: 8px;">● Báo động Đỏ (&lt; 0%)</span>
+              </div>
+
+              <!-- Scatter Canvas Wrapper -->
+              <div class="chart-wrapper" style="height: 230px; padding: 4px 6px;">
+                <canvas id="chartRiskScatter"></canvas>
+              </div>
             </div>
-            <div class="chart-wrapper"><canvas id="chartRiskScatter"></canvas></div>
+
+            <!-- Flagged High-Risk Alert Box -->
+            <div style="padding: 10px 14px; background: #fef2f2; border-top: 1px solid #fecaca; border-radius: 0 0 var(--radius-md) var(--radius-md); font-size: 11px;">
+              <div style="font-weight: 700; color: #991b1b; margin-bottom: 4px; display: flex; align-items: center; gap: 5px;">
+                <i data-lucide="alert-triangle" style="width: 13px; height: 13px;"></i> Doanh nghiệp cảnh báo rủi ro tài chính:
+              </div>
+              <div style="color: #b91c1c; line-height: 1.4;">
+                • <strong>Công ty TNHH Vận tải & Xây dựng ABC:</strong> ROA âm -4,2%, nợ BHXH 450 Triệu đ.<br>
+                • <strong>Công ty TNHH Bất động sản Hoàng Gia:</strong> ROA âm -2,1%, điểm tuân thủ BCTC 41/100.
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -50,8 +50,10 @@ const ChartsManager = {
             backgroundColor: gradPlan,
             borderColor: '#64748b',
             borderWidth: 1.5,
-            borderRadius: 8,
-            borderSkipped: false
+            borderRadius: 6,
+            barPercentage: 0.8,
+            categoryPercentage: 0.85,
+            maxBarThickness: 34
           },
           {
             label: 'Số Thực thu Lũy kế (Tỷ đồng)',
@@ -59,8 +61,10 @@ const ChartsManager = {
             backgroundColor: gradActual,
             borderColor: '#002B8C',
             borderWidth: 1.5,
-            borderRadius: 8,
-            borderSkipped: false
+            borderRadius: 6,
+            barPercentage: 0.8,
+            categoryPercentage: 0.85,
+            maxBarThickness: 34
           }
         ]
       },
@@ -296,9 +300,21 @@ const ChartsManager = {
     const canvas = document.getElementById('chartRiskScatter');
     if (!canvas) return;
 
-    if (this.instances.scatter) this.instances.scatter.destroy();
+    if (this.instances.scatter) {
+      try { this.instances.scatter.destroy(); } catch (e) {}
+    }
 
-    const dataPoints = APP_DATA.enterpriseRiskMatrix.map(dn => ({
+    const rawData = (window.APP_DATA && window.APP_DATA.enterpriseRiskMatrix) || [
+      { name: "Công ty TNHH Vận tải & Xây dựng ABC", roa: -4.2, roe: -8.5, tax_compliance_score: 32, risk_level: "Báo động Đỏ", debt_bhxh_mil: 450, color: "#ef4444" },
+      { name: "Công ty TNHH Bất động sản Hoàng Gia", roa: -2.1, roe: -5.0, tax_compliance_score: 41, risk_level: "Báo động Đỏ", debt_bhxh_mil: 280, color: "#ef4444" },
+      { name: "Công ty CP Thủy sản Xuất khẩu Phương Nam", roa: 1.2, roe: 2.4, tax_compliance_score: 65, risk_level: "Cảnh báo", debt_bhxh_mil: 0, color: "#f59e0b" },
+      { name: "Công ty TNHH Khoáng sản Miền Trung", roa: 0.5, roe: 1.1, tax_compliance_score: 52, risk_level: "Cảnh báo", debt_bhxh_mil: 120, color: "#f59e0b" },
+      { name: "Công ty CP Du lịch & Nghỉ dưỡng Nha Trang Bay", roa: 6.8, roe: 10.2, tax_compliance_score: 85, risk_level: "An toàn", debt_bhxh_mil: 0, color: "#10b981" },
+      { name: "Tổng Công ty Khánh Việt (KHATOCO)", roa: 14.8, roe: 22.4, tax_compliance_score: 98, risk_level: "Xuất sắc", debt_bhxh_mil: 0, color: "#002B8C" },
+      { name: "Công ty CP Nước giải khát Yến Sào Khánh Hòa", roa: 18.5, roe: 26.2, tax_compliance_score: 99, risk_level: "Xuất sắc", debt_bhxh_mil: 0, color: "#002B8C" }
+    ];
+
+    const dataPoints = rawData.map(dn => ({
       x: dn.roa,
       y: dn.tax_compliance_score,
       name: dn.name,
@@ -307,50 +323,59 @@ const ChartsManager = {
       color: dn.color
     }));
 
-    this.instances.scatter = new Chart(canvas, {
-      type: 'scatter',
-      data: {
-        datasets: [{
-          label: 'Doanh nghiệp trên Địa bàn Tỉnh',
-          data: dataPoints,
-          backgroundColor: dataPoints.map(p => p.color),
-          borderColor: '#ffffff',
-          borderWidth: 2,
-          pointRadius: 9,
-          pointHoverRadius: 14
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            backgroundColor: 'rgba(0, 43, 140, 0.95)',
-            callbacks: {
-              label: (item) => {
-                const raw = item.raw;
-                return ` ${raw.name}: ROA=${raw.x}%, Tuân thủ=${raw.y}/100 [${raw.risk}]`;
+    try {
+      this.instances.scatter = new Chart(canvas, {
+        type: 'scatter',
+        data: {
+          datasets: [{
+            label: 'Doanh nghiệp trên Địa bàn',
+            data: dataPoints,
+            backgroundColor: dataPoints.map(p => p.color),
+            borderColor: '#ffffff',
+            borderWidth: 2,
+            pointRadius: 8,
+            pointHoverRadius: 13
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: {
+            duration: 800
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: 'rgba(0, 43, 140, 0.95)',
+              titleFont: { family: 'Be Vietnam Pro', size: 12, weight: 'bold' },
+              bodyFont: { family: 'Be Vietnam Pro', size: 11 },
+              callbacks: {
+                label: (item) => {
+                  const raw = item.raw;
+                  return ` ${raw.name}: ROA = ${raw.x}%, Tuân thủ = ${raw.y}/100 [${raw.risk}]`;
+                }
               }
             }
-          }
-        },
-        scales: {
-          x: {
-            title: { display: true, text: 'Tỷ suất Sinh lời ROA (%)', color: '#334155', font: { weight: '700' } },
-            ticks: { color: '#64748b' },
-            grid: { color: 'rgba(0, 0, 0, 0.05)' }
           },
-          y: {
-            title: { display: true, text: 'Điểm Tuân thủ Thuế & BCTC (0 - 100)', color: '#334155', font: { weight: '700' } },
-            min: 0,
-            max: 100,
-            ticks: { color: '#64748b' },
-            grid: { color: 'rgba(0, 0, 0, 0.05)' }
+          scales: {
+            x: {
+              title: { display: true, text: 'Tỷ suất Sinh lời ROA (%)', color: '#334155', font: { weight: '700', size: 11 } },
+              ticks: { color: '#64748b', font: { size: 10 } },
+              grid: { color: 'rgba(0, 0, 0, 0.06)' }
+            },
+            y: {
+              title: { display: true, text: 'Điểm Tuân thủ Thuế & BCTC (0 - 100)', color: '#334155', font: { weight: '700', size: 11 } },
+              min: 0,
+              max: 105,
+              ticks: { color: '#64748b', font: { size: 10 } },
+              grid: { color: 'rgba(0, 0, 0, 0.06)' }
+            }
           }
         }
-      }
-    });
+      });
+    } catch (err) {
+      console.error('Error creating scatter chart:', err);
+    }
   },
 
   // 5. Biểu đồ Dòng Chảy Ngân Sách (Sankey / Cashflow Stream)

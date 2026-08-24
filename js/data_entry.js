@@ -115,7 +115,7 @@ const DataEntryManager = {
             </div>
             <div class="form-actions">
               <button type="reset" class="btn btn-secondary"><i data-lucide="rotate-ccw"></i> Nhập lại</button>
-              <button type="submit" class="btn btn-primary"><i data-lucide="send"></i> Trình lãnh đạo Sở phê duyệt</button>
+              <button type="submit" class="btn btn-primary"><i data-lucide="send"></i> Trình Lãnh đạo Phòng kiểm tra & Trình Lãnh đạo Sở phê duyệt</button>
             </div>
           </form>
         ` : `
@@ -1117,7 +1117,7 @@ const DataEntryManager = {
           </div>
           <div class="form-actions">
             <button type="reset" class="btn btn-secondary"><i data-lucide="rotate-ccw"></i> Nhập lại</button>
-            <button type="submit" class="btn btn-primary"><i data-lucide="send"></i> Trình lãnh đạo Sở phê duyệt phương án tự chủ</button>
+            <button type="submit" class="btn btn-primary"><i data-lucide="send"></i> Trình Lãnh đạo Phòng thẩm tra & Trình Lãnh đạo Sở phê duyệt phương án tự chủ</button>
           </div>
         </form>
       `;
@@ -1149,56 +1149,283 @@ const DataEntryManager = {
     App.showNotification(`Đã gửi hồ sơ [${newSub.id}] lên Lãnh đạo Sở xét duyệt nạp CSDL!`, "info");
   },
 
-  renderPendingTable() {
-    const tbody = document.getElementById('pendingSubmissionsTableBody');
+  // -------------------------------------------------------------
+  // TRUNG TÂM PHÊ DUYỆT & CHỈ ĐẠO ĐIỀU HÀNH DÀNH CHO LÃNH ĐẠO SỞ
+  // -------------------------------------------------------------
+  renderDirectorApprovalHub(containerId = 'dynamicDeptFormContainer') {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const pendingCount = APP_DATA.pendingSubmissions.filter(s => s.status === 'PENDING').length;
+    const approvedCount = APP_DATA.pendingSubmissions.filter(s => s.status === 'APPROVED').length;
+    const rejectedCount = APP_DATA.pendingSubmissions.filter(s => s.status === 'REJECTED').length;
+
+    container.innerHTML = `
+      <!-- 1. EXECUTIVE KPI SUMMARY -->
+      <div class="kpi-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 20px;">
+        <div class="kpi-card" style="border-left: 4px solid #f59e0b;">
+          <div class="kpi-header">
+            <span class="kpi-title">Hồ sơ chờ Giám đốc Sở duyệt</span>
+            <div class="kpi-icon-wrapper" style="background: #fef3c7; color: #b45309;"><i data-lucide="clock"></i></div>
+          </div>
+          <div class="kpi-value-row">
+            <div class="kpi-value" style="color: #b45309;">${pendingCount}</div>
+            <span class="badge badge-warning">Cần xử lý trong kỳ</span>
+          </div>
+          <div class="kpi-footer">Từ 8 phòng chuyên môn & đơn vị ngoài</div>
+        </div>
+
+        <div class="kpi-card" style="border-left: 4px solid #16a34a;">
+          <div class="kpi-header">
+            <span class="kpi-title">Đã phê duyệt nạp CSDL</span>
+            <div class="kpi-icon-wrapper" style="background: #dcfce7; color: #15803d;"><i data-lucide="check-circle-2"></i></div>
+          </div>
+          <div class="kpi-value-row">
+            <div class="kpi-value" style="color: #15803d;">${approvedCount}</div>
+            <span class="badge badge-success">Khóa sổ & Đồng bộ</span>
+          </div>
+          <div class="kpi-footer">Đã nạp chính thức vào Kho CSDL Tỉnh</div>
+        </div>
+
+        <div class="kpi-card" style="border-left: 4px solid #0284c7;">
+          <div class="kpi-header">
+            <span class="kpi-title">Tờ trình gửi UBND / HĐND tỉnh</span>
+            <div class="kpi-icon-wrapper" style="background: #e0f2fe; color: #0284c7;"><i data-lucide="send"></i></div>
+          </div>
+          <div class="kpi-value-row">
+            <div class="kpi-value" style="color: #002B8C;">04</div>
+            <span class="badge badge-info">Vượt thẩm quyền Sở</span>
+          </div>
+          <div class="kpi-footer">Dự toán tỉnh, Bảng giá đất, Đề án tự chủ</div>
+        </div>
+
+        <div class="kpi-card" style="border-left: 4px solid #dc2626;">
+          <div class="kpi-header">
+            <span class="kpi-title">Yêu cầu phòng chỉnh lý / giải trình</span>
+            <div class="kpi-icon-wrapper" style="background: #fee2e2; color: #dc2626;"><i data-lucide="rotate-ccw"></i></div>
+          </div>
+          <div class="kpi-value-row">
+            <div class="kpi-value" style="color: #dc2626;">${rejectedCount}</div>
+            <span class="badge badge-danger">Cần bổ sung số liệu</span>
+          </div>
+          <div class="kpi-footer">Đã chuyển trả phòng kèm ý kiến chỉ đạo</div>
+        </div>
+      </div>
+
+      <!-- 2. PHÂN ĐỊNH THẨM QUYỀN BAN GIÁM ĐỐC SỞ -->
+      <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 40px; height: 40px; border-radius: 50%; background: #002B8C; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;">
+            🏛️
+          </div>
+          <div>
+            <div style="font-size: 14px; font-weight: 750; color: #002B8C;">Thẩm quyền Quyết định & Phê duyệt của Ban Giám đốc Sở Tài chính</div>
+            <div style="font-size: 12px; color: #475569; margin-top: 2px;">
+              Trực tiếp xem xét Tờ trình đã được <strong>Lãnh đạo Phòng chuyên môn thẩm tra</strong> ➔ Ký duyệt nạp CSDL hoặc Ký Tờ trình gửi UBND tỉnh.
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-primary btn-sm" onclick="DataEntryManager.batchApproveAll()" title="Ký duyệt đồng loạt các hồ sơ đã có kết quả thẩm tra Đạt">
+            <i data-lucide="check-check"></i> Ký duyệt đồng loạt hồ sơ đạt chuẩn
+          </button>
+        </div>
+      </div>
+
+      <!-- 3. BẢNG DANH SÁCH TỜ TRÌNH & HỒ SƠ CHUẨN BIG DATA TABLE UX -->
+      <div class="table-fullscreen-wrapper" id="wrapper_director_approvals">
+        ${DeptWorkspaceManager.renderAdminTableToolbar('wrapper_director_approvals', 'table_director_approvals', 'Danh mục Tờ trình & Hồ sơ trình Ban Giám đốc Sở')}
+        <div class="table-scroll-container">
+          <table class="data-table freeze-first" id="table_director_approvals">
+            <thead>
+              <tr>
+                <th style="width: 140px;">Mã Tờ Trình</th>
+                <th style="min-width: 260px;">Nội Dung Tờ Trình & Căn Cứ</th>
+                <th>Phòng Chuyên Môn Thẩm Tra</th>
+                <th>Thẩm Quyền Xử Lý</th>
+                <th>Ngày Trình</th>
+                <th>Trạng Thái</th>
+                <th style="min-width: 240px; text-align: center;">Thao Tác Giám Đốc Sở</th>
+              </tr>
+            </thead>
+            <tbody id="directorApprovalTableBody">
+              <!-- Rendered rows -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+
+    this.renderDirectorApprovalRows();
+    if (window.lucide) window.lucide.createIcons();
+  },
+
+  renderDirectorApprovalRows() {
+    const tbody = document.getElementById('directorApprovalTableBody');
     if (!tbody) return;
 
-    const isDirector = (App.currentUser && (App.currentUser.deptId === 'lanhdao' || App.currentUser.role === 'DIRECTOR'));
-    const currentDeptName = (App.currentUser && App.currentUser.dept) || '';
-
-    // Filter submissions if specialist
-    const submissions = isDirector 
-      ? APP_DATA.pendingSubmissions 
-      : APP_DATA.pendingSubmissions.filter(sub => !currentDeptName || sub.dept.toLowerCase().includes(currentDeptName.toLowerCase()) || currentDeptName.toLowerCase().includes(sub.dept.toLowerCase()));
-
+    const submissions = APP_DATA.pendingSubmissions;
     if (submissions.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #64748b; padding: 24px;">Chưa có hồ sơ nào được lập trong kỳ.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #64748b; padding: 24px;">Không có tờ trình nào chờ xử lý.</td></tr>`;
       return;
     }
 
-    tbody.innerHTML = submissions.map(sub => `
-      <tr>
-        <td><strong style="color: #002B8C;">${sub.id}</strong></td>
-        <td>
-          <div style="font-weight: 600; color: var(--text-pure);">${sub.title}</div>
-          <div style="font-size: 11px; color: var(--text-muted);">${sub.dept}</div>
-        </td>
-        <td><span class="badge badge-info">${sub.type}</span></td>
-        <td>${sub.submittedBy}</td>
-        <td>${sub.submittedDate}</td>
-        <td>
-          <span class="badge ${sub.status === 'APPROVED' ? 'badge-success' : sub.status === 'REJECTED' ? 'badge-danger' : 'badge-warning'}">
-            ${sub.status === 'APPROVED' ? 'Đã phê duyệt nạp CSDL' : sub.status === 'REJECTED' ? 'Từ chối' : 'Chờ Lãnh đạo Sở duyệt'}
-          </span>
-        </td>
-        <td>
-          ${isDirector && sub.status === 'PENDING' ? `
-            <div style="display: flex; gap: 6px;">
-              <button class="btn btn-success btn-sm" onclick="DataEntryManager.approveSubmission('${sub.id}')">
-                <i data-lucide="check"></i> Duyệt
-              </button>
-              <button class="btn btn-danger btn-sm" onclick="DataEntryManager.rejectSubmission('${sub.id}')">
-                <i data-lucide="x"></i> Từ chối
-              </button>
+    tbody.innerHTML = submissions.map(sub => {
+      const isPending = sub.status === 'PENDING';
+      const isApproved = sub.status === 'APPROVED';
+      const isSubmittedToUBND = sub.status === 'SUBMITTED_UBND';
+      const isRejected = sub.status === 'REJECTED';
+
+      const isUBNDAuthority = sub.title.includes('Khu đô thị') || sub.title.includes('Bảng giá đất') || sub.title.includes('dự toán') || sub.dept.includes('Kinh tế');
+
+      return `
+        <tr>
+          <td><strong style="color: #002B8C; font-family: monospace;">${sub.id}</strong></td>
+          <td>
+            <div style="font-weight: 700; color: #0f172a; font-size: 13px;">${sub.title}</div>
+            <div style="font-size: 11px; color: #64748b; margin-top: 2px;">
+              Loại hồ sơ: <span class="badge badge-purple" style="font-size: 10px;">${sub.type}</span>
             </div>
-          ` : `
-            <span style="font-size: 11px; color: #64748b;">${sub.status === 'APPROVED' ? 'Đã nạp CSDL' : sub.status === 'REJECTED' ? 'Trả lại chuyên viên' : 'Đang xử lý'}</span>
-          `}
-        </td>
-      </tr>
-    `).join('');
+          </td>
+          <td>
+            <div style="font-weight: 600; color: #002B8C; font-size: 12px;">${sub.dept}</div>
+            <div style="font-size: 11px; color: #15803d; margin-top: 2px;">
+              <i data-lucide="check" style="width: 11px; height: 11px; display: inline-block;"></i> Lãnh đạo Phòng đã thẩm tra đạt
+            </div>
+          </td>
+          <td>
+            <span class="badge ${isUBNDAuthority ? 'badge-purple' : 'badge-info'}">
+              ${isUBNDAuthority ? 'Trình UBND tỉnh' : 'Giám đốc Sở ký duyệt'}
+            </span>
+          </td>
+          <td><span style="font-family: monospace; font-size: 11.5px;">${sub.submittedDate}</span></td>
+          <td>
+            <span class="badge ${isApproved ? 'badge-success' : isSubmittedToUBND ? 'badge-info' : isRejected ? 'badge-danger' : 'badge-warning'}">
+              ${isApproved ? 'Đã phê duyệt nạp CSDL' : isSubmittedToUBND ? 'Đã ký Tờ trình gửi UBND' : isRejected ? 'Yêu cầu chỉnh lý' : 'Chờ Giám đốc Sở duyệt'}
+            </span>
+          </td>
+          <td style="text-align: center;">
+            <div style="display: flex; gap: 5px; justify-content: center; flex-wrap: wrap;">
+              <button class="btn btn-soft-primary btn-sm" onclick="DataEntryManager.viewSubmissionDetail('${sub.id}')" title="Xem chi tiết Tờ trình & Bảng số liệu đối soát">
+                <i data-lucide="eye"></i> Xem
+              </button>
+              
+              ${isPending ? (
+                isUBNDAuthority ? `
+                  <button class="btn btn-primary btn-sm" onclick="DataEntryManager.signSubmitToUBND('${sub.id}')" title="Ký Tờ trình của Sở Tài chính gửi UBND tỉnh">
+                    <i data-lucide="send"></i> Ký trình UBND
+                  </button>
+                ` : `
+                  <button class="btn btn-success btn-sm" onclick="DataEntryManager.approveSubmission('${sub.id}')" title="Phê duyệt chính thức & Nạp CSDL">
+                    <i data-lucide="check"></i> Phê duyệt
+                  </button>
+                `
+              ) : ''}
+
+              ${isPending ? `
+                <button class="btn btn-danger btn-sm" onclick="DataEntryManager.rejectSubmission('${sub.id}')" title="Chuyển trả phòng chuyên môn kèm ý kiến chỉ đạo">
+                  <i data-lucide="rotate-ccw"></i> Trả lại
+                </button>
+              ` : ''}
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
 
     if (window.lucide) window.lucide.createIcons();
+  },
+
+  viewSubmissionDetail(subId) {
+    const sub = APP_DATA.pendingSubmissions.find(s => s.id === subId);
+    if (!sub) return;
+
+    const modalTitle = document.getElementById('modalGenericTitle');
+    const modalBody = document.getElementById('modalGenericBody');
+
+    if (modalTitle) {
+      modalTitle.innerHTML = `<i data-lucide="file-check" style="color: #002B8C;"></i> Tờ Trình Số [${sub.id}] - ${sub.title}`;
+    }
+
+    if (modalBody) {
+      const dataRows = Object.entries(sub.data || {}).map(([k, v]) => `
+        <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed #e2e8f0; font-size: 12.5px;">
+          <span style="color: #64748b; font-weight: 600; text-transform: capitalize;">${k.replace(/_/g, ' ')}:</span>
+          <strong style="color: #0f172a;">${v}</strong>
+        </div>
+      `).join('');
+
+      modalBody.innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px 16px;">
+            <div>
+              <div style="font-size: 11px; color: #64748b; text-transform: uppercase; font-weight: 700;">Đơn vị lập & thụ lý</div>
+              <div style="font-size: 14px; font-weight: 750; color: #002B8C;">${sub.dept}</div>
+            </div>
+            <div>
+              <span class="badge badge-purple">${sub.type}</span>
+            </div>
+          </div>
+
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px;">
+            <h4 style="font-size: 13.5px; font-weight: 700; color: #0f172a; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+              <i data-lucide="table" style="width: 15px; height: 15px; color: #0284c7;"></i> Dữ liệu Báo cáo & Chỉ số Tài chính đề xuất
+            </h4>
+            <div style="display: flex; flex-direction: column; gap: 4px;">
+              ${dataRows}
+            </div>
+          </div>
+
+          <div style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 12px 14px; font-size: 12.5px;">
+            <div style="font-weight: 700; color: #15803d; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+              <i data-lucide="shield-check" style="width: 15px; height: 15px;"></i> Ý kiến Thẩm tra của Lãnh đạo Phòng chuyên môn:
+            </div>
+            <div style="color: #166534;">
+              "Hồ sơ đã được Phòng chuyên môn rà soát, đối chiếu đầy đủ với căn cứ pháp lý hiện hành và số liệu Kho bạc/Thuế. Kính trình Giám đốc Sở xem xét, phê duyệt hoặc ký Tờ trình gửi UBND tỉnh."
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 6px;">
+            <button class="btn btn-secondary btn-sm" onclick="App.closeModal('modalGeneric')">Đóng</button>
+            ${sub.status === 'PENDING' ? `
+              <button class="btn btn-success btn-sm" onclick="App.closeModal('modalGeneric'); DataEntryManager.approveSubmission('${sub.id}')">
+                <i data-lucide="check"></i> Phê duyệt chính thức
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    App.openModal('modalGeneric');
+    if (window.lucide) window.lucide.createIcons();
+  },
+
+  signSubmitToUBND(subId) {
+    const sub = APP_DATA.pendingSubmissions.find(s => s.id === subId);
+    if (!sub) return;
+
+    sub.status = 'SUBMITTED_UBND';
+    sub.approvedBy = 'Giám đốc Sở Tài chính (Đã ký Tờ trình gửi UBND tỉnh)';
+    sub.approvedDate = new Date().toISOString().replace('T', ' ').substring(0, 16);
+
+    this.renderDirectorApprovalRows();
+    App.showNotification(`Giám đốc Sở đã ký Tờ trình [${subId}] gửi UBND tỉnh phê duyệt ban hành Quyết định!`, 'success');
+  },
+
+  batchApproveAll() {
+    let count = 0;
+    APP_DATA.pendingSubmissions.forEach(sub => {
+      if (sub.status === 'PENDING') {
+        sub.status = 'APPROVED';
+        sub.approvedBy = 'Lãnh đạo Sở Tài chính';
+        sub.approvedDate = new Date().toISOString().replace('T', ' ').substring(0, 16);
+        count++;
+      }
+    });
+
+    this.renderDirectorApprovalHub();
+    App.showNotification(`Đã ký phê duyệt đồng loạt ${count} hồ sơ thẩm tra đạt chuẩn vào CSDL!`, 'success');
   },
 
   approveSubmission(subId) {
@@ -1209,22 +1436,24 @@ const DataEntryManager = {
     sub.approvedBy = 'Lãnh đạo Sở Tài chính';
     sub.approvedDate = new Date().toISOString().replace('T', ' ').substring(0, 16);
 
+    this.renderDirectorApprovalRows();
     this.renderPendingTable();
-    App.showNotification(`Đã phê duyệt hồ sơ [${subId}]! Dữ liệu đã được nạp chính thức vào Kho CSDL Kinh tế Khánh Hòa.`, 'success');
+    App.showNotification(`Giám đốc Sở đã phê duyệt hồ sơ [${subId}]! Dữ liệu đã nạp vào Kho CSDL Kinh tế Khánh Hòa.`, 'success');
   },
 
   rejectSubmission(subId) {
     const sub = APP_DATA.pendingSubmissions.find(s => s.id === subId);
     if (!sub) return;
 
-    const reason = prompt("Nhập lý do từ chối hồ sơ (yêu cầu chuyên viên hoàn thiện lại):", "Số liệu chưa khớp với Quyết định đính kèm");
+    const reason = prompt("Nhập ý kiến chỉ đạo chuyển trả phòng chuyên môn bổ sung / giải trình:", "Số liệu chưa khớp với chứng từ kho bạc đối soát");
     if (!reason) return;
 
     sub.status = 'REJECTED';
     sub.rejectReason = reason;
 
+    this.renderDirectorApprovalRows();
     this.renderPendingTable();
-    App.showNotification(`Đã trả lại hồ sơ [${subId}] với lý do: "${reason}"`, 'warning');
+    App.showNotification(`Đã trả lại hồ sơ [${subId}] kèm ý kiến chỉ đạo: "${reason}"`, 'warning');
   },
 
   downloadTemplate(fileName) {

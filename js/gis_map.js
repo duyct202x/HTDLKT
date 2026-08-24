@@ -187,8 +187,8 @@ window.GisMapManager = {
         fillOpacity: isSelected ? 0.88 : 0.65
       });
 
-      // 2. Custom Point Marker & Annotation Pill Badge
-      const isImportantLabel = p.type === 'Phường' || p.type === 'Đặc khu' || isSelected || [7, 12, 18, 34].includes(p.stt);
+      // 2. Custom Point Marker & Annotation Pill Badge (Tránh chồng lấn nhãn khi xem toàn cảnh 65 xã/phường)
+      const isImportantLabel = isSelected || (self.activeFilter !== 'all') || ['KH65_49', 'KH65_01', 'KH65_65', 'KH65_33'].includes(p.id);
       const markerHtml = `
         <div class="gis-marker-container">
           ${isSelected ? '<div class="gis-active-halo"></div>' : ''}

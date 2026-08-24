@@ -446,26 +446,275 @@ const StateReportingManager = {
     if (window.lucide) window.lucide.createIcons();
   },
 
-  // 3. Màn hình phê duyệt và tổng hợp số liệu báo cáo
+  // 3. Màn hình thẩm tra chuyên môn và phê duyệt số liệu báo cáo
   renderReportApprovalView() {
     const container = document.getElementById('surveyMainContent');
     if (!container) return;
 
+    const auditData = [
+      {
+        orgId: "ORG_KT_01",
+        orgName: "Tổng Công ty Khánh Việt (KHATOCO)",
+        campaignName: "Báo cáo Giám sát Tài chính Quý III/2026",
+        deptReview: "Phòng Quản lý Doanh nghiệp",
+        reviewer: "Trưởng phòng QLDN (Đã ký nháy)",
+        declaredValue: "Doanh thu: 2.150 Tỷ | Nộp NS: 185,4 Tỷ",
+        matchedValue: "Khớp 100% với CSDL Cục Thuế & TABMIS",
+        riskLevel: "LOW",
+        status: "DEPT_VERIFIED", // Đã thẩm tra chuyên môn - Chờ Lãnh đạo Sở duyệt
+        statusText: "Phòng QLDN đã thẩm tra Đạt - Trình Lãnh đạo Sở"
+      },
+      {
+        orgId: "ORG_YS_02",
+        orgName: "Công ty CP Nước giải khát Yến Sào Khánh Hòa",
+        campaignName: "Báo cáo Tài chính & Chỉ số SXKD 6 tháng",
+        deptReview: "Phòng Quản lý Doanh nghiệp",
+        reviewer: "Trưởng phòng QLDN (Đã ký nháy)",
+        declaredValue: "Lợi nhuận: 82,6 Tỷ | Nộp NS: 34,2 Tỷ",
+        matchedValue: "Khớp 100% Hóa đơn điện tử & KBNN",
+        riskLevel: "LOW",
+        status: "DIRECTOR_APPROVED", // Giám đốc Sở đã duyệt
+        statusText: "Lãnh đạo Sở đã phê duyệt nạp CSDL"
+      },
+      {
+        orgId: "ORG_DTC_03",
+        orgName: "Ban Quản lý Dự án Đầu tư Xây dựng các Công trình Giao thông",
+        campaignName: "Tiến độ giải ngân vốn ĐTC tháng 8/2026",
+        deptReview: "Phòng Quản lý Đầu tư công",
+        reviewer: "Trưởng phòng QLĐTC (Đang thẩm tra)",
+        declaredValue: "Giải ngân lũy kế: 1.420,5 Tỷ (68,4%)",
+        matchedValue: "KBNN ghi nhận 1.418,2 Tỷ (Lệch 2,3 Tỷ tạm ứng)",
+        riskLevel: "MEDIUM",
+        status: "DEPT_AUDITING",
+        statusText: "Phòng QLĐTC đang đối soát chứng từ KBNN"
+      },
+      {
+        orgId: "ORG_UBND_04",
+        orgName: "UBND Phường Cam Nghĩa (Cam Ranh)",
+        campaignName: "Bộ chỉ số chỉ đạo điều hành Quyết định số 2071 Quý III",
+        deptReview: "Phòng Kinh tế và Ngân sách",
+        reviewer: "Trưởng phòng KTNS (Đã ký nháy)",
+        declaredValue: "Thu NSNN địa bàn: 145,8 Tỷ (104,2%)",
+        matchedValue: "Khớp 100% Chi cục Thuế khu vực",
+        riskLevel: "LOW",
+        status: "DIRECTOR_APPROVED",
+        statusText: "Lãnh đạo Sở đã phê duyệt nạp CSDL"
+      },
+      {
+        orgId: "ORG_BV_05",
+        orgName: "Bệnh viện Đa khoa tỉnh Khánh Hòa",
+        campaignName: "Báo cáo Tự chủ Tài chính ĐVSNCL (Nghị định 60)",
+        deptReview: "Phòng Tài chính Hành chính sự nghiệp",
+        reviewer: "Trưởng phòng HCSN (Yêu cầu giải trình)",
+        declaredValue: "Nguồn thu viện phí: 320 Tỷ | Chi lương: 180 Tỷ",
+        matchedValue: "Cần bổ sung thuyết minh quỹ phát triển hoạt động sự nghiệp",
+        riskLevel: "HIGH",
+        status: "EXPLANATION_REQUIRED",
+        statusText: "Phòng HCSN yêu cầu bổ sung thuyết minh"
+      },
+      {
+        orgId: "ORG_FDI_06",
+        orgName: "Công ty TNHH Maruha Nichiro Việt Nam (FDI)",
+        campaignName: "Giám sát tài chính & vốn FDI thực hiện 2026",
+        deptReview: "Phòng Quản lý Đầu tư ngoài ngân sách",
+        reviewer: "Trưởng phòng ĐTNS (Đã ký nháy)",
+        declaredValue: "Vốn thực hiện: 45 Triệu USD (100% cam kết)",
+        matchedValue: "Khớp số liệu Sở KH&ĐT & Ngân hàng Nhà nước",
+        riskLevel: "LOW",
+        status: "DEPT_VERIFIED",
+        statusText: "Phòng ĐTNS đã thẩm tra Đạt - Trình Lãnh đạo Sở"
+      }
+    ];
+
     container.innerHTML = `
-      <div class="card-header">
-        <div>
-          <h3 class="card-title"><i data-lucide="check-circle-2"></i> Thẩm tra & phê duyệt số liệu báo cáo</h3>
-          <p class="card-subtitle">Đối chiếu số liệu báo cáo và phê duyệt nạp chính thức vào CSDL kinh tế</p>
+      <!-- 1. HEADER & QUY TRÌNH PHÂN ĐỊNH THẨM QUYỀN -->
+      <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap;">
+          <div>
+            <h3 style="font-size: 15px; font-weight: 800; color: #002B8C; margin-bottom: 3px; display: flex; align-items: center; gap: 8px;">
+              <i data-lucide="shield-check"></i> Quy trình Thẩm tra Chuyên môn & Phê duyệt Số liệu Báo cáo
+            </h3>
+            <p style="font-size: 12px; color: #64748b; margin: 0;">
+              Phân định rõ ranh giới thẩm quyền giữa <strong>Lãnh đạo Phòng chuyên môn</strong> và <strong>Ban Giám đốc Sở Tài chính</strong>
+            </p>
+          </div>
+          <span class="badge badge-purple" style="font-size: 11px; padding: 4px 10px;">Quy chuẩn 2 cấp thẩm quyền</span>
+        </div>
+
+        <!-- 5-Step Workflow Diagram -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; font-size: 11.5px;">
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 10px;">
+            <div style="font-weight: 700; color: #64748b;">1. Cơ quan/Doanh nghiệp</div>
+            <div style="color: #0f172a; margin-top: 2px;">Nộp dự thảo kèm chữ ký số</div>
+          </div>
+          <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 8px 10px;">
+            <div style="font-weight: 700; color: #002B8C;">2. Phòng Chuyên môn</div>
+            <div style="color: #1e40af; margin-top: 2px;">Thẩm tra & Đối soát CSDL (KBNN/Thuế)</div>
+          </div>
+          <div style="background: #fef3c7; border: 1px solid #fde68a; border-radius: 6px; padding: 8px 10px;">
+            <div style="font-weight: 700; color: #b45309;">3. Giải trình / Chỉnh sửa</div>
+            <div style="color: #92400e; margin-top: 2px;">Yêu cầu làm rõ nếu có chênh lệch</div>
+          </div>
+          <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 8px 10px;">
+            <div style="font-weight: 700; color: #15803d;">4. Trưởng Phòng Ký nháy</div>
+            <div style="color: #166534; margin-top: 2px;">Lập Tờ trình kết quả thẩm tra</div>
+          </div>
+          <div style="background: #f3e8ff; border: 1px solid #e9d5ff; border-radius: 6px; padding: 8px 10px;">
+            <div style="font-weight: 700; color: #7c3aed;">5. Giám đốc Sở Ký duyệt</div>
+            <div style="color: #6b21a8; margin-top: 2px;">Khóa sổ & Đồng bộ vào Kho CSDL Tỉnh</div>
+          </div>
         </div>
       </div>
-      <div style="text-align: center; padding: 24px; color: #64748b;">
-        <i data-lucide="database-backup" style="font-size: 36px; color: #0284c7; margin-bottom: 8px; display: inline-block;"></i>
-        <h4 style="color: #0f172a; font-size: 14px; margin-bottom: 4px; font-weight: 700;">Số liệu sau khi duyệt được tự động đồng bộ vào CSDL</h4>
-        <p style="font-size: 12px; color: #475569;">Đảm bảo tính chính xác, kịp thời và toàn vẹn dữ liệu.</p>
+
+      <!-- 2. BẢNG ĐỐI SOÁT & THẨM TRA CHUẨN BIG DATA TABLE UX -->
+      <div class="table-fullscreen-wrapper" id="wrapper_reporting_audit_table">
+        ${DeptWorkspaceManager.renderAdminTableToolbar('wrapper_reporting_audit_table', 'table_reporting_audit_table', 'Ma trận Thẩm tra & Đối chiếu Số liệu Báo cáo Toàn tỉnh')}
+        <div class="table-scroll-container">
+          <table class="data-table freeze-first" id="table_reporting_audit_table">
+            <thead>
+              <tr>
+                <th style="width: 220px;">Đơn Vị Kê Khai</th>
+                <th style="min-width: 220px;">Kỳ Báo Cáo</th>
+                <th>Phòng Chuyên Môn Thụ Lý</th>
+                <th>Số Liệu Đơn Vị Kê Khai</th>
+                <th>Đối Soát CSDL Nhà Nước (KBNN/Thuế)</th>
+                <th>Trạng Thái Thẩm Định</th>
+                <th style="min-width: 190px; text-align: center;">Thao Tác Xử Lý</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${auditData.map(item => `
+                <tr>
+                  <td>
+                    <strong style="color: #0f172a; font-size: 12.5px;">${item.orgName}</strong>
+                    <div style="font-size: 11px; color: #64748b; font-family: monospace;">${item.orgId}</div>
+                  </td>
+                  <td>
+                    <div style="font-weight: 600; color: #002B8C; font-size: 12px;">${item.campaignName}</div>
+                  </td>
+                  <td>
+                    <div style="font-weight: 600; color: #334155; font-size: 12px;">${item.deptReview}</div>
+                    <div style="font-size: 10.5px; color: #15803d;">${item.reviewer}</div>
+                  </td>
+                  <td>
+                    <div style="font-size: 11.5px; font-weight: 600; color: #0f172a;">${item.declaredValue}</div>
+                  </td>
+                  <td>
+                    <div style="font-size: 11.5px; color: ${item.riskLevel === 'LOW' ? '#15803d' : item.riskLevel === 'MEDIUM' ? '#b45309' : '#dc2626'}; font-weight: 600;">
+                      ${item.matchedValue}
+                    </div>
+                  </td>
+                  <td>
+                    <span class="badge ${item.status === 'DIRECTOR_APPROVED' ? 'badge-success' : item.status === 'DEPT_VERIFIED' ? 'badge-info' : item.status === 'EXPLANATION_REQUIRED' ? 'badge-danger' : 'badge-warning'}">
+                      ${item.statusText}
+                    </span>
+                  </td>
+                  <td style="text-align: center;">
+                    <div style="display: flex; gap: 5px; justify-content: center; flex-wrap: wrap;">
+                      <button class="btn btn-soft-primary btn-sm" onclick="StateReportingManager.viewAuditReportModal('${item.orgId}')" title="Xem Báo cáo Đối soát & Chứng từ KBNN/Thuế">
+                        <i data-lucide="eye"></i> Đối soát
+                      </button>
+                      ${item.status === 'DEPT_VERIFIED' ? `
+                        <button class="btn btn-success btn-sm" onclick="StateReportingManager.approveReport('${item.orgId}')" title="Lãnh đạo Sở Phê duyệt & Chốt CSDL">
+                          <i data-lucide="check"></i> Duyệt CSDL
+                        </button>
+                      ` : ''}
+                      ${item.status === 'EXPLANATION_REQUIRED' || item.status === 'DEPT_AUDITING' ? `
+                        <button class="btn btn-warning btn-sm" onclick="StateReportingManager.requestExplanation('${item.orgId}')" title="Gửi yêu cầu đơn vị giải trình số liệu">
+                          <i data-lucide="message-square"></i> Giải trình
+                        </button>
+                      ` : ''}
+                    </div>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
       </div>
     `;
 
     if (window.lucide) window.lucide.createIcons();
+  },
+
+  viewAuditReportModal(orgId) {
+    const modalTitle = document.getElementById('modalGenericTitle');
+    const modalBody = document.getElementById('modalGenericBody');
+
+    if (modalTitle) {
+      modalTitle.innerHTML = `<i data-lucide="clipboard-check" style="color: #002B8C;"></i> Biên Bản Thẩm Tra & Đối Soát Số Liệu [${orgId}]`;
+    }
+
+    if (modalBody) {
+      modalBody.innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px; font-size: 12.5px;">
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
+              <div><span style="color: #64748b;">Đơn vị được thẩm tra:</span> <strong style="color: #002B8C;">${orgId}</strong></div>
+              <div><span style="color: #64748b;">Phòng chuyên môn thẩm tra:</span> <strong style="color: #0f172a;">Phòng chuyên môn phụ trách</strong></div>
+              <div><span style="color: #64748b;">Thời gian đối soát:</span> <strong>${new Date().toLocaleString('vi-VN')}</strong></div>
+              <div><span style="color: #64748b;">Kết quả thẩm định:</span> <span class="badge badge-success">Khớp 100% CSDL Quốc gia</span></div>
+            </div>
+          </div>
+
+          <h4 style="font-size: 13.5px; font-weight: 700; color: #0f172a;">Bảng so sánh đối chiếu số liệu (Audit Trail)</h4>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Chỉ Tiêu Kinh Tế</th>
+                <th>Số Đơn Vị Tự Kê Khai</th>
+                <th>Số Liệu KBNN / Thuế Xác Nhận</th>
+                <th>Chênh Lệch</th>
+                <th>Đánh Giá Chuyên Môn</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Doanh thu thuần / Nguồn thu</strong></td>
+                <td>2.150.000.000.000 đ</td>
+                <td>2.150.000.000.000 đ</td>
+                <td><strong style="color: #15803d;">0 đ (Khớp 100%)</strong></td>
+                <td><span class="badge badge-success">Đạt chuẩn</span></td>
+              </tr>
+              <tr>
+                <td><strong>Số nộp Ngân sách Nhà nước</strong></td>
+                <td>185.400.000.000 đ</td>
+                <td>185.400.000.000 đ</td>
+                <td><strong style="color: #15803d;">0 đ (Khớp 100%)</strong></td>
+                <td><span class="badge badge-success">Đã đối soát TABMIS</span></td>
+              </tr>
+              <tr>
+                <td><strong>Tỷ suất sinh lời ROE</strong></td>
+                <td>18,4%</td>
+                <td>18,4%</td>
+                <td><strong style="color: #15803d;">0%</strong></td>
+                <td><span class="badge badge-success">Bảo toàn vốn nhà nước</span></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 12px 14px; font-size: 12px; color: #166534;">
+            <strong>Kết luận thẩm tra của Trưởng phòng:</strong> "Số liệu báo cáo của đơn vị hoàn toàn trung thực, hợp pháp, khớp đúng với dữ liệu hóa đơn điện tử của Cục Thuế và tài khoản KBNN. Đề nghị Giám đốc Sở phê duyệt nạp vào Kho CSDL kinh tế tỉnh Khánh Hòa."
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 8px;">
+            <button class="btn btn-secondary btn-sm" onclick="App.closeModal('modalGeneric')">Đóng</button>
+            <button class="btn btn-primary btn-sm" onclick="App.showNotification('Đã xuất Biên bản thẩm tra số liệu sang PDF/Excel!', 'success')">
+              <i data-lucide="printer"></i> Xuất Biên bản Thẩm tra (.PDF)
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    App.openModal('modalGeneric');
+    if (window.lucide) window.lucide.createIcons();
+  },
+
+  requestExplanation(orgId) {
+    const reason = prompt("Nhập nội dung yêu cầu đơn vị giải trình số liệu chênh lệch:", "Đề nghị giải trình rõ khoản chênh lệch 2,3 tỷ đồng giữa số đề nghị thanh toán và xác nhận của Kho bạc Nhà nước");
+    if (!reason) return;
+    App.showNotification(`Đã gửi thông báo yêu cầu giải trình tới đơn vị [${orgId}]!`, "warning");
   },
 
   remindAllOverdue() {

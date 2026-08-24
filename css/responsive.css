@@ -338,11 +338,14 @@
     width: 100% !important;
   }
 
-  .map-district-sidebar {
+  .map-district-sidebar,
+  .map-district-floating-panel {
+    position: static !important;
     width: 100% !important;
     min-width: 0 !important;
     max-width: 100% !important;
     margin-top: 14px !important;
+    box-shadow: var(--shadow-xs) !important;
   }
 }
 

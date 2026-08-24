@@ -207,36 +207,38 @@
   box-shadow: var(--shadow-xs);
 }
 
-.district-info-header {
-  border-bottom: 1px solid #f1f5f9;
-  padding-bottom: 10px;
-  margin-bottom: 12px;
+/* Floating Glassmorphism Inspector Panel */
+.map-district-floating-panel {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 280px;
+  max-height: calc(100% - 28px);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 43, 140, 0.18);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  z-index: 500;
+  box-shadow: 0 10px 25px -5px rgba(0, 43, 140, 0.18), 0 4px 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+  pointer-events: auto;
 }
 
-.district-badge {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--c-oceanic-azure);
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
+.district-info-header {
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 8px;
   margin-bottom: 4px;
 }
 
-.district-name {
-  font-size: 15px;
-  font-weight: 800;
-  color: #0f172a;
-  margin: 0;
-}
-
-.district-metrics-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  flex: 1;
+.district-meta-sub {
+  font-size: 10.5px;
+  color: #64748b;
+  margin-top: 1px;
 }
 
 .district-metric-item {
