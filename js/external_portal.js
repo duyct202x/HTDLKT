@@ -8,7 +8,16 @@ const ExternalPortalManager = {
   currentEntityId: 'UBND-NTR',
   currentTab: 'tasks',
 
-  // Danh mục đơn vị và doanh nghiệp mẫu trên Cổng báo cáo
+  // Định nghĩa chuẩn 5 Bước Quy Trình Trạng Thái (Workflow Status)
+  WORKFLOW_STEPS: [
+    { step: 1, key: 'UNSUBMITTED', label: '1. Chưa nộp', icon: 'file-text', color: 'blue' },
+    { step: 2, key: 'SUBMITTED_DRAFT', label: '2. Đã nộp dự thảo', icon: 'send', color: 'warning' },
+    { step: 3, key: 'UNDER_REVIEW', label: '3. Phòng CM tiếp nhận', icon: 'eye', color: 'purple' },
+    { step: 4, key: 'EXPLANATION_REQUIRED', label: '4. Yêu cầu giải trình/Bổ sung', icon: 'alert-triangle', color: 'danger' },
+    { step: 5, key: 'APPROVED_FINAL', label: '5. Đã duyệt chốt số liệu', icon: 'check-circle-2', color: 'success' }
+  ],
+
+  // Danh mục 6 đơn vị và doanh nghiệp kê khai ngoài trên Cổng báo cáo
   reportingEntities: {
     // 1. Khối cơ quan nhà nước và UBND các xã, phường
     'UBND-NTR': {
@@ -25,24 +34,42 @@ const ExternalPortalManager = {
           campaignId: 'REP-2071-Q3-2026',
           title: 'Báo cáo bộ chỉ số phục vụ chỉ đạo điều hành quý III/2026 (Quyết định số 2071/QĐ-UBND)',
           authority: 'UBND tỉnh Khánh Hòa',
+          assignedDept: 'Phòng Kinh tế và Ngân sách',
+          specialist: 'Lê Thị Thu Hằng',
           deadline: '2026-09-25',
-          status: 'SUBMITTED_APPROVED',
-          submitDate: '2026-08-18 09:15',
+          workflowStep: 5,
+          timeline: {
+            step1: '2026-08-01 (Giao nhiệm vụ)',
+            step2: '2026-08-14 09:30 (Đã nộp dự thảo)',
+            step3: '2026-08-15 14:20 (Phòng KTNS tiếp nhận)',
+            step4: '--- (Không có sai sót)',
+            step5: '2026-08-18 16:45 (Đã duyệt chốt số liệu)'
+          },
           score: 98,
-          feedback: 'Số liệu đầy đủ, khớp đúng với Kho bạc Nhà nước KV XIV.'
+          feedback: 'Số liệu thu chi ngân sách và giải ngân khớp đúng 100% với Kho bạc Nhà nước. Đã chốt nạp CSDL điều hành tỉnh.'
         },
         {
           campaignId: 'REP-TSC-N167-2026',
           title: 'Báo cáo tổng hợp tình hình quản lý, sử dụng & sắp xếp cơ sở nhà đất công năm 2026',
           authority: 'Bộ Tài chính & UBND tỉnh',
+          assignedDept: 'Phòng Quản lý Giá và Công sản',
+          specialist: 'Đặng Quốc Hưng',
           deadline: '2026-08-15',
-          status: 'COMPLETED',
-          submitDate: '2026-08-14 16:30',
+          workflowStep: 5,
+          timeline: {
+            step1: '2026-07-20 (Giao nhiệm vụ)',
+            step2: '2026-08-10 10:15 (Đã nộp dự thảo)',
+            step3: '2026-08-11 08:30 (Phòng GCS tiếp nhận)',
+            step4: '---',
+            step5: '2026-08-14 16:30 (Đã duyệt chốt số liệu)'
+          },
           score: 100,
-          feedback: 'Đã tổng hợp 32 cơ sở nhà đất trên địa bàn Phường Nha Trang và các phường phụ cận.'
+          feedback: 'Đã tổng hợp đầy đủ 32 cơ sở nhà đất công dôi dư, phương án sắp xếp đạt chuẩn quy định.'
         }
       ]
     },
+
+    // 2. Ban Quản lý Dự án Giao thông tỉnh
     'BAN-QLDA-GT': {
       id: 'BAN-QLDA-GT',
       type: 'GOV_PROJECT_OWNER',
@@ -57,14 +84,24 @@ const ExternalPortalManager = {
           campaignId: 'REP-DTC-THANG8-2026',
           title: 'Báo cáo tình hình thực hiện & giải ngân kế hoạch vốn đầu tư công tháng 8/2026',
           authority: 'Bộ Tài chính & UBND tỉnh',
+          assignedDept: 'Phòng Quản lý Đầu tư công',
+          specialist: 'Phạm Minh Tuấn',
           deadline: '2026-08-30',
-          status: 'DRAFT',
-          submitDate: null,
+          workflowStep: 4,
+          timeline: {
+            step1: '2026-08-01 (Giao nhiệm vụ)',
+            step2: '2026-08-16 15:40 (Đã nộp dự thảo)',
+            step3: '2026-08-18 10:00 (Phòng QL ĐTC tiếp nhận)',
+            step4: '2026-08-20 16:15 (Yêu cầu giải trình tiến độ GPMB)',
+            step5: '--- (Đang chờ giải trình)'
+          },
           score: null,
-          feedback: 'Cần cập nhật bổ sung nguyên nhân chậm GPMB Dự án Đường Vành Đai 2.'
+          feedback: 'CẢNH BÁO TIẾN ĐỘ: Dự án Tuyến đường Vành Đai 2 giải ngân dưới 40% kế hoạch vốn. Phòng QL Đầu tư công yêu cầu Ban QLDA bổ sung văn bản giải trình nguyên nhân vướng GPMB và cam kết tiến độ thi công trước ngày 28/08/2026.'
         }
       ]
     },
+
+    // 3. Bệnh viện Đa khoa tỉnh Khánh Hòa
     'BV-DAKHOA-TINH': {
       id: 'BV-DAKHOA-TINH',
       type: 'GOV_PUBLIC_UNIT',
@@ -79,16 +116,24 @@ const ExternalPortalManager = {
           campaignId: 'REP-TU-CHU-N60',
           title: 'Báo cáo tình hình thực hiện cơ chế tự chủ tài chính đơn vị sự nghiệp công lập (Nghị định số 60)',
           authority: 'Bộ Tài chính & UBND tỉnh',
+          assignedDept: 'Phòng Tài chính Hành chính sự nghiệp',
+          specialist: 'Ngô Mỹ Linh',
           deadline: '2026-09-10',
-          status: 'PENDING_APPROVAL',
-          submitDate: '2026-08-19 14:00',
+          workflowStep: 3,
+          timeline: {
+            step1: '2026-08-05 (Giao nhiệm vụ)',
+            step2: '2026-08-19 14:00 (Đã nộp dự thảo phương án)',
+            step3: '2026-08-21 09:30 (Phòng HCSN đang tiếp nhận thẩm tra)',
+            step4: '---',
+            step5: '---'
+          },
           score: null,
-          feedback: 'Đang chờ Phòng Tài chính Hành chính sự nghiệp thẩm tra phương án nhóm 2.'
+          feedback: 'Phòng Tài chính Hành chính sự nghiệp đang thụ lý hồ sơ, kiểm tra phương án phân loại tự chủ Nhóm 2 giai đoạn 2026-2028.'
         }
       ]
     },
 
-    // 2. Khối Doanh nghiệp & Nhà đầu tư
+    // 4. Tổng Công ty Khánh Việt (KHATOCO)
     '4200238910': {
       id: '4200238910',
       type: 'ENTERPRISE',
@@ -103,14 +148,42 @@ const ExternalPortalManager = {
           campaignId: 'REP-BTC-NSNN-2026',
           title: 'Báo cáo đánh giá tình hình sản xuất kinh doanh & ước nộp ngân sách năm 2026',
           authority: 'Bộ Tài chính & UBND tỉnh',
+          assignedDept: 'Phòng Quản lý Doanh nghiệp',
+          specialist: 'Vũ Thị Mai',
           deadline: '2026-09-15',
-          status: 'OPEN_TODO',
-          submitDate: null,
+          workflowStep: 2,
+          timeline: {
+            step1: '2026-08-10 (Giao nhiệm vụ)',
+            step2: '2026-08-22 11:20 (Đã nộp dự thảo BCTC & ước nộp NSNN)',
+            step3: '--- (Chờ Phòng QLDN tiếp nhận)',
+            step4: '---',
+            step5: '---'
+          },
           score: null,
-          feedback: 'Hạn nộp báo cáo dự toán còn 25 ngày.'
+          feedback: 'Đã nộp thành công dự thảo ước nộp NSNN năm 2026 (3.620,5 tỷ đồng). Đang chờ chuyên viên Phòng Quản lý Doanh nghiệp tiếp nhận đối soát.'
+        },
+        {
+          campaignId: 'REP-BCTC-6THANG-2026',
+          title: 'Báo cáo tài chính và hiệu quả sử dụng vốn nhà nước 6 tháng đầu năm 2026',
+          authority: 'UBND tỉnh Khánh Hòa',
+          assignedDept: 'Phòng Quản lý Doanh nghiệp',
+          specialist: 'Vũ Thị Mai',
+          deadline: '2026-07-31',
+          workflowStep: 5,
+          timeline: {
+            step1: '2026-07-01',
+            step2: '2026-07-20',
+            step3: '2026-07-22',
+            step4: '---',
+            step5: '2026-07-28 (Đã phê duyệt chốt số liệu)'
+          },
+          score: 99,
+          feedback: 'Báo cáo tài chính kiểm toán hoàn tất, chỉ tiêu bảo toàn vốn và nộp NSNN đạt xuất sắc.'
         }
       ]
     },
+
+    // 5. Công ty Yến Sào Khánh Hòa
     '4200429779': {
       id: '4200429779',
       type: 'ENTERPRISE',
@@ -125,14 +198,42 @@ const ExternalPortalManager = {
           campaignId: 'REP-BTC-NSNN-2026',
           title: 'Báo cáo tình hình hoạt động doanh thu & nộp ngân sách năm 2026',
           authority: 'Bộ Tài chính & UBND tỉnh',
+          assignedDept: 'Phòng Quản lý Doanh nghiệp',
+          specialist: 'Vũ Thị Mai',
           deadline: '2026-09-15',
-          status: 'OPEN_TODO',
-          submitDate: null,
+          workflowStep: 1,
+          timeline: {
+            step1: '2026-08-10 (Đã mở cổng tiếp nhận)',
+            step2: '--- (Chưa nộp dự thảo)',
+            step3: '---',
+            step4: '---',
+            step5: '---'
+          },
           score: null,
-          feedback: 'Hạn nộp báo cáo dự toán còn 25 ngày.'
+          feedback: 'Chế độ báo cáo đang mở. Đơn vị cần tổng hợp số liệu doanh thu và số ước nộp NSNN quý III để gửi dự thảo trước ngày 15/09/2026.'
+        },
+        {
+          campaignId: 'REP-BCTC-Q2-2026',
+          title: 'Báo cáo giám sát tài chính định kỳ Quý II/2026',
+          authority: 'UBND tỉnh Khánh Hòa',
+          assignedDept: 'Phòng Quản lý Doanh nghiệp',
+          specialist: 'Vũ Thị Mai',
+          deadline: '2026-07-20',
+          workflowStep: 5,
+          timeline: {
+            step1: '2026-06-25',
+            step2: '2026-07-15',
+            step3: '2026-07-16',
+            step4: '---',
+            step5: '2026-07-19 (Đã phê duyệt chốt số liệu)'
+          },
+          score: 97,
+          feedback: 'Số liệu doanh thu 2.180 tỷ đồng đạt chuẩn, đã nạp Master Data.'
         }
       ]
     },
+
+    // 6. Doanh nghiệp FDI Maruha Nichiro
     'FDI-MARUHA': {
       id: 'FDI-MARUHA',
       type: 'ENTERPRISE_FDI',
@@ -147,11 +248,37 @@ const ExternalPortalManager = {
           campaignId: 'REP-DN-FDI-2026',
           title: 'Báo cáo giám sát tài chính & vốn thực hiện doanh nghiệp FDI năm 2026',
           authority: 'Bộ Tài chính',
+          assignedDept: 'Phòng Quản lý Đầu tư ngoài ngân sách',
+          specialist: 'Nguyễn Thị Bích Trâm',
           deadline: '2026-09-30',
-          status: 'OPEN_TODO',
-          submitDate: null,
+          workflowStep: 1,
+          timeline: {
+            step1: '2026-08-15 (Mở nhiệm vụ báo cáo)',
+            step2: '--- (Chưa nộp dự thảo)',
+            step3: '---',
+            step4: '---',
+            step5: '---'
+          },
           score: null,
-          feedback: 'Báo cáo định kỳ hằng năm theo quy định của Bộ Tài chính.'
+          feedback: 'Kỳ báo cáo định kỳ giám sát vốn FDI (58 triệu USD) tại KCN Nam Cam Ranh. Hạn nộp còn 37 ngày.'
+        },
+        {
+          campaignId: 'REP-FDI-VON-THUCHIEN',
+          title: 'Báo cáo tiến độ giải ngân vốn đầu tư xây dựng nhà máy giai đoạn 1',
+          authority: 'UBND tỉnh & Ban QL KKT Vân Phong',
+          assignedDept: 'Phòng Quản lý Đầu tư ngoài ngân sách',
+          specialist: 'Nguyễn Thị Bích Trâm',
+          deadline: '2026-08-20',
+          workflowStep: 3,
+          timeline: {
+            step1: '2026-08-01',
+            step2: '2026-08-18 16:00 (Đã nộp dự thảo)',
+            step3: '2026-08-21 10:30 (Phòng DTNS đang tiếp nhận thẩm tra)',
+            step4: '---',
+            step5: '---'
+          },
+          score: null,
+          feedback: 'Phòng Quản lý Đầu tư ngoài ngân sách đang đối chiếu tiến độ thi công và hồ sơ hải quan nhập khẩu máy móc công nghệ.'
         }
       ]
     }
@@ -192,6 +319,57 @@ const ExternalPortalManager = {
     this.renderPortalBody();
   },
 
+  renderWorkflowStepper(task) {
+    const currentStep = task.workflowStep || 1;
+    const tl = task.timeline || {};
+
+    const steps = [
+      { num: 1, title: '1. Chưa nộp', icon: 'file-text', time: tl.step1 || 'Mở nhiệm vụ' },
+      { num: 2, title: '2. Đã nộp dự thảo', icon: 'send', time: tl.step2 || 'Chờ nộp' },
+      { num: 3, title: '3. Phòng CM tiếp nhận', icon: 'eye', time: tl.step3 || 'Chờ tiếp nhận' },
+      { num: 4, title: '4. Yêu cầu giải trình', icon: 'alert-triangle', time: tl.step4 || 'Không có' },
+      { num: 5, title: '5. Đã duyệt chốt số liệu', icon: 'check-circle-2', time: tl.step5 || 'Chưa duyệt' }
+    ];
+
+    let stepperHtml = '<div class="portal-workflow-stepper">';
+
+    steps.forEach((s, idx) => {
+      let nodeClass = '';
+      if (s.num < currentStep) {
+        nodeClass = 'completed';
+      } else if (s.num === currentStep) {
+        if (currentStep === 1) nodeClass = 'active';
+        else if (currentStep === 2) nodeClass = 'warning-active';
+        else if (currentStep === 3) nodeClass = 'active';
+        else if (currentStep === 4) nodeClass = 'alert-active';
+        else if (currentStep === 5) nodeClass = 'completed';
+      }
+
+      stepperHtml += `
+        <div class="workflow-step-node ${nodeClass}">
+          <div class="workflow-step-bubble">
+            <i data-lucide="${s.num < currentStep || (s.num === 5 && currentStep === 5) ? 'check' : s.icon}"></i>
+          </div>
+          <div class="workflow-step-title">${s.title}</div>
+          <div class="workflow-step-meta" title="${s.time}">${s.time.split('(')[0].trim()}</div>
+        </div>
+      `;
+
+      if (idx < steps.length - 1) {
+        let lineClass = '';
+        if (s.num < currentStep) {
+          lineClass = 'completed';
+        } else if (s.num === currentStep - 1) {
+          lineClass = 'in-progress';
+        }
+        stepperHtml += `<div class="workflow-step-line ${lineClass}"></div>`;
+      }
+    });
+
+    stepperHtml += '</div>';
+    return stepperHtml;
+  },
+
   renderPortalLayout() {
     const container = document.getElementById('departmentWorkspaceContainer');
     if (!container) return;
@@ -207,7 +385,7 @@ const ExternalPortalManager = {
           </div>
           <div class="banner-title-group">
             <h2>Cổng tiếp nhận và nộp báo cáo trực tuyến</h2>
-            <p>Tiếp nhận nhiệm vụ, kê khai biểu mẫu và theo dõi kết quả thẩm tra số liệu</p>
+            <p>Quy trình 5 bước kê khai số liệu: Chưa nộp ➔ Đã nộp dự thảo ➔ Phòng CM tiếp nhận ➔ Yêu cầu giải trình/Bổ sung ➔ Đã phê duyệt chốt số liệu</p>
           </div>
         </div>
 
@@ -221,13 +399,13 @@ const ExternalPortalManager = {
       <!-- PORTAL NAVIGATION TABS -->
       <div class="sub-tabs-bar" id="portalNavTabs" style="margin-bottom: 16px;">
         <button class="sub-tab-btn ${this.currentTab === 'tasks' ? 'active' : ''}" onclick="ExternalPortalManager.switchPortalTab('tasks', this)">
-          <i data-lucide="clipboard-list"></i> Nhiệm vụ báo cáo (${entity.assignedTasks.length})
+          <i data-lucide="clipboard-list"></i> Nhiệm vụ báo cáo & Quy trình (${entity.assignedTasks.length})
         </button>
         <button class="sub-tab-btn ${this.currentTab === 'fill_form' ? 'active' : ''}" onclick="ExternalPortalManager.switchPortalTab('fill_form', this)">
           <i data-lucide="edit-3"></i> Kê khai & nộp báo cáo
         </button>
         <button class="sub-tab-btn ${this.currentTab === 'history' ? 'active' : ''}" onclick="ExternalPortalManager.switchPortalTab('history', this)">
-          <i data-lucide="history"></i> Lịch sử nộp & Kết quả
+          <i data-lucide="history"></i> Lịch sử & Kết quả thẩm tra
         </button>
         <button class="sub-tab-btn ${this.currentTab === 'guidance' ? 'active' : ''}" onclick="ExternalPortalManager.switchPortalTab('guidance', this)">
           <i data-lucide="book-open"></i> Quy định & Biểu mẫu
@@ -249,59 +427,121 @@ const ExternalPortalManager = {
     const entity = this.reportingEntities[this.currentEntityId] || this.reportingEntities['UBND-NTR'];
 
     if (this.currentTab === 'tasks') {
-      // Tab 1: Task Inbox
+      // Tab 1: Task Inbox with 5-Step Workflow Status
       container.innerHTML = `
         <div class="card-header" style="flex-wrap: wrap; gap: 8px;">
           <div>
-            <h3 class="card-title"><i data-lucide="clipboard-check"></i> Danh sách chế độ báo cáo định kỳ cần thực hiện</h3>
-            <p class="card-subtitle">Báo cáo theo quy định của Bộ Tài chính và UBND tỉnh Khánh Hòa phục vụ công tác điều hành ngân sách và kinh tế</p>
+            <h3 class="card-title"><i data-lucide="git-pull-request"></i> Theo dõi quy trình 5 bước nộp và thẩm tra số liệu báo cáo</h3>
+            <p class="card-subtitle">Minh bạch toàn diện từng trạng thái từ khâu giao nhiệm vụ, thẩm tra chuyên môn tới phê duyệt chốt số liệu CSDL</p>
           </div>
-          <span class="badge badge-info">Theo quy định pháp luật</span>
+          <span class="badge badge-info">Theo dõi thời gian thực</span>
         </div>
 
-        <div class="api-service-grid" style="grid-template-columns: 1fr; gap: 12px;">
+        <div style="display: flex; flex-direction: column; gap: 16px; padding: 4px;">
           ${entity.assignedTasks.map(t => {
-            const isDone = t.status === 'SUBMITTED_APPROVED' || t.status === 'COMPLETED';
-            const isPending = t.status === 'PENDING_APPROVAL';
-            const isDraft = t.status === 'DRAFT';
-            const isTodo = t.status === 'OPEN_TODO';
+            const step = t.workflowStep || 1;
+            let stepBadge = '';
+            let borderLeftColor = '#002B8C';
 
-            const badgeText = isDone ? 'Đã nộp & được Sở TC duyệt' : isPending ? 'Đang chờ Sở TC phê duyệt' : isDraft ? 'Đang lưu nháp (chưa nộp)' : 'Cần nộp trước hạn';
-            const badgeClass = isDone ? 'badge-success' : isPending ? 'badge-info' : isDraft ? 'badge-warning' : 'badge-danger';
+            if (step === 1) {
+              stepBadge = `<span class="badge badge-info"><i data-lucide="file-text"></i> Bước 1: Chưa nộp</span>`;
+              borderLeftColor = '#002B8C';
+            } else if (step === 2) {
+              stepBadge = `<span class="badge badge-warning"><i data-lucide="send"></i> Bước 2: Đã nộp dự thảo</span>`;
+              borderLeftColor = '#d97706';
+            } else if (step === 3) {
+              stepBadge = `<span class="badge badge-purple"><i data-lucide="eye"></i> Bước 3: Phòng CM tiếp nhận</span>`;
+              borderLeftColor = '#7e22ce';
+            } else if (step === 4) {
+              stepBadge = `<span class="badge badge-danger"><i data-lucide="alert-triangle"></i> Bước 4: Yêu cầu giải trình / Bổ sung</span>`;
+              borderLeftColor = '#dc2626';
+            } else if (step === 5) {
+              stepBadge = `<span class="badge badge-success"><i data-lucide="check-circle-2"></i> Bước 5: Đã duyệt chốt số liệu</span>`;
+              borderLeftColor = '#10b981';
+            }
 
             return `
-              <div class="card" style="padding: 16px; background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid ${isDone ? '#10b981' : isPending ? '#0284c7' : isDraft ? '#f59e0b' : '#ef4444'}; margin-bottom: 12px;">
-                <!-- Hàng 1: Huy hiệu trạng thái + Cơ quan giao + Hạn chót nộp -->
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 8px;">
-                  <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
-                    <span class="badge ${badgeClass}">${badgeText}</span>
-                    <span class="badge badge-purple">${t.authority || 'UBND tỉnh'}</span>
+              <div class="card" style="padding: 18px; background: #ffffff; border: 1px solid #cbd5e1; border-left: 5px solid ${borderLeftColor}; box-shadow: var(--shadow-card);">
+                <!-- Hàng 1: Badge quy trình + Phòng chuyên môn + Hạn chót -->
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+                  <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                    ${stepBadge}
+                    <span class="badge badge-info"><i data-lucide="building"></i> Thụ lý: ${t.assignedDept || 'Sở Tài chính'} (${t.specialist || 'Chuyên viên'})</span>
+                    <span class="badge badge-secondary">${t.authority || 'UBND tỉnh'}</span>
                   </div>
-                  <span style="font-size: 11.5px; color: #b45309; font-weight: 600; font-family: 'JetBrains Mono', monospace; display: flex; align-items: center; gap: 4px;">
-                    <i data-lucide="clock" style="width: 13px; height: 13px;"></i> Hạn chót: <strong>${t.deadline}</strong>
+                  <span style="font-size: 12px; color: #b45309; font-weight: 700; font-family: 'JetBrains Mono', monospace; display: flex; align-items: center; gap: 4px;">
+                    <i data-lucide="clock" style="width: 14px; height: 14px;"></i> Hạn nộp: <strong>${t.deadline}</strong>
                   </span>
                 </div>
 
-                <!-- Hàng 2: Tiêu đề chế độ báo cáo (chiếm trọn 100% bề ngang) -->
-                <h4 style="font-size: 14.5px; font-weight: 700; color: #0f172a; line-height: 1.35; margin: 0 0 8px 0;">${t.title}</h4>
+                <!-- Hàng 2: Tiêu đề báo cáo -->
+                <h4 style="font-size: 15px; font-weight: 750; color: #0f172a; line-height: 1.4; margin: 0 0 6px 0;">${t.title}</h4>
 
-                <!-- Hàng 3: Ý kiến phản hồi / Hướng dẫn từ Sở Tài chính -->
-                <div style="font-size: 12px; color: #475569; margin-bottom: 10px; line-height: 1.45; background: #f8fafc; padding: 8px 12px; border-radius: 6px; border: 1px dashed #cbd5e1;">
-                  <span style="color: #64748b; font-weight: 600;">Ý kiến phản hồi từ Sở Tài chính:</span>
-                  <div style="color: #002B8C; font-weight: 600; margin-top: 2px;">"${t.feedback}"</div>
+                <!-- Hàng 3: SƠ ĐỒ TIẾN TRÌNH QUY TRÌNH 5 BƯỚC (5-STEP WORKFLOW STEPPER) -->
+                ${this.renderWorkflowStepper(t)}
+
+                <!-- Hàng 4: Ý kiến phản hồi / Hướng dẫn & Yêu cầu giải trình từ Sở Tài chính -->
+                <div style="font-size: 12.5px; margin-bottom: 14px; line-height: 1.5; background: ${step === 4 ? '#fff1f2' : '#f8fafc'}; padding: 12px 14px; border-radius: 6px; border: 1px solid ${step === 4 ? '#fca5a5' : '#cbd5e1'};">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <span style="color: ${step === 4 ? '#991b1b' : '#334155'}; font-weight: 700; display: flex; align-items: center; gap: 5px;">
+                      <i data-lucide="${step === 4 ? 'alert-circle' : 'message-square'}" style="width: 14px; height: 14px;"></i>
+                      ${step === 4 ? 'YÊU CẦU GIẢI TRÌNH & BỔ SUNG TỪ PHÒNG CHUYÊN MÔN:' : 'Ý kiến phản hồi từ Sở Tài chính:'}
+                    </span>
+                    ${t.score ? `<span class="badge badge-success" style="font-weight: 700;">Đánh giá: ${t.score}/100 Điểm</span>` : ''}
+                  </div>
+                  <div style="color: ${step === 4 ? '#7f1d1d' : '#0f172a'}; font-weight: 600;">
+                    ${t.feedback}
+                  </div>
                 </div>
 
-                <!-- Hàng 4: Thao tác nộp / xem lại -->
-                <div style="display: flex; justify-content: flex-end; align-items: center; gap: 8px; border-top: 1px solid #f1f5f9; padding-top: 8px;">
-                  ${!isDone ? `
-                    <button class="btn btn-primary btn-sm" onclick="ExternalPortalManager.openFormToFill('${t.campaignId}')">
-                      <i data-lucide="edit-3"></i> Kê khai & nộp báo cáo
-                    </button>
-                  ` : `
-                    <button class="btn btn-secondary btn-sm" onclick="App.showNotification('Đang tải văn bản báo cáo đã nộp...', 'info')">
-                      <i data-lucide="eye"></i> Xem lại bản đã nộp
-                    </button>
-                  `}
+                <!-- Hàng 5: Cụm Tác vụ Thực tế & Chuyển đổi Trạng thái -->
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-top: 1px solid #f1f5f9; padding-top: 12px;">
+                  <!-- Demo Step Controller -->
+                  <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                    <span style="font-size: 11px; font-weight: 700; color: #475569;">Mô phỏng bước:</span>
+                    <button class="btn btn-sm ${step === 1 ? 'btn-primary' : 'btn-outline'}" onclick="ExternalPortalManager.advanceWorkflow('${t.campaignId}', 1, 'Mở nhiệm vụ báo cáo')" title="Chuyển sang Bước 1: Chưa nộp">B1</button>
+                    <button class="btn btn-sm ${step === 2 ? 'btn-primary' : 'btn-outline'}" onclick="ExternalPortalManager.advanceWorkflow('${t.campaignId}', 2, 'Đã nộp dự thảo báo cáo')" title="Chuyển sang Bước 2: Đã nộp dự thảo">B2</button>
+                    <button class="btn btn-sm ${step === 3 ? 'btn-primary' : 'btn-outline'}" onclick="ExternalPortalManager.advanceWorkflow('${t.campaignId}', 3, 'Phòng chuyên môn tiếp nhận thẩm tra')" title="Chuyển sang Bước 3: Phòng CM tiếp nhận">B3</button>
+                    <button class="btn btn-sm ${step === 4 ? 'btn-primary' : 'btn-outline'}" onclick="ExternalPortalManager.advanceWorkflow('${t.campaignId}', 4, 'Phát hiện chênh lệch số liệu, yêu cầu đơn vị nộp giải trình')" title="Chuyển sang Bước 4: Yêu cầu giải trình">B4</button>
+                    <button class="btn btn-sm ${step === 5 ? 'btn-primary' : 'btn-outline'}" onclick="ExternalPortalManager.advanceWorkflow('${t.campaignId}', 5, 'Lãnh đạo Sở phê duyệt chốt số liệu vào CSDL')" title="Chuyển sang Bước 5: Đã duyệt chốt">B5</button>
+                  </div>
+
+                  <!-- Main Action Buttons -->
+                  <div style="display: flex; gap: 8px;">
+                    ${step === 1 ? `
+                      <button class="btn btn-primary btn-sm" onclick="ExternalPortalManager.openFormToFill('${t.campaignId}')">
+                        <i data-lucide="edit-3"></i> Kê khai & nộp dự thảo
+                      </button>
+                    ` : step === 2 ? `
+                      <button class="btn btn-secondary btn-sm" onclick="App.showNotification('Đang mở bản dự thảo báo cáo...', 'info')">
+                        <i data-lucide="eye"></i> Xem bản dự thảo
+                      </button>
+                      <button class="btn btn-primary btn-sm" onclick="ExternalPortalManager.advanceWorkflow('${t.campaignId}', 3, 'Phòng chuyên môn tiếp nhận hồ sơ')">
+                        <i data-lucide="check"></i> Tiếp nhận thẩm tra
+                      </button>
+                    ` : step === 3 ? `
+                      <button class="btn btn-warning btn-sm" onclick="ExternalPortalManager.advanceWorkflow('${t.campaignId}', 4, 'Yêu cầu làm rõ số liệu giải ngân và đối chiếu hóa đơn chứng từ')">
+                        <i data-lucide="alert-triangle"></i> Yêu cầu giải trình
+                      </button>
+                      <button class="btn btn-success btn-sm" onclick="ExternalPortalManager.advanceWorkflow('${t.campaignId}', 5, 'Số liệu hợp lệ 100%, phê duyệt chốt số liệu CSDL')">
+                        <i data-lucide="check-circle-2"></i> Duyệt chốt số liệu
+                      </button>
+                    ` : step === 4 ? `
+                      <button class="btn btn-danger btn-sm" onclick="ExternalPortalManager.openExplanationModal('${t.campaignId}')">
+                        <i data-lucide="send"></i> Nộp giải trình & Bổ sung
+                      </button>
+                      <button class="btn btn-success btn-sm" onclick="ExternalPortalManager.advanceWorkflow('${t.campaignId}', 5, 'Đã tiếp nhận giải trình hợp lệ, phê duyệt chốt số liệu')">
+                        <i data-lucide="check-circle-2"></i> Duyệt chốt số liệu
+                      </button>
+                    ` : `
+                      <button class="btn btn-outline btn-sm" onclick="DeptWorkspaceManager.exportFilteredReport('pdf')">
+                        <i data-lucide="printer"></i> Tải văn bản kết luận (PDF)
+                      </button>
+                      <button class="btn btn-secondary btn-sm" onclick="App.showNotification('Đã lưu trữ số liệu vào CSDL Master Data!', 'success')">
+                        <i data-lucide="database"></i> Xem số liệu đã chốt
+                      </button>
+                    `}
+                  </div>
                 </div>
               </div>
             `;
@@ -313,7 +553,7 @@ const ExternalPortalManager = {
       container.innerHTML = `
         <div class="card-header">
           <div>
-            <h3 class="card-title"><i data-lucide="edit"></i> Biểu mẫu kê khai và nộp báo cáo trực tuyến</h3>
+            <h3 class="card-title"><i data-lucide="edit"></i> Biểu mẫu kê khai và nộp dự thảo báo cáo trực tuyến (Bước 2)</h3>
             <p class="card-subtitle">Đơn vị có thể nhập số liệu trực tiếp hoặc tải tệp Excel mẫu để điền số liệu nạp nhanh</p>
           </div>
           <button class="btn btn-soft-primary btn-sm" onclick="DataEntryManager.downloadTemplate('Mau_BaoCao_DinhKy.xlsx')">
@@ -324,12 +564,12 @@ const ExternalPortalManager = {
         <!-- Excel Drag and Drop Area -->
         <div style="margin-bottom: 20px; border: 2px dashed #93c5fd; border-radius: 12px; padding: 22px; text-align: center; background: #f0f7ff; cursor: pointer;" onclick="document.getElementById('portalExcelFileInput').click()">
           <input type="file" id="portalExcelFileInput" style="display: none;" accept=".xlsx, .xls" onchange="ExternalPortalManager.handleExcelUpload(event)" />
-          <i data-lucide="file-spreadsheet" style="font-size: 36px; color: #0284c7; margin-bottom: 8px; display: inline-block;"></i>
-          <h4 style="font-size: 14.5px; font-weight: 700; color: #0f172a;">Kéo thả tệp Excel báo cáo hoặc nhấp để tải lên</h4>
+          <i data-lucide="file-spreadsheet" style="font-size: 36px; color: #002B8C; margin-bottom: 8px; display: inline-block;"></i>
+          <h4 style="font-size: 14.5px; font-weight: 750; color: #0f172a;">Kéo thả tệp Excel báo cáo hoặc nhấp để tải lên</h4>
           <p style="font-size: 12px; color: #475569; margin-top: 4px;">Hỗ trợ tệp .xlsx, .xls theo đúng mẫu chuẩn của Bộ Tài chính và Sở Tài chính (Dung lượng tối đa: 20MB)</p>
         </div>
 
-        <div style="text-align: center; margin: 15px 0; color: #64748b; font-size: 12px; font-weight: 600;">--- HOẶC KÊ KHAI TRỰC TUYẾN TỪNG CHỈ TIÊU BÁO CÁO ---</div>
+        <div style="text-align: center; margin: 15px 0; color: #64748b; font-size: 12px; font-weight: 700;">--- HOẶC KÊ KHAI TRỰC TUYẾN TỪNG CHỈ TIÊU BÁO CÁO ---</div>
 
         <form id="formPortalSubmit" onsubmit="ExternalPortalManager.handleOnlineSubmit(event)">
           <div class="form-grid">
@@ -372,57 +612,53 @@ const ExternalPortalManager = {
 
           <div class="form-actions">
             <button type="button" class="btn btn-secondary" onclick="App.showNotification('Đã lưu bản nháp thành công!', 'info')"><i data-lucide="bookmark"></i> Lưu bản nháp</button>
-            <button type="submit" class="btn btn-primary"><i data-lucide="send"></i> Nộp báo cáo lên Sở Tài chính</button>
+            <button type="submit" class="btn btn-primary"><i data-lucide="send"></i> Nộp dự thảo lên Sở Tài chính</button>
           </div>
         </form>
       `;
     } else if (this.currentTab === 'history') {
-      // Tab 3: History & Evaluation
+      // Tab 3: History & Evaluation with Big Data Table UX
       container.innerHTML = `
-        <div class="card-header">
-          <div>
-            <h3 class="card-title"><i data-lucide="history"></i> Lịch sử nộp báo cáo và kết quả thẩm định</h3>
-            <p class="card-subtitle">Chi tiết điểm đánh giá chất lượng số liệu, biên bản tiếp nhận và ý kiến thẩm tra từ các phòng chuyên môn</p>
+        <div class="table-fullscreen-wrapper" id="wrapper_portal_history">
+          ${DeptWorkspaceManager.renderAdminTableToolbar('wrapper_portal_history', 'table_portal_history', 'Lịch sử nộp báo cáo và tiến độ quy trình 5 bước')}
+          <div class="table-scroll-container">
+            <table class="data-table freeze-first" id="table_portal_history">
+              <thead>
+                <tr>
+                  <th>Mã đợt nộp</th>
+                  <th>Tên kỳ báo cáo</th>
+                  <th>Quy trình hiện tại</th>
+                  <th>Phòng CM thụ lý</th>
+                  <th>Chuyên viên thẩm tra</th>
+                  <th>Hạn nộp</th>
+                  <th>Đánh giá / Kết luận</th>
+                  <th style="text-align: center;">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${entity.assignedTasks.map(t => {
+                  const step = t.workflowStep || 1;
+                  const stepObj = this.WORKFLOW_STEPS.find(s => s.step === step) || this.WORKFLOW_STEPS[0];
+                  return `
+                    <tr>
+                      <td><strong style="color: #002B8C;">${t.campaignId}</strong></td>
+                      <td><strong>${t.title}</strong></td>
+                      <td><span class="badge badge-${stepObj.color}">${stepObj.label}</span></td>
+                      <td>${t.assignedDept || 'Sở Tài chính'}</td>
+                      <td>${t.specialist || 'Chuyên viên'}</td>
+                      <td><code>${t.deadline}</code></td>
+                      <td>${t.score ? `<strong style="color: #14532d;">${t.score}/100 Điểm</strong>` : '<span style="color: #64748b;">Đang xử lý</span>'}</td>
+                      <td style="text-align: center;">
+                        <button class="btn btn-sm btn-outline" onclick="ExternalPortalManager.switchPortalTab('tasks')">
+                          <i data-lucide="eye"></i> Chi tiết
+                        </button>
+                      </td>
+                    </tr>
+                  `;
+                }).join('')}
+              </tbody>
+            </table>
           </div>
-          <button class="btn btn-soft-primary btn-sm" onclick="App.showNotification('Đang trích xuất biên bản xác nhận số liệu đã nộp...', 'info')">
-            <i data-lucide="download"></i> Tải biên bản tiếp nhận
-          </button>
-        </div>
-
-        <div class="table-container">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Mã đợt nộp</th>
-                <th>Tên kỳ báo cáo</th>
-                <th>Thời gian nộp</th>
-                <th>Người nộp</th>
-                <th>Trạng thái tiếp nhận</th>
-                <th>Chuyên viên thẩm tra</th>
-                <th>Chất lượng số liệu</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong style="color: #002B8C;">SUB-2071-7901</strong></td>
-                <td><strong>Bộ chỉ số Quyết định số 2071 Quý III/2026</strong></td>
-                <td>2026-08-18 09:15</td>
-                <td>Nguyễn Văn A (UBND TP)</td>
-                <td><span class="badge badge-success">Đã phê duyệt nạp CSDL</span></td>
-                <td>Lê Thị Thu Hằng (Phòng Quản lý Ngân sách)</td>
-                <td><strong style="color: #15803d;">98 / 100 Điểm</strong></td>
-              </tr>
-              <tr>
-                <td><strong style="color: #002B8C;">SUB-TSC-8812</strong></td>
-                <td><strong>Báo cáo nhà đất công dôi dư Nghị định số 167</strong></td>
-                <td>2026-08-14 16:30</td>
-                <td>Trần Thị B (UBND TP)</td>
-                <td><span class="badge badge-success">Đã phê duyệt nạp CSDL</span></td>
-                <td>Đặng Quốc Hưng (Phòng Giá & CS)</td>
-                <td><strong style="color: #15803d;">100 / 100 Điểm</strong></td>
-              </tr>
-            </tbody>
-          </table>
         </div>
       `;
     } else if (this.currentTab === 'guidance') {
@@ -469,8 +705,101 @@ const ExternalPortalManager = {
     if (window.lucide) window.lucide.createIcons();
   },
 
+  advanceWorkflow(campaignId, targetStep, comment) {
+    const entity = this.reportingEntities[this.currentEntityId];
+    if (!entity) return;
+
+    const task = entity.assignedTasks.find(t => t.campaignId === campaignId);
+    if (!task) return;
+
+    task.workflowStep = targetStep;
+    const nowStr = new Date().toLocaleString('vi-VN');
+
+    if (!task.timeline) task.timeline = {};
+    if (targetStep === 1) {
+      task.timeline.step1 = `${nowStr} (Mở nhiệm vụ)`;
+      task.feedback = 'Nhiệm vụ báo cáo đang mở. Đơn vị cần tổng hợp số liệu nộp dự thảo trước thời hạn.';
+    } else if (targetStep === 2) {
+      task.timeline.step2 = `${nowStr} (Đã nộp dự thảo)`;
+      task.feedback = comment || 'Đã nộp dự thảo thành công. Chờ Phòng chuyên môn Sở Tài chính tiếp nhận.';
+    } else if (targetStep === 3) {
+      task.timeline.step3 = `${nowStr} (${task.assignedDept || 'Phòng CM'} tiếp nhận)`;
+      task.feedback = comment || `${task.assignedDept || 'Phòng chuyên môn'} đang thụ lý kiểm tra tính hợp lệ và đối soát số liệu.`;
+    } else if (targetStep === 4) {
+      task.timeline.step4 = `${nowStr} (Yêu cầu giải trình/Bổ sung)`;
+      task.feedback = comment || 'CẢNH BÁO: Phòng chuyên môn phát hiện chênh lệch số liệu. Yêu cầu đơn vị nộp giải trình và cập nhật lại dự thảo.';
+    } else if (targetStep === 5) {
+      task.timeline.step5 = `${nowStr} (Đã phê duyệt chốt số liệu)`;
+      task.feedback = comment || 'Số liệu hoàn toàn chính xác, đã được Lãnh đạo Sở phê duyệt và nạp vào Master Data CSDL Kinh tế toàn tỉnh.';
+      task.score = task.score || 98;
+    }
+
+    const stepObj = this.WORKFLOW_STEPS.find(s => s.step === targetStep);
+    App.showNotification(`Quy trình báo cáo [${task.campaignId}] chuyển sang: ${stepObj.label}`, targetStep === 4 ? 'warning' : targetStep === 5 ? 'success' : 'info');
+
+    if (window.RealtimeEngine) {
+      RealtimeEngine.pushEvent({
+        type: 'WORKFLOW_TRANSITION',
+        title: `Cổng ngoài [${entity.name}] chuyển trạng thái ${stepObj.label}`,
+        desc: task.title,
+        time: 'Vừa xong'
+      });
+    }
+
+    this.renderPortalBody();
+  },
+
+  openExplanationModal(campaignId) {
+    const entity = this.reportingEntities[this.currentEntityId];
+    if (!entity) return;
+    const task = entity.assignedTasks.find(t => t.campaignId === campaignId);
+    if (!task) return;
+
+    const modalTitleEl = document.getElementById('modalGenericTitle');
+    const modalBodyEl = document.getElementById('modalGenericBody');
+
+    if (modalTitleEl) {
+      modalTitleEl.innerHTML = `<i data-lucide="alert-triangle" style="color: #dc2626;"></i> Nộp Văn Bản Giải Trình & Bổ Sung Số Liệu (Bước 4)`;
+    }
+
+    if (modalBodyEl) {
+      modalBodyEl.innerHTML = `
+        <div style="background: #fff1f2; border: 1px solid #fca5a5; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+          <div style="font-weight: 700; color: #991b1b; font-size: 13px;">Ý kiến yêu cầu từ ${task.assignedDept || 'Phòng chuyên môn Sở Tài chính'}:</div>
+          <div style="font-size: 12.5px; color: #7f1d1d; margin-top: 4px;">"${task.feedback}"</div>
+        </div>
+
+        <form id="formExplanationSubmit" onsubmit="event.preventDefault(); ExternalPortalManager.submitExplanation('${campaignId}');">
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label" style="font-weight: 700;">Nội dung văn bản giải trình chi tiết <span class="req">*</span></label>
+            <textarea class="form-control" id="explanationText" rows="4" placeholder="Giải trình rõ nguyên nhân chênh lệch số liệu, căn cứ pháp lý, cam kết tiến độ điều chỉnh..." required>Đơn vị xin giải trình nguyên nhân vướng mắc GPMB và đã bổ sung chứng từ giải ngân vốn đợt 2 theo đúng hướng dẫn của Phòng chuyên môn.</textarea>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label" style="font-weight: 700;">Đính kèm tệp văn bản giải trình / Báo cáo bổ sung (PDF/Excel có ký số)</label>
+            <input type="file" class="form-control" accept=".pdf, .docx, .xlsx" />
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 8px;">
+            <button type="button" class="btn btn-secondary" onclick="App.closeModal('modalGeneric')">Hủy bỏ</button>
+            <button type="submit" class="btn btn-primary"><i data-lucide="send"></i> Gửi văn bản giải trình lên Sở Tài chính</button>
+          </div>
+        </form>
+      `;
+    }
+
+    App.openModal('modalGeneric');
+    if (window.lucide) window.lucide.createIcons();
+  },
+
+  submitExplanation(campaignId) {
+    App.closeModal('modalGeneric');
+    this.advanceWorkflow(campaignId, 3, 'Đơn vị đã nộp văn bản giải trình và hồ sơ bổ sung. Phòng chuyên môn đang thụ lý thẩm tra lại.');
+    App.showNotification('Đã gửi văn bản giải trình thành công! Trạng thái chuyển về Bước 3 (Phòng CM tiếp nhận thẩm tra lại).', 'success');
+  },
+
   openFormToFill(campaignId) {
-    this.switchPortalTab('fill_form', document.querySelectorAll('#portalNavTabs .tab-btn')[1]);
+    this.switchPortalTab('fill_form', document.querySelectorAll('#portalNavTabs .sub-tab-btn')[1]);
   },
 
   handleExcelUpload(e) {
@@ -482,22 +811,12 @@ const ExternalPortalManager = {
   handleOnlineSubmit(e) {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const reporter = formData.get('reporter_name');
     const campaignId = formData.get('campaign_id');
 
-    App.showNotification(`Đã gửi thành công báo cáo [${campaignId}] của ${this.reportingEntities[this.currentEntityId].name} tới Sở Tài chính!`, 'success');
+    App.showNotification(`Đã gửi thành công dự thảo báo cáo [${campaignId}] của ${this.reportingEntities[this.currentEntityId].name} tới Sở Tài chính!`, 'success');
 
-    // Add to pending submissions in Sở Tài chính Admin
-    APP_DATA.pendingSubmissions.unshift({
-      id: "SUB-PORTAL-" + Math.floor(1000 + Math.random() * 9000),
-      dept: this.reportingEntities[this.currentEntityId].name,
-      title: `Báo cáo định kỳ trực tuyến (${campaignId})`,
-      type: "Báo Cáo Định Kỳ Cổng Ngoài",
-      submittedBy: reporter,
-      submittedDate: new Date().toISOString().replace('T', ' ').substring(0, 16),
-      status: "PENDING"
-    });
+    this.advanceWorkflow(campaignId, 2, 'Đã nộp dự thảo báo cáo trực tuyến thành công. Chờ Phòng chuyên môn Sở Tài chính tiếp nhận.');
 
-    this.switchPortalTab('history', document.querySelectorAll('#portalNavTabs .tab-btn')[2]);
+    this.switchPortalTab('tasks', document.querySelectorAll('#portalNavTabs .sub-tab-btn')[0]);
   }
 };

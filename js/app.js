@@ -131,6 +131,26 @@ const App = {
   }
 };
 
+// Global Keyboard Shortcut: ESC to exit Fullscreen Table or close Modals
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    const fullscreenTable = document.querySelector('.table-fullscreen-wrapper.is-fullscreen');
+    if (fullscreenTable) {
+      fullscreenTable.classList.remove('is-fullscreen');
+      document.body.style.overflow = '';
+      const btn = fullscreenTable.querySelector('.btn-fullscreen-toggle');
+      if (btn) {
+        btn.innerHTML = `<i data-lucide="maximize-2"></i> <span>Toàn màn hình</span>`;
+        if (window.lucide) window.lucide.createIcons();
+      }
+      App.showNotification('Đã thoát chế độ toàn màn hình', 'info');
+    } else {
+      const activeModal = document.querySelector('.modal-overlay.active');
+      if (activeModal) activeModal.classList.remove('active');
+    }
+  }
+});
+
 // Bootstrap application on page load
 document.addEventListener('DOMContentLoaded', () => {
   App.init();

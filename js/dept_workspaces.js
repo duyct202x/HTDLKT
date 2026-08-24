@@ -7,6 +7,887 @@
 const DeptWorkspaceManager = {
   currentDeptId: 'lanhdao',
   currentTab: 'dashboard',
+  currentFilters: {
+    year: '2026',
+    period: 'all',
+    region: 'all',
+    sector: 'all',
+    query: ''
+  },
+
+  renderGlobalFilterBar() {
+    const f = this.currentFilters;
+    return `
+      <div class="global-filter-bar" id="appGlobalFilterBar">
+        <!-- HÀNG 1: 4 BỘ CHỌN CHIỀU DỮ LIỆU ĐỒNG NHẤT 100% -->
+        <div class="filter-row-selectors">
+          <!-- 1. Năm ngân sách -->
+          <div class="filter-item">
+            <label class="filter-label"><i data-lucide="calendar"></i> Năm:</label>
+            <select class="filter-select" id="filterYearSelect" onchange="DeptWorkspaceManager.handleFilterChange()">
+              <option value="2026" ${f.year === '2026' ? 'selected' : ''}>2026</option>
+              <option value="2025" ${f.year === '2025' ? 'selected' : ''}>2025</option>
+              <option value="2024" ${f.year === '2024' ? 'selected' : ''}>2024</option>
+              <option value="all" ${f.year === 'all' ? 'selected' : ''}>2021-2026</option>
+            </select>
+          </div>
+
+          <!-- 2. Kỳ điều hành -->
+          <div class="filter-item">
+            <label class="filter-label"><i data-lucide="clock"></i> Kỳ:</label>
+            <select class="filter-select" id="filterPeriodSelect" onchange="DeptWorkspaceManager.handleFilterChange()">
+              <option value="all" ${f.period === 'all' ? 'selected' : ''}>Cả năm</option>
+              <option value="6m" ${f.period === '6m' ? 'selected' : ''}>Lũy kế 6T</option>
+              <option value="q1" ${f.period === 'q1' ? 'selected' : ''}>Quý I</option>
+              <option value="q2" ${f.period === 'q2' ? 'selected' : ''}>Quý II</option>
+              <option value="q3" ${f.period === 'q3' ? 'selected' : ''}>Quý III</option>
+              <option value="q4" ${f.period === 'q4' ? 'selected' : ''}>Quý IV</option>
+              <option value="m8" ${f.period === 'm8' ? 'selected' : ''}>Tháng 8</option>
+            </select>
+          </div>
+
+          <!-- 3. Địa bàn 65 xã/phường -->
+          <div class="filter-item filter-item-region">
+            <label class="filter-label"><i data-lucide="map-pin"></i> Địa bàn:</label>
+            <select class="filter-select" id="filterRegionSelect" onchange="DeptWorkspaceManager.handleFilterChange()">
+              <option value="all" ${f.region === 'all' ? 'selected' : ''}>Toàn tỉnh (65 đơn vị cơ sở)</option>
+              <optgroup label="16 Phường đô thị">
+                <option value="KH65_49" ${f.region === 'KH65_49' ? 'selected' : ''}>Phường Nha Trang</option>
+                <option value="KH65_50" ${f.region === 'KH65_50' ? 'selected' : ''}>Phường Bắc Nha Trang</option>
+                <option value="KH65_51" ${f.region === 'KH65_51' ? 'selected' : ''}>Phường Tây Nha Trang</option>
+                <option value="KH65_52" ${f.region === 'KH65_52' ? 'selected' : ''}>Phường Nam Nha Trang</option>
+                <option value="KH65_53" ${f.region === 'KH65_53' ? 'selected' : ''}>Phường Bắc Cam Ranh</option>
+                <option value="KH65_54" ${f.region === 'KH65_54' ? 'selected' : ''}>Phường Cam Ranh</option>
+                <option value="KH65_55" ${f.region === 'KH65_55' ? 'selected' : ''}>Phường Cam Linh</option>
+                <option value="KH65_56" ${f.region === 'KH65_56' ? 'selected' : ''}>Phường Ba Ngòi</option>
+                <option value="KH65_57" ${f.region === 'KH65_57' ? 'selected' : ''}>Phường Ninh Hòa</option>
+                <option value="KH65_58" ${f.region === 'KH65_58' ? 'selected' : ''}>Phường Đông Ninh Hòa</option>
+                <option value="KH65_59" ${f.region === 'KH65_59' ? 'selected' : ''}>Phường Hòa Thắng</option>
+                <option value="KH65_60" ${f.region === 'KH65_60' ? 'selected' : ''}>Phường Phan Rang</option>
+                <option value="KH65_61" ${f.region === 'KH65_61' ? 'selected' : ''}>Phường Đông Hải</option>
+                <option value="KH65_62" ${f.region === 'KH65_62' ? 'selected' : ''}>Phường Ninh Chữ</option>
+                <option value="KH65_63" ${f.region === 'KH65_63' ? 'selected' : ''}>Phường Bảo An</option>
+                <option value="KH65_64" ${f.region === 'KH65_64' ? 'selected' : ''}>Phường Tháp Chàm</option>
+              </optgroup>
+              <optgroup label="Xã & Đặc khu tiêu biểu">
+                <option value="KH65_18" ${f.region === 'KH65_18' ? 'selected' : ''}>Xã Cam Lâm</option>
+                <option value="KH65_12" ${f.region === 'KH65_12' ? 'selected' : ''}>Xã Diên Khánh</option>
+                <option value="KH65_10" ${f.region === 'KH65_10' ? 'selected' : ''}>Xã Vạn Ninh (KKT Vân Phong)</option>
+                <option value="KH65_34" ${f.region === 'KH65_34' ? 'selected' : ''}>Xã Cà Ná</option>
+                <option value="KH65_37" ${f.region === 'KH65_37' ? 'selected' : ''}>Xã Ninh Hải</option>
+                <option value="KH65_65" ${f.region === 'KH65_65' ? 'selected' : ''}>Đặc khu Trường Sa</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <!-- 4. Lĩnh vực / Nguồn vốn -->
+          <div class="filter-item filter-item-sector">
+            <label class="filter-label"><i data-lucide="layers"></i> Lĩnh vực:</label>
+            <select class="filter-select" id="filterSectorSelect" onchange="DeptWorkspaceManager.handleFilterChange()">
+              <option value="all" ${f.sector === 'all' ? 'selected' : ''}>Tất cả nguồn & lĩnh vực</option>
+              <option value="nsnn" ${f.sector === 'nsnn' ? 'selected' : ''}>Thu - Chi NSNN</option>
+              <option value="dtc" ${f.sector === 'dtc' ? 'selected' : ''}>Đầu tư công (NSTW & NSĐP)</option>
+              <option value="oda" ${f.sector === 'oda' ? 'selected' : ''}>Vốn ODA & Vay ưu đãi</option>
+              <option value="dtns" ${f.sector === 'dtns' ? 'selected' : ''}>Đầu tư ngoài NS & FDI</option>
+              <option value="land" ${f.sector === 'land' ? 'selected' : ''}>Tiền sử dụng đất & Thuê đất</option>
+              <option value="tcdn" ${f.sector === 'tcdn' ? 'selected' : ''}>Tài chính Doanh nghiệp</option>
+              <option value="hcsn" ${f.sector === 'hcsn' ? 'selected' : ''}>Đơn vị HCSN tự chủ</option>
+              <option value="cs" ${f.sector === 'cs' ? 'selected' : ''}>Tài sản công & Xe công</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- HÀNG 2: TÌM KIẾM NHANH & NÚT THAO TÁC XUẤT DỮ LIỆU -->
+        <div class="filter-row-actions">
+          <!-- Instant Search Input -->
+          <div class="filter-search-box">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" id="globalSearchInput" class="filter-search-input" value="${f.query || ''}" placeholder="Tìm nhanh dự án, MST, doanh nghiệp, cơ quan..." oninput="DeptWorkspaceManager.handleSearchInput(this.value)">
+            <button class="search-clear-btn" id="globalSearchClearBtn" onclick="DeptWorkspaceManager.clearSearch()" style="${f.query ? 'display: block;' : 'display: none;'}" title="Xóa tìm kiếm">✕</button>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="filter-actions">
+            <button class="btn btn-sm btn-outline" onclick="DeptWorkspaceManager.resetAllFilters()" title="Đặt lại bộ lọc về mặc định">
+              <i data-lucide="rotate-ccw"></i> <span>Đặt lại</span>
+            </button>
+            <button class="btn btn-sm btn-primary" onclick="DeptWorkspaceManager.exportFilteredReport('excel')" title="Xuất dữ liệu đang lọc ra Excel">
+              <i data-lucide="file-spreadsheet"></i> <span>Xuất Excel</span>
+            </button>
+            <button class="btn btn-sm btn-outline" onclick="DeptWorkspaceManager.exportFilteredReport('pdf')" title="Xuất / In báo cáo PDF">
+              <i data-lucide="printer"></i> <span>In PDF</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
+  handleFilterChange() {
+    const yearEl = document.getElementById('filterYearSelect');
+    const periodEl = document.getElementById('filterPeriodSelect');
+    const regionEl = document.getElementById('filterRegionSelect');
+    const sectorEl = document.getElementById('filterSectorSelect');
+
+    if (yearEl) this.currentFilters.year = yearEl.value;
+    if (periodEl) this.currentFilters.period = periodEl.value;
+    if (regionEl) this.currentFilters.region = regionEl.value;
+    if (sectorEl) this.currentFilters.sector = sectorEl.value;
+
+    const yearText = yearEl ? yearEl.options[yearEl.selectedIndex].text.split('(')[0].trim() : 'Năm 2026';
+    const periodText = periodEl ? periodEl.options[periodEl.selectedIndex].text : 'Cả năm';
+    const regionText = regionEl ? regionEl.options[regionEl.selectedIndex].text : 'Toàn tỉnh';
+
+    App.showNotification(`Đã áp dụng bộ lọc: ${yearText} • ${periodText} • ${regionText}`, 'info');
+  },
+
+  handleSearchInput(val) {
+    this.currentFilters.query = val;
+    const clearBtn = document.getElementById('globalSearchClearBtn');
+    if (clearBtn) clearBtn.style.display = val ? 'block' : 'none';
+
+    const normalized = (val || '').trim().toLowerCase();
+    const rows = document.querySelectorAll('.data-table tbody tr');
+
+    rows.forEach(row => {
+      const text = row.innerText.toLowerCase();
+      if (!normalized || text.includes(normalized)) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  },
+
+  clearSearch() {
+    this.currentFilters.query = '';
+    const input = document.getElementById('globalSearchInput');
+    if (input) input.value = '';
+    const clearBtn = document.getElementById('globalSearchClearBtn');
+    if (clearBtn) clearBtn.style.display = 'none';
+
+    const rows = document.querySelectorAll('.data-table tbody tr');
+    rows.forEach(row => {
+      row.style.display = '';
+    });
+  },
+
+  resetAllFilters() {
+    this.currentFilters = {
+      year: '2026',
+      period: 'all',
+      region: 'all',
+      sector: 'all',
+      query: ''
+    };
+
+    const yearEl = document.getElementById('filterYearSelect');
+    const periodEl = document.getElementById('filterPeriodSelect');
+    const regionEl = document.getElementById('filterRegionSelect');
+    const sectorEl = document.getElementById('filterSectorSelect');
+    const input = document.getElementById('globalSearchInput');
+    const clearBtn = document.getElementById('globalSearchClearBtn');
+
+    if (yearEl) yearEl.value = '2026';
+    if (periodEl) periodEl.value = 'all';
+    if (regionEl) regionEl.value = 'all';
+    if (sectorEl) sectorEl.value = 'all';
+    if (input) input.value = '';
+    if (clearBtn) clearBtn.style.display = 'none';
+
+    const rows = document.querySelectorAll('.data-table tbody tr');
+    rows.forEach(row => {
+      row.style.display = '';
+    });
+
+    App.showNotification('Đã đặt lại toàn bộ bộ lọc về trạng thái mặc định', 'success');
+  },
+
+  exportFilteredReport(type) {
+    const f = this.currentFilters;
+    if (type === 'excel') {
+      const tables = document.querySelectorAll('.data-table');
+      if (tables.length > 0) {
+        let csvContent = '\uFEFF';
+        csvContent += `BÁO CÁO DỮ LIỆU KINH TẾ TỈNH KHÁNH HÒA\r\n`;
+        csvContent += `Phân hệ: ${DEPT_CONFIGS[this.currentDeptId]?.domainName || this.currentDeptId}\r\n`;
+        csvContent += `Bộ lọc: Năm ${f.year} | Kỳ: ${f.period} | Địa bàn: ${f.region}\r\n`;
+        csvContent += `Thời điểm xuất: ${new Date().toLocaleString('vi-VN')}\r\n\r\n`;
+
+        tables.forEach((tbl) => {
+          const rows = tbl.querySelectorAll('tr');
+          rows.forEach(row => {
+            if (row.style.display !== 'none') {
+              const cells = Array.from(row.querySelectorAll('th, td')).map(c => `"${c.innerText.replace(/"/g, '""').trim()}"`);
+              csvContent += cells.join(',') + '\r\n';
+            }
+          });
+          csvContent += '\r\n';
+        });
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `Bao_cao_Kinh_Te_${this.currentDeptId}_${f.year}_${f.period}.csv`;
+        link.click();
+        App.showNotification('Đã xuất thành công tệp dữ liệu báo cáo (.csv / Excel)!', 'success');
+      } else {
+        App.showNotification('Đã xuất cấu hình báo cáo theo bộ lọc hiện tại!', 'success');
+      }
+    } else if (type === 'pdf') {
+      window.print();
+    }
+  },
+
+  toggleTableFullscreen(wrapperId) {
+    const wrapper = document.getElementById(wrapperId);
+    if (!wrapper) return;
+
+    wrapper.classList.toggle('is-fullscreen');
+    const isFull = wrapper.classList.contains('is-fullscreen');
+    const btn = wrapper.querySelector('.btn-fullscreen-toggle');
+    if (btn) {
+      btn.innerHTML = isFull 
+        ? `<i data-lucide="minimize-2"></i> <span>Thu nhỏ</span>`
+        : `<i data-lucide="maximize-2"></i> <span>Toàn màn hình</span>`;
+    }
+
+    if (isFull) {
+      document.body.style.overflow = 'hidden';
+      App.showNotification('Đã bật chế độ xem toàn màn hình (Bấm Esc hoặc nút Thu nhỏ để thoát)', 'info');
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    if (window.lucide) window.lucide.createIcons();
+  },
+
+  exportTableToExcel(tableId, title = 'Báo cáo Dữ liệu') {
+    const table = document.getElementById(tableId) || document.querySelector(`#${tableId} table`) || document.querySelector('.data-table');
+    if (!table) {
+      App.showNotification('Không tìm thấy bảng dữ liệu để xuất!', 'warning');
+      return;
+    }
+
+    const f = this.currentFilters;
+    let csvContent = '\uFEFF';
+    csvContent += `CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\r\nĐộc lập - Tự do - Hạnh phúc\r\n\r\n`;
+    csvContent += `SỞ TÀI CHÍNH TỈNH KHÁNH HÒA\r\n`;
+    csvContent += `HỆ THỐNG DỮ LIỆU KINH TẾ TỈNH KHÁNH HÒA\r\n\r\n`;
+    csvContent += `TIÊU ĐỀ BÁO CÁO: ${title.toUpperCase()}\r\n`;
+    csvContent += `Phân hệ nghiệp vụ: ${DEPT_CONFIGS[this.currentDeptId]?.domainName || this.currentDeptId}\r\n`;
+    csvContent += `Kỳ dữ liệu: Năm ${f.year} - Kỳ: ${f.period} | Địa bàn: ${f.region}\r\n`;
+    csvContent += `Thời điểm kết xuất dữ liệu: ${new Date().toLocaleString('vi-VN')}\r\n\r\n`;
+
+    const rows = table.querySelectorAll('tr');
+    rows.forEach(row => {
+      if (row.style.display !== 'none') {
+        const cells = Array.from(row.querySelectorAll('th, td')).map(c => `"${c.innerText.replace(/"/g, '""').trim()}"`);
+        csvContent += cells.join(',') + '\r\n';
+      }
+    });
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    const cleanFileName = title.toLowerCase().replace(/[^a-z0-9]/gi, '_').replace(/_+/g, '_');
+    link.download = `${cleanFileName}_KhanhHoa_${f.year}.csv`;
+    link.click();
+    App.showNotification(`Đã xuất thành công bảng dữ liệu chuẩn hành chính (${title})!`, 'success');
+  },
+
+  printTableReport(tableId, title = 'Báo cáo Dữ liệu') {
+    const table = document.getElementById(tableId) || document.querySelector(`#${tableId} table`) || document.querySelector('.data-table');
+    if (!table) {
+      window.print();
+      return;
+    }
+
+    const printWin = window.open('', '_blank', 'width=1100,height=750');
+    if (!printWin) {
+      window.print();
+      return;
+    }
+
+    const f = this.currentFilters;
+    printWin.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>${title} - Sở Tài chính tỉnh Khánh Hòa</title>
+        <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+        <style>
+          body { font-family: 'Be Vietnam Pro', sans-serif; padding: 24px; color: #0f172a; }
+          .header-table { width: 100%; margin-bottom: 20px; border: none; }
+          .header-table td { border: none; padding: 4px; vertical-align: top; }
+          h2 { text-align: center; color: #002B8C; margin: 16px 0 6px 0; text-transform: uppercase; font-size: 16px; }
+          .sub-meta { text-align: center; font-size: 12px; color: #475569; margin-bottom: 20px; }
+          table.data-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
+          table.data-table th, table.data-table td { border: 1px solid #cbd5e1; padding: 8px 10px; }
+          table.data-table th { background: #f1f5f9; font-weight: 700; text-transform: uppercase; }
+          .badge { padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 11px; }
+          .badge-danger { color: #991b1b; }
+          .badge-warning { color: #78350f; }
+          .badge-success { color: #14532d; }
+          .signature-section { margin-top: 40px; display: flex; justify-content: space-between; page-break-inside: avoid; }
+          .signature-box { text-align: center; width: 220px; font-size: 12.5px; }
+          .signature-box strong { display: block; margin-bottom: 60px; }
+          @media print {
+            body { padding: 0; }
+            button { display: none; }
+          }
+        </style>
+      </head>
+      <body>
+        <table class="header-table">
+          <tr>
+            <td style="text-align: left; width: 45%;">
+              <strong>ỦY BAN NHÂN DÂN TỈNH KHÁNH HÒA</strong><br>
+              <strong>SỞ TÀI CHÍNH</strong><br>
+              <small>Số: ..../STC-BC</small>
+            </td>
+            <td style="text-align: center; width: 55%;">
+              <strong>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</strong><br>
+              <strong>Độc lập - Tự do - Hạnh phúc</strong><br>
+              <small><em>Khánh Hòa, ngày ${new Date().getDate()} tháng ${new Date().getMonth() + 1} năm ${new Date().getFullYear()}</em></small>
+            </td>
+          </tr>
+        </table>
+
+        <h2>${title}</h2>
+        <div class="sub-meta">
+          Bộ lọc: Năm ${f.year} | Kỳ điều hành: ${f.period} | Địa bàn: ${f.region}<br>
+          Trích xuất từ: Hệ thống dữ liệu kinh tế tỉnh Khánh Hòa
+        </div>
+
+        <table class="data-table">
+          ${table.innerHTML}
+        </table>
+
+        <div class="signature-section">
+          <div class="signature-box">
+            <strong>NGƯỜI LẬP BIỂU</strong>
+            (Ký, ghi rõ họ tên)
+          </div>
+          <div class="signature-box">
+            <strong>TRƯỞNG PHÒNG CHUYÊN MÔN</strong>
+            (Ký, ghi rõ họ tên)
+          </div>
+          <div class="signature-box">
+            <strong>GIÁM ĐỐC SỞ TÀI CHÍNH</strong>
+            (Ký số, đóng dấu)
+          </div>
+        </div>
+
+        <script>
+          window.onload = function() {
+            setTimeout(function() { window.print(); }, 400);
+          };
+        </script>
+      </body>
+      </html>
+    `);
+    printWin.document.close();
+  },
+
+  renderAdminTableToolbar(wrapperId, tableId, title) {
+    return `
+      <div class="table-admin-toolbar">
+        <div class="table-toolbar-title">
+          <i data-lucide="table-2"></i> <span>${title}</span>
+        </div>
+        <div class="table-toolbar-actions">
+          <button class="btn btn-sm btn-outline btn-fullscreen-toggle" onclick="DeptWorkspaceManager.toggleTableFullscreen('${wrapperId}')" title="Xem toàn màn hình không bị phân tâm">
+            <i data-lucide="maximize-2"></i> <span>Toàn màn hình</span>
+          </button>
+          <button class="btn btn-sm btn-primary" onclick="DeptWorkspaceManager.exportTableToExcel('${tableId}', '${title}')" title="Xuất tệp Excel theo biểu mẫu quy định">
+            <i data-lucide="file-spreadsheet"></i> <span>Xuất Excel</span>
+          </button>
+          <button class="btn btn-sm btn-outline" onclick="DeptWorkspaceManager.printTableReport('${tableId}', '${title}')" title="In báo cáo chuẩn phục vụ cuộc họp">
+            <i data-lucide="printer"></i> <span>In PDF</span>
+          </button>
+        </div>
+      </div>
+    `;
+  },
+
+  openKpiDrilldownModal(encodedLabel, deptId) {
+    const label = decodeURIComponent(encodedLabel || '');
+    const modalTitleEl = document.getElementById('modalGenericTitle');
+    const modalBodyEl = document.getElementById('modalGenericBody');
+    const modalContainer = document.querySelector('#modalGeneric .modal-container');
+
+    if (modalContainer) {
+      modalContainer.classList.add('modal-xl');
+    }
+
+    let titleText = `Bảng Chi Tiết Chỉ Số Điều Hành: ${label}`;
+    let bodyHtml = '';
+
+    // 1. GIẢI NGÂN VỐN ĐẦU TƯ CÔNG / DỰ ÁN CHẬM GIẢI NGÂN
+    if (label.includes('Giải ngân') || label.includes('Đầu tư công') || label.includes('chậm giải ngân') || label.includes('Dự án trong kế hoạch')) {
+      titleText = `<i data-lucide="hard-hat" style="color: #002B8C;"></i> Chi Tiết Giải Ngân Vốn Đầu Tư Công & Các Dự Án Chậm Tiến Độ (Năm 2026)`;
+      bodyHtml = `
+        <div class="drilldown-stat-banner">
+          <div class="drilldown-stat-item">
+            <i data-lucide="layers" style="color: #002B8C;"></i>
+            <span>Tổng số dự án: <strong>186 dự án</strong></span>
+          </div>
+          <div class="drilldown-stat-item">
+            <i data-lucide="wallet" style="color: #002B8C;"></i>
+            <span>Kế hoạch vốn 2026: <strong>11.480 tỷ đồng</strong></span>
+          </div>
+          <div class="drilldown-stat-item">
+            <i data-lucide="trending-up" style="color: #14532d;"></i>
+            <span>Đã giải ngân: <strong>7.850,4 tỷ đồng (68,38%)</strong></span>
+          </div>
+          <div class="drilldown-stat-item">
+            <i data-lucide="alert-triangle" style="color: #991b1b;"></i>
+            <span>Dự án chậm nghẽn (< 50%): <strong style="color: #991b1b;">5 dự án</strong></span>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <div style="font-size: 13px; font-weight: 700; color: #0f172a;">
+            DANH SÁCH 5 DỰ ÁN GIẢI NGÂN CHẬM TIẾN ĐỘ & NGUY CƠ NGHẼN VỐN CẦN LÃNH ĐẠO SỞ CHỈ ĐẠO
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn btn-sm btn-primary" onclick="App.showNotification('Đã phát lệnh đôn đốc khẩn cấp tới 5 Chủ đầu tư dự án chậm tiến độ!', 'warning')">
+              <i data-lucide="send"></i> <span>Gửi văn bản đôn đốc khẩn</span>
+            </button>
+            <button class="btn btn-sm btn-outline" onclick="DeptWorkspaceManager.exportTableToExcel('modalTableDtc', 'Danh sách 5 dự án đầu tư công chậm tiến độ')">
+              <i data-lucide="file-spreadsheet"></i> <span>Xuất Excel</span>
+            </button>
+            <button class="btn btn-sm btn-outline" onclick="DeptWorkspaceManager.printTableReport('modalTableDtc', 'Danh sách 5 dự án đầu tư công chậm tiến độ')">
+              <i data-lucide="printer"></i> <span>In PDF</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="table-scroll-container">
+          <table class="data-table freeze-first" id="modalTableDtc">
+            <thead>
+              <tr>
+                <th style="width: 100px;">Mã DA</th>
+                <th>Tên Dự Án Đầu Tư Công & Địa Bàn</th>
+                <th>Chủ Đầu Tư / Ban QLDA</th>
+                <th style="text-align: right;">Kế Hoạch Vốn</th>
+                <th style="text-align: right;">Đã Giải Ngân</th>
+                <th style="text-align: center;">Tỷ Lệ</th>
+                <th>Điểm Nghẽn Chính / Nguyên Nhân</th>
+                <th style="text-align: center;">Thao Tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background: #fff1f2;">
+                <td><code>DA-DTC-042</code></td>
+                <td>
+                  <strong>Đường trục chính KKT Vân Phong - Phân khu 3</strong><br>
+                  <small style="color: #334155;">Địa bàn: Xã Vạn Ninh, tỉnh Khánh Hòa</small>
+                </td>
+                <td>Ban QLDA Khu Kinh tế Vân Phong</td>
+                <td style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700;">850 tỷ đồng</td>
+                <td style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #991b1b;">187,0 tỷ đồng</td>
+                <td style="text-align: center;">
+                  <span class="badge badge-danger" style="font-weight: 700;">22,0%</span>
+                </td>
+                <td style="color: #991b1b; font-size: 12px; font-weight: 600;">
+                  <i data-lucide="alert-circle" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i>
+                  Vướng bồi thường GPMB 42 hộ dân & xác định giá đất cụ thể
+                </td>
+                <td style="text-align: center;">
+                  <button class="btn btn-sm btn-outline" onclick="App.showNotification('Đã mở hồ sơ kiểm tra chi tiết DA-DTC-042', 'info')">
+                    <i data-lucide="eye"></i> Hồ sơ
+                  </button>
+                </td>
+              </tr>
+
+              <tr style="background: #fffbeb;">
+                <td><code>DA-DTC-088</code></td>
+                <td>
+                  <strong>Hệ thống thoát nước & Xử lý nước thải Nam Cam Ranh</strong><br>
+                  <small style="color: #334155;">Địa bàn: Phường Cam Linh & Phường Ba Ngòi</small>
+                </td>
+                <td>Ban QLDA Phát triển tỉnh Khánh Hòa</td>
+                <td style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700;">420 tỷ đồng</td>
+                <td style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #78350f;">147,0 tỷ đồng</td>
+                <td style="text-align: center;">
+                  <span class="badge badge-warning" style="font-weight: 700;">35,0%</span>
+                </td>
+                <td style="color: #78350f; font-size: 12px; font-weight: 600;">
+                  <i data-lucide="alert-circle" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i>
+                  Thủ tục điều chỉnh thiết kế cơ sở & đấu thầu thiết bị trạm bơm
+                </td>
+                <td style="text-align: center;">
+                  <button class="btn btn-sm btn-outline" onclick="App.showNotification('Đã mở hồ sơ kiểm tra chi tiết DA-DTC-088', 'info')">
+                    <i data-lucide="eye"></i> Hồ sơ
+                  </button>
+                </td>
+              </tr>
+
+              <tr style="background: #fffbeb;">
+                <td><code>DA-DTC-115</code></td>
+                <td>
+                  <strong>Kè biển bảo vệ khu dân cư ven biển Cà Ná</strong><br>
+                  <small style="color: #334155;">Địa bàn: Xã Cà Ná, tỉnh Khánh Hòa</small>
+                </td>
+                <td>Ban QLDA Nông nghiệp và PTNT</td>
+                <td style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700;">260 tỷ đồng</td>
+                <td style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #78350f;">104,0 tỷ đồng</td>
+                <td style="text-align: center;">
+                  <span class="badge badge-warning" style="font-weight: 700;">40,0%</span>
+                </td>
+                <td style="color: #78350f; font-size: 12px; font-weight: 600;">
+                  <i data-lucide="alert-circle" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i>
+                  Thời tiết sóng biển mùa gió chướng & thiếu nguồn vật liệu đá hộc
+                </td>
+                <td style="text-align: center;">
+                  <button class="btn btn-sm btn-outline" onclick="App.showNotification('Đã mở hồ sơ kiểm tra chi tiết DA-DTC-115', 'info')">
+                    <i data-lucide="eye"></i> Hồ sơ
+                  </button>
+                </td>
+              </tr>
+
+              <tr style="background: #fffbeb;">
+                <td><code>DA-DTC-134</code></td>
+                <td>
+                  <strong>Nâng cấp mở rộng Bệnh viện Y học Cổ truyền tỉnh</strong><br>
+                  <small style="color: #334155;">Địa bàn: Phường Nam Nha Trang</small>
+                </td>
+                <td>Ban QLDA Dân dụng và Công nghiệp</td>
+                <td style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700;">190 tỷ đồng</td>
+                <td style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #78350f;">81,7 tỷ đồng</td>
+                <td style="text-align: center;">
+                  <span class="badge badge-warning" style="font-weight: 700;">43,0%</span>
+                </td>
+                <td style="color: #78350f; font-size: 12px; font-weight: 600;">
+                  <i data-lucide="alert-circle" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i>
+                  Nhà thầu xây lắp thi công cầm chừng, đang thanh tra tiến độ
+                </td>
+                <td style="text-align: center;">
+                  <button class="btn btn-sm btn-outline" onclick="App.showNotification('Đã mở hồ sơ kiểm tra chi tiết DA-DTC-134', 'info')">
+                    <i data-lucide="eye"></i> Hồ sơ
+                  </button>
+                </td>
+              </tr>
+
+              <tr style="background: #fffbeb;">
+                <td><code>DA-DTC-158</code></td>
+                <td>
+                  <strong>Trường THPT chuyên Lê Quý Đôn (Cơ sở mới)</strong><br>
+                  <small style="color: #334155;">Địa bàn: Phường Tây Nha Trang</small>
+                </td>
+                <td>Ban QLDA Dân dụng và Công nghiệp</td>
+                <td style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700;">120 tỷ đồng</td>
+                <td style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #78350f;">54,0 tỷ đồng</td>
+                <td style="text-align: center;">
+                  <span class="badge badge-warning" style="font-weight: 700;">45,0%</span>
+                </td>
+                <td style="color: #78350f; font-size: 12px; font-weight: 600;">
+                  <i data-lucide="alert-circle" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i>
+                  Chờ phê duyệt thẩm định PCCC bổ sung & nghiệm thu giai đoạn 1
+                </td>
+                <td style="text-align: center;">
+                  <button class="btn btn-sm btn-outline" onclick="App.showNotification('Đã mở hồ sơ kiểm tra chi tiết DA-DTC-158', 'info')">
+                    <i data-lucide="eye"></i> Hồ sơ
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+    // 2. TỔNG THU NGÂN SÁCH / DỰ TOÁN THU / THỰC THU / DOANH NGHIỆP TRỌNG ĐIỂM
+    else if (label.includes('thu ngân sách') || label.includes('Thực thu') || label.includes('Dự toán thu') || label.includes('Thu từ DN')) {
+      titleText = `<i data-lucide="receipt" style="color: #002B8C;"></i> Chi Tiết Thu Ngân Sách Nhà Nước Theo Sắc Thuế & Doanh Nghiệp Lớn`;
+      bodyHtml = `
+        <div class="drilldown-stat-banner">
+          <div class="drilldown-stat-item">
+            <i data-lucide="target" style="color: #002B8C;"></i>
+            <span>Dự toán HĐND giao: <strong>18.100 tỷ đồng</strong></span>
+          </div>
+          <div class="drilldown-stat-item">
+            <i data-lucide="trending-up" style="color: #14532d;"></i>
+            <span>Thực thu lũy kế: <strong style="color: #14532d;">18.520,6 tỷ đồng (Đạt 102,3%)</strong></span>
+          </div>
+          <div class="drilldown-stat-item">
+            <i data-lucide="award" style="color: #002B8C;"></i>
+            <span>Thu từ DN trọng điểm: <strong>8.340,5 tỷ đồng (45%)</strong></span>
+          </div>
+          <div class="drilldown-stat-item">
+            <i data-lucide="check-circle" style="color: #14532d;"></i>
+            <span>Vượt chỉ tiêu: <strong>+420,6 tỷ đồng</strong></span>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 12px; display: flex; justify-content: flex-end; gap: 6px;">
+          <button class="btn btn-sm btn-outline" onclick="DeptWorkspaceManager.exportTableToExcel('modalTableTaxpayers', 'Danh sách doanh nghiệp nộp thuế lớn')">
+            <i data-lucide="file-spreadsheet"></i> <span>Xuất Excel</span>
+          </button>
+          <button class="btn btn-sm btn-outline" onclick="DeptWorkspaceManager.printTableReport('modalTableTaxpayers', 'Danh sách doanh nghiệp nộp thuế lớn')">
+            <i data-lucide="printer"></i> <span>In PDF</span>
+          </button>
+        </div>
+
+        <div class="table-scroll-container">
+          <table class="data-table freeze-first" id="modalTableTaxpayers">
+            <thead>
+              <tr>
+                <th>Mã Số Thuế</th>
+                <th>Tên Đơn Vị / Doanh Nghiệp Đóng Góp Lớn</th>
+                <th>Địa Bàn</th>
+                <th style="text-align: right;">Dự Toán Giao</th>
+                <th style="text-align: right;">Thực Nộp NSNN</th>
+                <th style="text-align: center;">Tỷ Lệ Đạt</th>
+                <th style="text-align: center;">Trạng Thái</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>4200238910</code></td>
+                <td><strong>Tổng Công ty Khánh Việt (KHATOCO)</strong></td>
+                <td>Phường Nha Trang</td>
+                <td style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700;">3.500 tỷ đồng</td>
+                <td style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #14532d;">3.620,5 tỷ đồng</td>
+                <td style="text-align: center;"><span class="badge badge-success">103,4%</span></td>
+                <td style="text-align: center;"><span class="badge badge-success">Vượt chỉ tiêu</span></td>
+              </tr>
+              <tr>
+                <td><code>4200429779</code></td>
+                <td><strong>Công ty Yến Sào Khánh Hòa</strong></td>
+                <td>Phường Nha Trang</td>
+                <td style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700;">2.100 tỷ đồng</td>
+                <td style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #14532d;">2.180,0 tỷ đồng</td>
+                <td style="text-align: center;"><span class="badge badge-success">103,8%</span></td>
+                <td style="text-align: center;"><span class="badge badge-success">Vượt chỉ tiêu</span></td>
+              </tr>
+              <tr>
+                <td><code>4200789012</code></td>
+                <td><strong>Công ty Bia Sài Gòn - Nam Trung Bộ</strong></td>
+                <td>Xã Diên Khánh</td>
+                <td style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700;">1.500 tỷ đồng</td>
+                <td style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #78350f;">1.450,0 tỷ đồng</td>
+                <td style="text-align: center;"><span class="badge badge-warning">96,7%</span></td>
+                <td style="text-align: center;"><span class="badge badge-warning">Đang theo dõi</span></td>
+              </tr>
+              <tr>
+                <td><code>4201123456</code></td>
+                <td><strong>Công ty CP Điện lực Khánh Hòa</strong></td>
+                <td>Phường Nha Trang</td>
+                <td style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700;">700 tỷ đồng</td>
+                <td style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #14532d;">720,0 tỷ đồng</td>
+                <td style="text-align: center;"><span class="badge badge-success">102,8%</span></td>
+                <td style="text-align: center;"><span class="badge badge-success">Đạt kế hoạch</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+    // 3. VỐN FDI / DỰ ÁN NGOÀI NGÂN SÁCH
+    else if (label.includes('FDI') || label.includes('ngoài ngân sách') || label.includes('Vốn đăng ký')) {
+      titleText = `<i data-lucide="globe" style="color: #002B8C;"></i> Danh Mục Dự Án Đầu Tư Ngoài Ngân Sách & Doanh Nghiệp FDI`;
+      bodyHtml = `
+        <div class="drilldown-stat-banner">
+          <div class="drilldown-stat-item">
+            <i data-lucide="building-2" style="color: #002B8C;"></i>
+            <span>Tổng số dự án theo dõi: <strong>142 dự án</strong></span>
+          </div>
+          <div class="drilldown-stat-item">
+            <i data-lucide="globe" style="color: #002B8C;"></i>
+            <span>Dự án FDI: <strong>38 dự án (485,6 triệu USD)</strong></span>
+          </div>
+          <div class="drilldown-stat-item">
+            <i data-lucide="coins" style="color: #002B8C;"></i>
+            <span>Tổng vốn đăng ký: <strong>86.450 tỷ đồng</strong></span>
+          </div>
+          <div class="drilldown-stat-item">
+            <i data-lucide="alert-triangle" style="color: #991b1b;"></i>
+            <span>Dự án chậm tiến độ: <strong style="color: #991b1b;">9 dự án</strong></span>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 12px; display: flex; justify-content: flex-end; gap: 6px;">
+          <button class="btn btn-sm btn-outline" onclick="DeptWorkspaceManager.exportTableToExcel('modalTableFdi', 'Danh mục dự án ngoài ngân sách và FDI')">
+            <i data-lucide="file-spreadsheet"></i> <span>Xuất Excel</span>
+          </button>
+          <button class="btn btn-sm btn-outline" onclick="DeptWorkspaceManager.printTableReport('modalTableFdi', 'Danh mục dự án ngoài ngân sách và FDI')">
+            <i data-lucide="printer"></i> <span>In PDF</span>
+          </button>
+        </div>
+
+        <div class="table-scroll-container">
+          <table class="data-table freeze-first" id="modalTableFdi">
+            <thead>
+              <tr>
+                <th>Mã Dự Án</th>
+                <th>Tên Dự Án & Địa Bàn</th>
+                <th>Nhà Đầu Tư</th>
+                <th style="text-align: right;">Vốn Đăng Ký</th>
+                <th>Quy Mô Đất</th>
+                <th style="text-align: center;">Tiến Độ</th>
+                <th style="text-align: center;">Trạng Thái</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>DA-NNS-001</code></td>
+                <td><strong>Khu đô thị sinh thái Bắc Cam Ranh</strong><br><small style="color: #334155;">Phường Bắc Cam Ranh</small></td>
+                <td>Tập đoàn Phát triển Đô thị Khánh Hòa</td>
+                <td style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700;">4.850 tỷ đồng</td>
+                <td>125,4 ha</td>
+                <td style="text-align: center;"><span class="badge badge-warning">35%</span></td>
+                <td style="text-align: center;"><span class="badge badge-warning">Đang GPMB</span></td>
+              </tr>
+              <tr>
+                <td><code>DA-NNS-002</code></td>
+                <td><strong>Tổ hợp nghỉ dưỡng & Sân golf Vĩnh Hy</strong><br><small style="color: #334155;">Xã Ninh Hải</small></td>
+                <td>Công ty CP Đầu tư Biển Xanh</td>
+                <td style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700;">3.200 tỷ đồng</td>
+                <td>88,0 ha</td>
+                <td style="text-align: center;"><span class="badge badge-info">62%</span></td>
+                <td style="text-align: center;"><span class="badge badge-info">Xây dựng hạ tầng</span></td>
+              </tr>
+              <tr>
+                <td><code>DA-NNS-003</code></td>
+                <td><strong>Nhà máy chế biến thủy sản công nghệ cao FDI</strong><br><small style="color: #334155;">KCN Nam Cam Ranh</small></td>
+                <td>Maruha Nichiro Corporation (Nhật Bản)</td>
+                <td style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #14532d;">1.450 tỷ đồng (58 triệu USD)</td>
+                <td>15,2 ha</td>
+                <td style="text-align: center;"><span class="badge badge-success">94%</span></td>
+                <td style="text-align: center;"><span class="badge badge-success">Chuẩn bị vận hành</span></td>
+              </tr>
+              <tr>
+                <td><code>DA-NNS-004</code></td>
+                <td><strong>Khu du lịch Hòn Tằm mở rộng</strong><br><small style="color: #334155;">Vịnh Nha Trang</small></td>
+                <td>Công ty CP Hòn Tằm Biển Nha Trang</td>
+                <td style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700;">980 tỷ đồng</td>
+                <td>22,5 ha</td>
+                <td style="text-align: center;"><span class="badge badge-warning">20%</span></td>
+                <td style="text-align: center;"><span class="badge badge-warning">Thủ tục đất đai</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+    // 4. HỒ SƠ CHỜ PHÊ DUYỆT / HỒ SƠ KÊ KHAI
+    else if (label.includes('phê duyệt') || label.includes('Hồ sơ') || label.includes('Văn bản')) {
+      titleText = `<i data-lucide="check-square" style="color: #002B8C;"></i> Danh Sách Hồ Sơ & Tờ Trình Đang Chờ Lãnh Đạo Sở Phê Duyệt`;
+      bodyHtml = `
+        <div class="drilldown-stat-banner">
+          <div class="drilldown-stat-item">
+            <i data-lucide="inbox" style="color: #002B8C;"></i>
+            <span>Hồ sơ chờ phê duyệt: <strong style="color: #991b1b;">6 hồ sơ</strong></span>
+          </div>
+          <div class="drilldown-stat-item">
+            <i data-lucide="clock" style="color: #78350f;"></i>
+            <span>Đúng hạn xử lý: <strong>100%</strong></span>
+          </div>
+          <div class="drilldown-stat-item">
+            <i data-lucide="shield-check" style="color: #14532d;"></i>
+            <span>Quy trình ký số: <strong>Nghị định 30/2020/NĐ-CP</strong></span>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 12px; display: flex; justify-content: flex-end; gap: 6px;">
+          <button class="btn btn-sm btn-outline" onclick="DeptWorkspaceManager.exportTableToExcel('modalTableApprovals', 'Danh sách tờ trình và hồ sơ chờ duyệt')">
+            <i data-lucide="file-spreadsheet"></i> <span>Xuất Excel</span>
+          </button>
+          <button class="btn btn-sm btn-outline" onclick="DeptWorkspaceManager.printTableReport('modalTableApprovals', 'Danh sách tờ trình và hồ sơ chờ duyệt')">
+            <i data-lucide="printer"></i> <span>In PDF</span>
+          </button>
+        </div>
+
+        <div class="table-scroll-container">
+          <table class="data-table freeze-first" id="modalTableApprovals">
+            <thead>
+              <tr>
+                <th>Mã Tờ Trình</th>
+                <th>Nội Dung Tờ Trình Chuyên Môn</th>
+                <th>Phòng Trình</th>
+                <th>Người Ký Nháy</th>
+                <th>Thời Hạn</th>
+                <th style="text-align: center;">Thao Tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>TT-DTC-2026-08</code></td>
+                <td><strong>Tờ trình điều chỉnh kế hoạch vốn đầu tư công năm 2026 đợt 2</strong></td>
+                <td>Phòng Quản lý Đầu tư công</td>
+                <td>Phạm Minh Tuấn</td>
+                <td style="color: #991b1b; font-weight: 700;">Hôm nay</td>
+                <td style="text-align: center;">
+                  <button class="btn btn-sm btn-primary" onclick="App.showNotification('Đã phê duyệt điện tử tờ trình TT-DTC-2026-08', 'success')">
+                    <i data-lucide="check"></i> Duyệt
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td><code>TT-GCS-2026-14</code></td>
+                <td><strong>Phương án thẩm định giá khởi điểm đấu giá cơ sở nhà đất cũ Cam Ranh</strong></td>
+                <td>Phòng Quản lý Giá và Công sản</td>
+                <td>Đặng Quốc Hưng</td>
+                <td>25/08/2026</td>
+                <td style="text-align: center;">
+                  <button class="btn btn-sm btn-primary" onclick="App.showNotification('Đã phê duyệt điện tử tờ trình TT-GCS-2026-14', 'success')">
+                    <i data-lucide="check"></i> Duyệt
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td><code>TT-HCSN-2026-22</code></td>
+                <td><strong>Phương án tự chủ tài chính giai đoạn 2026-2028 Bệnh viện Đa khoa tỉnh</strong></td>
+                <td>Phòng Tài chính Hành chính sự nghiệp</td>
+                <td>Ngô Mỹ Linh</td>
+                <td>28/08/2026</td>
+                <td style="text-align: center;">
+                  <button class="btn btn-sm btn-primary" onclick="App.showNotification('Đã phê duyệt điện tử tờ trình TT-HCSN-2026-22', 'success')">
+                    <i data-lucide="check"></i> Duyệt
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+    // 5. CÁC CHỈ SỐ MẶC ĐỊNH KHÁC
+    else {
+      titleText = `<i data-lucide="pie-chart" style="color: #002B8C;"></i> Chi Tiết Chỉ Số Nghiệp Vụ: ${label}`;
+      bodyHtml = `
+        <div class="drilldown-stat-banner">
+          <div class="drilldown-stat-item">
+            <i data-lucide="info" style="color: #002B8C;"></i>
+            <span>Lĩnh vực chuyên môn: <strong>${DEPT_CONFIGS[deptId]?.deptName || deptId}</strong></span>
+          </div>
+          <div class="drilldown-stat-item">
+            <i data-lucide="calendar" style="color: #002B8C;"></i>
+            <span>Thời điểm tra cứu: <strong>${new Date().toLocaleDateString('vi-VN')}</strong></span>
+          </div>
+        </div>
+        <p style="font-size: 13px; color: #1e293b; line-height: 1.6; margin-bottom: 14px;">
+          Số liệu chi tiết được trích xuất trực tiếp từ CSDL Chuyên ngành Sở Tài chính tỉnh Khánh Hòa, kết nối liên thông qua hệ thống API Gateway thời gian thực.
+        </p>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-sm btn-primary" onclick="DeptWorkspaceManager.exportFilteredReport('excel')">
+            <i data-lucide="file-spreadsheet"></i> Xuất dữ liệu chi tiết (Excel)
+          </button>
+          <button class="btn btn-sm btn-secondary" onclick="App.closeModal('modalGeneric')">
+            Đóng
+          </button>
+        </div>
+      `;
+    }
+
+    if (modalTitleEl) modalTitleEl.innerHTML = titleText;
+    if (modalBodyEl) modalBodyEl.innerHTML = bodyHtml;
+
+    App.openModal('modalGeneric');
+    if (window.lucide) window.lucide.createIcons();
+  },
 
   init() {
     this.setupUserSwitcher();
@@ -109,22 +990,22 @@ const DeptWorkspaceManager = {
     if (config.id === 'portal' || config.id.startsWith('portal_')) {
       const activeTab = (typeof ExternalPortalManager !== 'undefined') ? ExternalPortalManager.currentTab : 'tasks';
       navHtml = `
-        <div class="nav-section-title">CỔNG BÁO CÁO TRỰC TUYẾN</div>
+        <div class="nav-section-title">QUY TRÌNH 5 BƯỚC BÁO CÁO</div>
         <a class="nav-item ${activeTab === 'tasks' ? 'active' : ''}" onclick="ExternalPortalManager.switchPortalTab('tasks', this)">
-          <i data-lucide="clipboard-list"></i>
-          <span>Nhiệm vụ báo cáo</span>
+          <i data-lucide="git-pull-request"></i>
+          <span>Nhiệm vụ & Quy trình 5 bước</span>
         </a>
         <a class="nav-item ${activeTab === 'fill_form' ? 'active' : ''}" onclick="ExternalPortalManager.switchPortalTab('fill_form', this)">
           <i data-lucide="edit-3"></i>
-          <span>Kê khai & nộp báo cáo</span>
+          <span>Kê khai dự thảo báo cáo</span>
         </a>
         <a class="nav-item ${activeTab === 'history' ? 'active' : ''}" onclick="ExternalPortalManager.switchPortalTab('history', this)">
           <i data-lucide="history"></i>
-          <span>Lịch sử nộp & Kết quả</span>
+          <span>Lịch sử & Kết quả thẩm tra</span>
         </a>
         <a class="nav-item ${activeTab === 'guidance' ? 'active' : ''}" onclick="ExternalPortalManager.switchPortalTab('guidance', this)">
           <i data-lucide="book-open"></i>
-          <span>Quy định & biểu mẫu</span>
+          <span>Quy định & Biểu mẫu chuẩn</span>
         </a>
       `;
     } else if (config.id === 'lanhdao') {
@@ -788,19 +1669,8 @@ const DeptWorkspaceManager = {
       return;
     }
 
-    // Render header banner of department
-    let contentHtml = `
-      <div class="domain-header-banner">
-        <div class="banner-left">
-          <div class="banner-icon">
-            <i data-lucide="${config.icon}"></i>
-          </div>
-          <div class="banner-title" style="margin-bottom: 0;">
-            <h2>${config.domainName}</h2>
-          </div>
-        </div>
-      </div>
-    `;
+    // Render Global Filter Bar directly without redundant header banner
+    let contentHtml = this.renderGlobalFilterBar();
 
     // Render Stats Grid of this department
     contentHtml += `
@@ -832,7 +1702,7 @@ const DeptWorkspaceManager = {
             : `<span class="metric-val">${valDisplay}</span>`;
 
           return `
-            <div class="kpi-card">
+            <div class="kpi-card" onclick="DeptWorkspaceManager.openKpiDrilldownModal('${encodeURIComponent(s.label)}', '${deptId}')" title="Nhấp để mở rộng bảng chi tiết dữ liệu (Executive Drill-Down)">
               <div class="kpi-top-row">
                 <span class="kpi-label">${s.label}</span>
                 <div class="kpi-icon-pill ${s.color}">
@@ -1108,12 +1978,10 @@ const DeptWorkspaceManager = {
     return `
       <div class="dashboard-row">
         <div class="col-6">
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title"><i data-lucide="file-text"></i> Văn bản chỉ đạo & điều hành phát hành gần nhất</h3>
-            </div>
-            <div class="table-container">
-              <table class="data-table">
+          <div class="table-fullscreen-wrapper" id="wrapper_vp_documents">
+            ${this.renderAdminTableToolbar('wrapper_vp_documents', 'table_vp_documents', 'Văn bản chỉ đạo & điều hành phát hành gần nhất')}
+            <div class="table-scroll-container">
+              <table class="data-table freeze-first" id="table_vp_documents">
                 <thead>
                   <tr>
                     <th>Số / Ký hiệu</th>
@@ -1140,12 +2008,10 @@ const DeptWorkspaceManager = {
           </div>
         </div>
         <div class="col-6">
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title"><i data-lucide="archive"></i> Tiến độ số hóa hồ sơ tài liệu lưu trữ các phòng ban</h3>
-            </div>
-            <div class="table-container">
-              <table class="data-table">
+          <div class="table-fullscreen-wrapper" id="wrapper_vp_archives">
+            ${this.renderAdminTableToolbar('wrapper_vp_archives', 'table_vp_archives', 'Tiến độ số hóa hồ sơ lưu trữ các phòng ban')}
+            <div class="table-scroll-container">
+              <table class="data-table freeze-first" id="table_vp_archives">
                 <thead>
                   <tr>
                     <th>Phòng chuyên môn</th>
@@ -1200,12 +2066,10 @@ const DeptWorkspaceManager = {
     return `
       <div class="dashboard-row">
         <div class="col-6">
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title"><i data-lucide="award"></i> Doanh nghiệp có số nộp ngân sách lớn</h3>
-            </div>
-            <div class="table-container">
-              <table class="data-table">
+          <div class="table-fullscreen-wrapper" id="wrapper_ktns_taxpayers">
+            ${this.renderAdminTableToolbar('wrapper_ktns_taxpayers', 'table_ktns_taxpayers', 'Doanh nghiệp có số nộp ngân sách lớn')}
+            <div class="table-scroll-container">
+              <table class="data-table freeze-first" id="table_ktns_taxpayers">
                 <thead>
                   <tr>
                     <th>Doanh nghiệp trọng điểm</th>
@@ -1220,7 +2084,7 @@ const DeptWorkspaceManager = {
                     <tr>
                       <td><strong>${k.name}</strong><br><small>MST: ${k.mst}</small></td>
                       <td>${k.target}</td>
-                      <td><strong style="color: #0284c7;">${k.actual}</strong></td>
+                      <td><strong style="color: #002B8C;">${k.actual}</strong></td>
                       <td><span class="badge badge-success">${k.rate}</span></td>
                       <td><span class="badge badge-success">${k.status}</span></td>
                     </tr>
@@ -1255,13 +2119,10 @@ const DeptWorkspaceManager = {
     return `
       <div class="dashboard-row">
         <div class="col-7">
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title"><i data-lucide="hard-hat"></i> Tiến độ dự án đầu tư công trọng điểm</h3>
-              <span class="badge badge-warning">Kế hoạch 2026</span>
-            </div>
-            <div class="table-container">
-              <table class="data-table">
+          <div class="table-fullscreen-wrapper" id="wrapper_dtc_projects">
+            ${this.renderAdminTableToolbar('wrapper_dtc_projects', 'table_dtc_projects', 'Tiến độ dự án đầu tư công trọng điểm')}
+            <div class="table-scroll-container">
+              <table class="data-table freeze-first" id="table_dtc_projects">
                 <thead>
                   <tr>
                     <th>Mã dự án</th>
@@ -1275,11 +2136,11 @@ const DeptWorkspaceManager = {
                 <tbody>
                   ${config.projects.map(p => `
                     <tr>
-                      <td><strong style="color: #0284c7;">${p.id}</strong></td>
+                      <td><strong style="color: #002B8C;">${p.id}</strong></td>
                       <td><strong>${p.name}</strong></td>
                       <td>${p.owner}</td>
                       <td>${p.budget}</td>
-                      <td><strong style="color: #15803d;">${p.disbursed}</strong></td>
+                      <td><strong style="color: #14532d;">${p.disbursed}</strong></td>
                       <td><span class="badge badge-success">${p.rate}</span></td>
                     </tr>
                   `).join('')}
@@ -1311,19 +2172,10 @@ const DeptWorkspaceManager = {
       return this.renderDeptArchiveFiltered('Đầu tư ngoài ngân sách', 'Phòng Quản lý Đầu tư ngoài ngân sách (117m / 900.900 trang A4)');
     }
     return `
-      <div class="card" style="margin-bottom: 24px;">
-        <div class="card-header">
-          <div>
-            <h3 class="card-title"><i data-lucide="building-2"></i> Danh mục dự án đầu tư ngoài ngân sách và dự án FDI</h3>
-            <p class="card-subtitle">Theo dõi sát tiến độ cam kết, vốn đăng ký, diện tích đất sử dụng và Giấy chứng nhận ĐKĐT (IRC)</p>
-          </div>
-          <div style="display: flex; gap: 8px;">
-            <button class="btn btn-secondary btn-sm" onclick="DeptWorkspaceManager.switchTab('data_entry')"><i data-lucide="plus"></i> Thêm dự án mới</button>
-            <button class="btn btn-primary btn-sm" onclick="App.showNotification('Đang xuất báo cáo Excel dự án ngoài ngân sách...', 'success')"><i data-lucide="download"></i> Xuất Excel</button>
-          </div>
-        </div>
-        <div class="table-container">
-          <table class="data-table">
+      <div class="table-fullscreen-wrapper" id="wrapper_dtns_projects">
+        ${this.renderAdminTableToolbar('wrapper_dtns_projects', 'table_dtns_projects', 'Danh mục dự án đầu tư ngoài ngân sách và dự án FDI')}
+        <div class="table-scroll-container">
+          <table class="data-table freeze-first" id="table_dtns_projects">
             <thead>
               <tr>
                 <th>Mã dự án</th>
@@ -1339,10 +2191,10 @@ const DeptWorkspaceManager = {
             <tbody>
               ${config.projects.map(p => `
                 <tr>
-                  <td><strong style="color: #0284c7;">${p.id}</strong></td>
+                  <td><strong style="color: #002B8C;">${p.id}</strong></td>
                   <td><strong>${p.name}</strong></td>
                   <td>${p.investor}</td>
-                  <td><strong style="color: #15803d;">${p.capital}</strong></td>
+                  <td><strong style="color: #14532d;">${p.capital}</strong></td>
                   <td>${p.land}</td>
                   <td><span class="badge badge-info">${p.progress}</span></td>
                   <td><span class="badge ${p.status.includes('chậm') ? 'badge-danger' : 'badge-warning'}">${p.status}</span></td>
@@ -1366,12 +2218,10 @@ const DeptWorkspaceManager = {
     return `
       <div class="dashboard-row">
         <div class="col-7">
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title"><i data-lucide="briefcase"></i> Theo dõi báo cáo tài chính và hiệu quả hoạt động doanh nghiệp</h3>
-            </div>
-            <div class="table-container">
-              <table class="data-table">
+          <div class="table-fullscreen-wrapper" id="wrapper_dn_companies">
+            ${this.renderAdminTableToolbar('wrapper_dn_companies', 'table_dn_companies', 'Theo dõi BCTC và hiệu quả hoạt động doanh nghiệp')}
+            <div class="table-scroll-container">
+              <table class="data-table freeze-first" id="table_dn_companies">
                 <thead>
                   <tr>
                     <th>Doanh nghiệp</th>
@@ -1388,8 +2238,8 @@ const DeptWorkspaceManager = {
                       <td><strong>${c.name}</strong><br><small>MST: ${c.mst}</small></td>
                       <td>${c.capital}</td>
                       <td>${c.revenue}</td>
-                      <td><strong style="color: ${c.roa.includes('-') ? '#dc2626' : '#0284c7'};">${c.roa}</strong></td>
-                      <td><strong style="color: ${c.roe.includes('-') ? '#dc2626' : '#0284c7'};">${c.roe}</strong></td>
+                      <td><strong style="color: ${c.roa.includes('-') ? '#991b1b' : '#002B8C'};">${c.roa}</strong></td>
+                      <td><strong style="color: ${c.roe.includes('-') ? '#991b1b' : '#002B8C'};">${c.roe}</strong></td>
                       <td><span class="badge ${c.risk === 'An toàn' ? 'badge-success' : c.risk === 'Trung bình' ? 'badge-warning' : 'badge-danger'}">${c.risk}</span></td>
                     </tr>
                   `).join('')}
@@ -1415,15 +2265,10 @@ const DeptWorkspaceManager = {
   renderGiaCongSanContent() {
     const config = DEPT_CONFIGS['giacongsan'];
     return `
-      <div class="card">
-        <div class="card-header">
-          <div>
-            <h3 class="card-title"><i data-lucide="home"></i> Phương án sắp xếp lại, xử lý cơ sở nhà đất công</h3>
-            <p class="card-subtitle">Danh mục các cơ sở nhà đất công được giữ lại, bán đấu giá, chuyển nhượng hoặc thu hồi</p>
-          </div>
-        </div>
-        <div class="table-container">
-          <table class="data-table">
+      <div class="table-fullscreen-wrapper" id="wrapper_gcs_properties">
+        ${this.renderAdminTableToolbar('wrapper_gcs_properties', 'table_gcs_properties', 'Phương án sắp xếp lại, xử lý cơ sở nhà đất công')}
+        <div class="table-scroll-container">
+          <table class="data-table freeze-first" id="table_gcs_properties">
             <thead>
               <tr>
                 <th>Mã cơ sở</th>
@@ -1436,7 +2281,7 @@ const DeptWorkspaceManager = {
             <tbody>
               ${config.properties.map(prop => `
                 <tr>
-                  <td><strong style="color: #0284c7;">${prop.id}</strong></td>
+                  <td><strong style="color: #002B8C;">${prop.id}</strong></td>
                   <td><strong>${prop.name}</strong></td>
                   <td>${prop.area}</td>
                   <td><span class="badge badge-info">${prop.plan}</span></td>
@@ -1454,15 +2299,10 @@ const DeptWorkspaceManager = {
   renderHCSNContent() {
     const config = DEPT_CONFIGS['hcsn'];
     return `
-      <div class="card">
-        <div class="card-header">
-          <div>
-            <h3 class="card-title"><i data-lucide="graduation-cap"></i> Danh sách đơn vị sự nghiệp công lập tự chủ tài chính</h3>
-            <p class="card-subtitle">Phân loại mức độ tự chủ (Nhóm 1, 2, 3, 4), nguồn thu sự nghiệp và số biên chế giao</p>
-          </div>
-        </div>
-        <div class="table-container">
-          <table class="data-table">
+      <div class="table-fullscreen-wrapper" id="wrapper_hcsn_units">
+        ${this.renderAdminTableToolbar('wrapper_hcsn_units', 'table_hcsn_units', 'Danh sách đơn vị sự nghiệp công lập tự chủ tài chính')}
+        <div class="table-scroll-container">
+          <table class="data-table freeze-first" id="table_hcsn_units">
             <thead>
               <tr>
                 <th>Mã đơn vị</th>
@@ -1476,11 +2316,11 @@ const DeptWorkspaceManager = {
             <tbody>
               ${config.units.map(u => `
                 <tr>
-                  <td><strong style="color: #0284c7;">${u.id}</strong></td>
+                  <td><strong style="color: #002B8C;">${u.id}</strong></td>
                   <td><strong>${u.name}</strong></td>
                   <td><span class="badge badge-purple">${u.group}</span></td>
                   <td>${u.staff}</td>
-                  <td><strong style="color: #15803d;">${u.revenue}</strong></td>
+                  <td><strong style="color: #14532d;">${u.revenue}</strong></td>
                   <td>${u.budget_support}</td>
                 </tr>
               `).join('')}
@@ -1499,16 +2339,10 @@ const DeptWorkspaceManager = {
       <div class="dashboard-row">
         <!-- Quyết định xử phạt VPHC -->
         <div class="col-7">
-          <div class="card" style="height: 100%;">
-            <div class="card-header">
-              <div>
-                <h3 class="card-title"><i data-lucide="gavel"></i> Theo dõi thi hành quyết định xử phạt vi phạm hành chính</h3>
-                <p class="card-subtitle">Theo dõi đôn đốc thi hành các quyết định xử phạt VPHC trong lĩnh vực tài chính, giá, kế toán</p>
-              </div>
-              <span class="badge badge-purple">42 Quyết định</span>
-            </div>
-            <div class="table-container">
-              <table class="data-table">
+          <div class="table-fullscreen-wrapper" id="wrapper_pc_legal_cases">
+            ${this.renderAdminTableToolbar('wrapper_pc_legal_cases', 'table_pc_legal_cases', 'Theo dõi thi hành quyết định xử phạt VPHC')}
+            <div class="table-scroll-container">
+              <table class="data-table freeze-first" id="table_pc_legal_cases">
                 <thead>
                   <tr>
                     <th>Mã hồ sơ</th>
@@ -1521,13 +2355,13 @@ const DeptWorkspaceManager = {
                 <tbody>
                   ${config.legalCases.map(c => `
                     <tr>
-                      <td><strong style="color: #0284c7;">${c.id}</strong></td>
+                      <td><strong style="color: #002B8C;">${c.id}</strong></td>
                       <td>
                         <strong>${c.caseName}</strong>
                         <div style="font-size: 11px; color: #475569; margin-top: 2px;">Cán bộ đôn đốc: ${c.expert} | Hạn: ${c.deadline}</div>
                       </td>
                       <td>${c.agency}</td>
-                      <td><strong style="color: #ef4444;">${c.amount}</strong></td>
+                      <td><strong style="color: #991b1b;">${c.amount}</strong></td>
                       <td>
                         <span class="badge ${c.status.includes('Đã') || c.status.includes('Còn') ? 'badge-success' : 'badge-warning'}">${c.status}</span>
                       </td>
@@ -2458,27 +3292,36 @@ const DeptWorkspaceManager = {
           </div>
 
           <div style="padding: 12px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;">
-            <div style="font-size: 12px; font-weight: 600; color: #0f172a; margin-bottom: 6px;">Phạm vi quyền hạn dữ liệu:</div>
-            <ul style="padding-left: 18px; font-size: 12.5px; color: #334155; line-height: 1.6;">
-              ${isExternal ? `
-                <li>Kê khai số liệu báo cáo định kỳ theo mẫu biểu của Sở Tài chính.</li>
-                <li>Tra cứu lịch sử nộp hồ sơ và kết quả thẩm tra.</li>
-                <li>Gửi văn bản kiến nghị, đề xuất hỗ trợ.</li>
-              ` : (config.role === 'DIRECTOR' ? `
-                <li>Toàn quyền xem dữ liệu kinh tế - tài chính tổng thể tỉnh Khánh Hòa.</li>
-                <li>Phê duyệt hồ sơ báo cáo, chủ trương đầu tư, phương án tự chủ HCSN.</li>
-                <li>Chỉ đạo điều hành trực tiếp đến từng phòng ban nghiệp vụ.</li>
-              ` : `
-                <li>Thẩm tra hồ sơ báo cáo thuộc lĩnh vực: <strong>${config.domainName}</strong>.</li>
-                <li>Lập hồ sơ nghiệp vụ và trình Lãnh đạo Sở phê duyệt.</li>
-                <li>Khai thác và cập nhật cơ sở dữ liệu chuyên ngành.</li>
-              `)}
-            </ul>
+            <div style="font-size: 12.5px; font-weight: 750; color: #002B8C; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+              <i data-lucide="shield-check" style="width: 15px; height: 15px;"></i> Ma trận Phân quyền 3 Lớp của Tài khoản:
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px;">
+              <div>
+                <strong style="color: #002B8C;">1. Lớp Chức năng:</strong>
+                <span class="rbac-layer-tag rbac-tag-function">${isExternal ? 'Xem, Kê khai dự thảo, Nộp giải trình' : (config.role === 'DIRECTOR' ? 'Xem, Duyệt, Khóa sổ, Xuất báo cáo, Chỉ đạo' : 'Xem, Nhập liệu, Sửa dự thảo, Xuất báo cáo')}</span>
+              </div>
+              <div>
+                <strong style="color: #6b21a8;">2. Lớp Phạm vi (Data Scope):</strong>
+                <span class="rbac-layer-tag rbac-tag-scope">${isExternal ? 'Phạm vi Đơn vị (Entity Scope)' : (config.role === 'DIRECTOR' ? 'Toàn tỉnh (Province-Wide 65 xã/phường & 8 phòng)' : 'Phòng phụ trách: ' + (config.title || config.deptName))}</span>
+              </div>
+              <div>
+                <strong style="color: #92400e;">3. Lớp Trường Dữ liệu (Field Security):</strong>
+                <span class="rbac-layer-tag rbac-tag-field">${isExternal ? 'DDM Masking: Ẩn số liệu đơn vị khác, ẩn dữ liệu thanh tra & chỉ tiêu mật' : (config.role === 'DIRECTOR' ? 'Toàn quyền 100% các trường dữ liệu (Gồm Mật & Tối mật)' : 'Xem trường chuyên môn; DDM che mờ CCCD/STK')}</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px;">
+            <button class="btn btn-primary btn-sm" onclick="App.closeModal('modalGeneric'); DeptWorkspaceManager.loadWorkspace('admin'); DeptWorkspaceManager.switchTab('audit_system', document.querySelector('.nav-item[data-tab=audit_system]'));">
+              <i data-lucide="external-link"></i> Xem Ma trận RBAC toàn hệ thống
+            </button>
           </div>
         </div>
       `;
     }
 
     App.openModal('modalGeneric');
+    if (window.lucide) window.lucide.createIcons();
   }
 };

@@ -17,38 +17,39 @@ const ApiGatewayManager = {
     if (!container) {
       container = document.getElementById('adminApiGatewayContainer') || document.getElementById('apiGatewayCard');
     }
-    if (!container) return false;
-
     container.innerHTML = `
       <!-- TOP NAVIGATION BAR FOR API GATEWAY -->
       <div class="card" style="margin-bottom: 20px;">
-        <div class="card-header" style="padding-bottom: 12px;">
+        <div class="card-header" style="padding-bottom: 12px; flex-wrap: wrap; gap: 10px;">
           <div>
-            <h3 class="card-title"><i data-lucide="network"></i> Quản lý kết nối & Tích hợp API</h3>
-            <p class="card-subtitle">Giám sát 15 dịch vụ API kết nối với Bộ Tài chính, Bộ KH&ĐT, Thuế, Kho bạc</p>
+            <h3 class="card-title"><i data-lucide="network"></i> Quản trị Tích hợp API Gateway & Đồng bộ CSDL Quốc gia</h3>
+            <p class="card-subtitle">Giám sát kết nối TABMIS Kho bạc, Thuế điện tử, CSDL Đăng ký doanh nghiệp và Đầu tư công Quốc gia</p>
           </div>
-          <div style="display: flex; gap: 10px;">
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="btn btn-secondary btn-sm" onclick="ApiGatewayManager.pingAllHealthCheckSystems()">
+              <i data-lucide="activity"></i> Kiểm tra kết nối (Health-Check)
+            </button>
             <button class="btn btn-primary btn-sm" onclick="ApiGatewayManager.openAddApiModal()">
               <i data-lucide="plus-circle"></i> Khai báo API mới
-            </button>
-            <button class="btn btn-secondary btn-sm" onclick="ApiGatewayManager.pingAllConnections()">
-              <i data-lucide="activity"></i> Kiểm tra kết nối
             </button>
           </div>
         </div>
 
         <div class="tabs-nav" id="apiGatewayMainTabs">
+          <button class="tab-btn ${this.currentView === 'healthcheck' ? 'active' : ''}" onclick="ApiGatewayManager.switchMainView('healthcheck', this)">
+            <i data-lucide="shield-check"></i> 1. Giám sát kết nối (Health-Check 4 Hệ thống)
+          </button>
+          <button class="tab-btn ${this.currentView === 'queue_sync' ? 'active' : ''}" onclick="ApiGatewayManager.switchMainView('queue_sync', this)">
+            <i data-lucide="layers"></i> 2. Hàng đợi (Queue) & Nhật ký đồng bộ
+          </button>
           <button class="tab-btn ${this.currentView === 'directory' ? 'active' : ''}" onclick="ApiGatewayManager.switchMainView('directory', this)">
-            <i data-lucide="list"></i> 1. Danh mục kết nối API
+            <i data-lucide="list"></i> 3. Danh mục 15 API chuyên ngành
           </button>
           <button class="tab-btn ${this.currentView === 'cards' ? 'active' : ''}" onclick="ApiGatewayManager.switchMainView('cards', this)">
-            <i data-lucide="layout-grid"></i> 2. Sơ đồ kiến trúc & Giám sát
+            <i data-lucide="layout-grid"></i> 4. Sơ đồ kiến trúc luồng
           </button>
           <button class="tab-btn ${this.currentView === 'tester' ? 'active' : ''}" onclick="ApiGatewayManager.switchMainView('tester', this)">
-            <i data-lucide="terminal"></i> 3. Kiểm thử API & Payload
-          </button>
-          <button class="tab-btn ${this.currentView === 'logs' ? 'active' : ''}" onclick="ApiGatewayManager.switchMainView('logs', this)">
-            <i data-lucide="history"></i> 4. Nhật ký giao dịch
+            <i data-lucide="terminal"></i> 5. Kiểm thử API & Payload
           </button>
         </div>
       </div>
@@ -72,7 +73,11 @@ const ApiGatewayManager = {
     const container = document.getElementById('apiGatewayDynamicContent');
     if (!container) return;
 
-    if (this.currentView === 'directory') {
+    if (this.currentView === 'healthcheck') {
+      container.innerHTML = this.renderHealthCheckView();
+    } else if (this.currentView === 'queue_sync') {
+      container.innerHTML = this.renderQueueSyncView();
+    } else if (this.currentView === 'directory') {
       container.innerHTML = this.renderDirectoryView();
     } else if (this.currentView === 'cards') {
       container.innerHTML = `
@@ -105,12 +110,340 @@ const ApiGatewayManager = {
       this.renderApiCards();
     } else if (this.currentView === 'tester') {
       container.innerHTML = this.renderTesterView();
-    } else if (this.currentView === 'logs') {
-      container.innerHTML = `<div class="card" id="apiAuditLogsContainer"></div>`;
-      this.renderAuditLogs();
     }
 
     if (window.lucide) window.lucide.createIcons();
+  },
+
+  // -------------------------------------------------------------
+  // 0. MÀN HÌNH GIÁM SÁT KẾT NỐI (HEALTH-CHECK 4 HỆ THỐNG CỐT LÕI)
+  // -------------------------------------------------------------
+  renderHealthCheckView() {
+    const systems = [
+      {
+        id: "SYS-TABMIS",
+        name: "Hệ thống TABMIS (Kho bạc Nhà nước)",
+        provider: "Bộ Tài chính & KBNN Khu vực XIV (Khánh Hòa)",
+        endpoint: "https://tabmis.mof.gov.vn/api/v2/khanhhoa/ledger",
+        status: "HEALTHY",
+        ping: "42 ms",
+        uptime: "99.99%",
+        authType: "Mutual TLS / LGSP 2.0 (RSA-4096)",
+        sslCert: "Hợp lệ (Hết hạn: 15/12/2027)",
+        lastSync: "Vừa xong (12:00:00)",
+        syncedRecords: "48.250 chứng từ",
+        scope: "Thu - chi NSNN, số dư tài khoản, cam kết chi"
+      },
+      {
+        id: "SYS-TMS-TAX",
+        name: "Hệ thống Thuế điện tử TMS (Tổng cục Thuế)",
+        provider: "Cục Thuế tỉnh Khánh Hòa",
+        endpoint: "https://etax.gdt.gov.vn/api/v1/khanhhoa/tax-revenue",
+        status: "HEALTHY",
+        ping: "56 ms",
+        uptime: "99.95%",
+        authType: "OAuth 2.0 + HMAC-SHA256",
+        sslCert: "Hợp lệ (Hết hạn: 20/09/2027)",
+        lastSync: "15 phút trước",
+        syncedRecords: "14.890 DN & Hộ kinh doanh",
+        scope: "Thuế GTGT, TNDN, nợ thuế, tiền thuê đất"
+      },
+      {
+        id: "SYS-CSDL-DN",
+        name: "CSDL Quốc gia về Đăng ký Doanh nghiệp",
+        provider: "Bộ Kế hoạch và Đầu tư",
+        endpoint: "https://dangkykinhdoanh.gov.vn/api/v3/sync-enterprise",
+        status: "HEALTHY",
+        ping: "68 ms",
+        uptime: "99.98%",
+        authType: "RESTful / Bearer Token / AES-256",
+        sslCert: "Hợp lệ (Hết hạn: 10/05/2028)",
+        lastSync: "10 phút trước",
+        syncedRecords: "14.890 pháp nhân DN",
+        scope: "Thành lập mới, vốn điều lệ, người đại diện PL"
+      },
+      {
+        id: "SYS-DTC-QG",
+        name: "Hệ thống Quản lý Đầu tư công Quốc gia",
+        provider: "Bộ Kế hoạch và Đầu tư",
+        endpoint: "https://dautucong.mpi.gov.vn/api/v1/projects/khanhhoa",
+        status: "HEALTHY",
+        ping: "75 ms",
+        uptime: "99.92%",
+        authType: "OAuth 2.0 / OpenID Connect",
+        sslCert: "Hợp lệ (Hết hạn: 18/11/2027)",
+        lastSync: "30 phút trước",
+        syncedRecords: "186 dự án ĐTC",
+        scope: "Quyết định chủ trương, kế hoạch vốn trung hạn"
+      }
+    ];
+
+    return `
+      <!-- BANNER TỔNG QUAN HEALTH-CHECK -->
+      <div class="healthcheck-grid">
+        ${systems.map(s => `
+          <div class="healthcheck-card status-${s.status === 'HEALTHY' ? 'healthy' : 'warning'}">
+            <div class="healthcheck-header">
+              <div>
+                <span class="badge ${s.status === 'HEALTHY' ? 'badge-success' : 'badge-warning'}">
+                  <span class="pulse-dot"></span> ${s.status === 'HEALTHY' ? 'Đang kết nối (Online)' : 'Đang đối soát'}
+                </span>
+                <div class="healthcheck-title" style="margin-top: 6px;">${s.name}</div>
+                <div class="healthcheck-provider">${s.provider}</div>
+              </div>
+              <button class="btn btn-sm btn-outline" style="padding: 4px 8px;" onclick="ApiGatewayManager.pingSingleSystem('${s.id}')" title="Kiểm tra ping ngay">
+                <i data-lucide="activity" style="width: 14px; height: 14px;"></i>
+              </button>
+            </div>
+
+            <div style="background: #f8fafc; border-radius: 6px; padding: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0;">
+              <code style="font-size: 11px; color: #002B8C; word-break: break-all;">${s.endpoint}</code>
+            </div>
+
+            <div class="healthcheck-metric-row">
+              <span style="color: #64748b;">Độ trễ phản hồi (Latency):</span>
+              <strong style="color: #15803d; font-family: 'JetBrains Mono', monospace;">${s.ping}</strong>
+            </div>
+            <div class="healthcheck-metric-row">
+              <span style="color: #64748b;">Tỷ lệ khả dụng (Uptime):</span>
+              <strong style="color: #002B8C; font-family: 'JetBrains Mono', monospace;">${s.uptime}</strong>
+            </div>
+            <div class="healthcheck-metric-row">
+              <span style="color: #64748b;">Chứng chỉ SSL/TLS:</span>
+              <span style="color: #334155; font-size: 11.5px;">${s.sslCert}</span>
+            </div>
+            <div class="healthcheck-metric-row">
+              <span style="color: #64748b;">Giao thức xác thực:</span>
+              <span class="badge badge-purple" style="font-size: 10.5px;">${s.authType}</span>
+            </div>
+            <div class="healthcheck-metric-row">
+              <span style="color: #64748b;">Đồng bộ gần nhất:</span>
+              <strong style="color: #0f172a; font-size: 11.5px;">${s.lastSync}</strong>
+            </div>
+            <div class="healthcheck-metric-row">
+              <span style="color: #64748b;">Số bản ghi đã nạp:</span>
+              <strong style="color: #002B8C; font-family: 'JetBrains Mono', monospace;">${s.syncedRecords}</strong>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+
+      <!-- CÁC THÔNG SỐ AN TOÀN & BẢO MẬT TRỤC TÍCH HỢP -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title"><i data-lucide="lock"></i> Tiêu chuẩn kỹ thuật Trục kết nối & An toàn dữ liệu</h3>
+            <p class="card-subtitle">Tuân thủ Khung Kiến trúc Chính phủ điện tử 2.0 và Nghị định 356/2025/NĐ-CP của Chính phủ</p>
+          </div>
+          <span class="badge badge-success">Mã hóa AES-256 / SHA-256</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">
+          <div style="background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid #cbd5e1;">
+            <div style="font-weight: 750; color: #002B8C; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+              <i data-lucide="key" style="width: 16px; height: 16px;"></i> Mã hóa truyền dẫn (In-Transit Encryption)
+            </div>
+            <div style="font-size: 12px; color: #475569; line-height: 1.45;">
+              100% các kết nối ra ngoài qua API Gateway bắt buộc chạy giao thức TLS 1.3 với cặp khóa RSA-4096 bit và mã hóa đường truyền IPSec VPN chuyên dụng.
+            </div>
+          </div>
+
+          <div style="background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid #cbd5e1;">
+            <div style="font-weight: 750; color: #002B8C; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+              <i data-lucide="cpu" style="width: 16px; height: 16px;"></i> Cơ chế Giới hạn tần suất (Rate Limiting)
+            </div>
+            <div style="font-size: 12px; color: #475569; line-height: 1.45;">
+              Tích hợp bộ đệm Token Bucket giới hạn tối đa 2.500 req/phút đối với các cơ quan ngoài để chống nghẽn đường truyền và ngăn chặn tấn công từ chối dịch vụ (DDoS).
+            </div>
+          </div>
+
+          <div style="background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid #cbd5e1;">
+            <div style="font-weight: 750; color: #002B8C; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+              <i data-lucide="database" style="width: 16px; height: 16px;"></i> Dự phòng & Phục hồi thảm họa (Disaster Recovery)
+            </div>
+            <div style="font-size: 12px; color: #475569; line-height: 1.45;">
+              Dữ liệu được sao lưu định kỳ mỗi 60 phút sang Trung tâm Dữ liệu dự phòng (DR Site) tại Công viên Phần mềm Quân đội Nha Trang, RPO = 5 phút, RTO = 15 phút.
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
+  // -------------------------------------------------------------
+  // 1. HÀNG ĐỢI XỬ LÝ (QUEUE) & NHẬT KÝ ĐỒNG BỘ (SYNC LOGS) & CẢNH BÁO LỖI
+  // -------------------------------------------------------------
+  renderQueueSyncView() {
+    const queueJobs = [
+      { id: "JOB-7821", name: "Đồng bộ giao dịch Thu NSNN tháng 8/2026 từ TABMIS", source: "KBNN Khánh Hòa", target: "FACT_THU_NGAN_SACH", status: "PROCESSING", progress: 85, records: "1.240 / 1.450 dòng", latency: "1.2s", retryCount: 0 },
+      { id: "JOB-7822", name: "Quét thông tin Doanh nghiệp thành lập mới quý III", source: "CSDL Quốc gia ĐKKD", target: "MD.DOANH_NGHIEP", status: "PENDING", progress: 0, records: "Chờ hàng đợi", latency: "---", retryCount: 0 },
+      { id: "JOB-7823", name: "Cập nhật giải ngân 16 dự án ĐTC trọng điểm", source: "KBNN & QL ĐTC", target: "FACT_GIAI_NGAN_DTC", status: "SUCCESS", progress: 100, records: "186 dự án", latency: "420ms", retryCount: 0 },
+      { id: "JOB-7820", name: "Đồng bộ nợ thuế quá hạn từ Hệ thống TMS", source: "Cục Thuế tỉnh", target: "FACT_NO_THUE_DN", status: "ERROR_SCHEMA", progress: 40, records: "412 lỗi / 1.890 dòng", latency: "890ms", retryCount: 2 }
+    ];
+
+    const syncHistory = [
+      { syncId: "SYNC-20260824-001", apiCode: "API-01", name: "Đồng bộ dự toán và quyết toán KBNN (TABMIS)", time: "2026-08-24 12:00:00", duration: "1.4s", records: "48.250", status: "SUCCESS", httpCode: "200 OK" },
+      { syncId: "SYNC-20260824-002", apiCode: "API-02", name: "Đồng bộ chỉ tiêu nộp thuế doanh nghiệp", time: "2026-08-24 11:45:00", duration: "2.1s", records: "14.890", status: "SUCCESS", httpCode: "200 OK" },
+      { syncId: "SYNC-20260824-003", apiCode: "API-04", name: "Đồng bộ tiến độ giải ngân vốn đầu tư công", time: "2026-08-24 11:30:00", duration: "0.8s", records: "186", status: "SUCCESS", httpCode: "200 OK" },
+      { syncId: "SYNC-20260824-004", apiCode: "API-07", name: "Tra cứu pháp nhân mới & người đại diện", time: "2026-08-24 11:15:00", duration: "1.9s", records: "342", status: "SUCCESS", httpCode: "200 OK" },
+      { syncId: "SYNC-20260824-005", apiCode: "API-09", name: "Đồng bộ dữ liệu bảng giá đất & tài sản công", time: "2026-08-24 10:00:00", duration: "3.2s", records: "1.840", status: "SUCCESS", httpCode: "200 OK" }
+    ];
+
+    return `
+      <!-- TỔNG QUAN CHỈ SỐ HÀNG ĐỢI (QUEUE STATS) -->
+      <div class="queue-stat-grid">
+        <div class="queue-stat-card">
+          <div class="queue-stat-label">Tổng tác vụ đồng bộ (Total Jobs)</div>
+          <div class="queue-stat-value" style="color: #002B8C;">1.435</div>
+        </div>
+        <div class="queue-stat-card">
+          <div class="queue-stat-label">Đang chờ xử lý (Pending Jobs)</div>
+          <div class="queue-stat-value" style="color: #d97706;">12</div>
+        </div>
+        <div class="queue-stat-card">
+          <div class="queue-stat-label">Đang nạp CSDL (Processing)</div>
+          <div class="queue-stat-value" style="color: #0284c7;">2</div>
+        </div>
+        <div class="queue-stat-card">
+          <div class="queue-stat-label">Lỗi sai lệch định dạng (Schema Error)</div>
+          <div class="queue-stat-value" style="color: #dc2626;">1</div>
+        </div>
+      </div>
+
+      <!-- CẢNH BÁO LỖI SAI LỆCH ĐỊNH DẠNG TỰ ĐỘNG (DATA SCHEMA VALIDATION ALERTS) -->
+      <div class="card" style="margin-bottom: 20px; border-left: 5px solid #dc2626; background: #fff1f2;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <div style="font-size: 14.5px; font-weight: 750; color: #991b1b; display: flex; align-items: center; gap: 6px;">
+              <i data-lucide="alert-octagon" style="width: 18px; height: 18px; color: #dc2626;"></i>
+              CẢNH BÁO LỖI SAI LỆCH ĐỊNH DẠNG DỮ LIỆU TỰ ĐỘNG (DEAD-LETTER QUEUE ALERT)
+            </div>
+            <div style="font-size: 12.5px; color: #7f1d1d; margin-top: 4px; line-height: 1.45;">
+              Hệ thống phát hiện bản ghi nợ thuế từ Cục Thuế <code>JOB-7820</code> có trường <code>TIEN_THUE_NO</code> vượt quá giới hạn <code>DECIMAL(18,2)</code> (chứa ký tự không hợp lệ).
+              Hệ thống đã <strong>tự động cách ly bản ghi lỗi vào hàng đợi DLQ</strong> để không làm gián đoạn luồng nạp chính và kích hoạt cơ chế Auto-Retry sau 5 phút.
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-danger btn-sm" onclick="App.showNotification('Đang kích hoạt Auto-Retry xử lý lại hàng đợi lỗi...', 'info')">
+              <i data-lucide="rotate-cw"></i> Chạy lại hàng đợi (Retry)
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="App.showNotification('Đã lưu log lỗi và bỏ qua bản ghi sai lệch để tiếp tục tiến trình.', 'warning')">
+              <i data-lucide="skip-forward"></i> Bỏ qua bản ghi lỗi
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- BẢNG HÀNG ĐỢI XỬ LÝ THỜI GIAN THỰC -->
+      <div class="card" style="margin-bottom: 20px;">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title"><i data-lucide="cpu"></i> Hàng đợi xử lý tác vụ đồng bộ thời gian thực (Job Processing Queue)</h3>
+            <p class="card-subtitle">Luồng xử lý bất đồng bộ đa tiến trình (Asynchronous Multi-threading Pipeline)</p>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="App.showNotification('Đang quét và làm mới trạng thái hàng đợi...', 'info')">
+            <i data-lucide="refresh-cw"></i> Làm mới hàng đợi
+          </button>
+        </div>
+
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Mã Job</th>
+                <th>Tên Tác Vụ Đồng Bộ</th>
+                <th>Nguồn ➔ Đích</th>
+                <th>Tiến Độ Xử Lý</th>
+                <th>Khối Lượng Dữ Liệu</th>
+                <th>Độ Trễ</th>
+                <th>Trạng Thái</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${queueJobs.map(j => {
+                let stBadge = '';
+                if (j.status === 'PROCESSING') stBadge = '<span class="badge badge-info"><span class="pulse-dot"></span> Đang nạp</span>';
+                else if (j.status === 'PENDING') stBadge = '<span class="badge badge-warning">Chờ xử lý</span>';
+                else if (j.status === 'SUCCESS') stBadge = '<span class="badge badge-success">Thành công</span>';
+                else if (j.status === 'ERROR_SCHEMA') stBadge = '<span class="badge badge-danger">Lỗi định dạng</span>';
+
+                return `
+                  <tr>
+                    <td><code style="color: #002B8C; font-weight: 700;">${j.id}</code></td>
+                    <td><strong>${j.name}</strong></td>
+                    <td><span style="font-size: 11.5px; color: #475569;">${j.source} ➔ <code>${j.target}</code></span></td>
+                    <td style="min-width: 140px;">
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <div style="flex: 1; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                          <div style="width: ${j.progress}%; height: 100%; background: ${j.status === 'ERROR_SCHEMA' ? '#dc2626' : '#10b981'};"></div>
+                        </div>
+                        <span style="font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono', monospace;">${j.progress}%</span>
+                      </div>
+                    </td>
+                    <td style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px;">${j.records}</td>
+                    <td style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #15803d;">${j.latency}</td>
+                    <td>${stBadge}</td>
+                  </tr>
+                `;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- BẢNG NHẬT KÝ ĐỒNG BỘ DỮ LIỆU (SYNC LOGS) CHUẨN BIG DATA TABLE UX -->
+      <div class="table-fullscreen-wrapper" id="wrapper_api_sync_logs">
+        ${DeptWorkspaceManager.renderAdminTableToolbar('wrapper_api_sync_logs', 'table_api_sync_logs', 'Nhật ký đồng bộ dữ liệu API Gateway & CSDL Quốc gia')}
+        <div class="table-scroll-container">
+          <table class="data-table freeze-first" id="table_api_sync_logs">
+            <thead>
+              <tr>
+                <th>Mã Đợt Đồng Bộ</th>
+                <th>Mã Dịch Vụ API</th>
+                <th>Tên Giao Dịch Đồng Bộ</th>
+                <th>Thời Gian Thực Hiện</th>
+                <th>Thời Gian Xử Lý</th>
+                <th>Số Bản Ghi Nạp</th>
+                <th>Mã Trạng Thái</th>
+                <th style="text-align: center;">Thao Tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${syncHistory.map(h => `
+                <tr>
+                  <td><strong style="color: #002B8C;">${h.syncId}</strong></td>
+                  <td><code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; color: #002B8C; font-weight: 700;">${h.apiCode}</code></td>
+                  <td><strong>${h.name}</strong></td>
+                  <td><span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px;">${h.time}</span></td>
+                  <td><span style="font-family: 'JetBrains Mono', monospace; color: #15803d; font-weight: 600;">${h.duration}</span></td>
+                  <td><strong style="font-family: 'JetBrains Mono', monospace; color: #0f172a;">${h.records}</strong></td>
+                  <td><span class="badge badge-success">${h.httpCode}</span></td>
+                  <td style="text-align: center;">
+                    <button class="btn btn-sm btn-outline" onclick="App.showNotification('Đang mở chi tiết gói tin JSON của đợt đồng bộ ${h.syncId}...', 'info')">
+                      <i data-lucide="eye"></i> Chi tiết
+                    </button>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  },
+
+  pingAllHealthCheckSystems() {
+    App.showNotification('Đang kiểm tra kết nối (Ping Health-Check) 4 hệ thống Quốc gia...', 'info');
+    setTimeout(() => {
+      App.showNotification('Tất cả 4 hệ thống cốt lõi (TABMIS, Thuế TMS, CSDL ĐKKD, Đầu tư công) hoạt động hoàn hảo 100%!', 'success');
+    }, 700);
+  },
+
+  pingSingleSystem(sysId) {
+    App.showNotification(`Đang gửi tín hiệu kiểm tra tới [${sysId}]...`, 'info');
+    setTimeout(() => {
+      App.showNotification(`Hệ thống [${sysId}] phản hồi tức thì với độ trễ tối ưu (Latency < 75ms)!`, 'success');
+    }, 500);
   },
 
   // -------------------------------------------------------------

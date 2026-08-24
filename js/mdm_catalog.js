@@ -780,8 +780,8 @@ const MdmCatalogManager = {
           <h4 style="font-size: 13.5px; font-weight: 700; color: #0f172a; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
             <i data-lucide="table" style="color: #10b981; width: 16px; height: 16px;"></i> 2. Trích Xuất Dữ Liệu Mẫu (Sample Records Extracted)
           </h4>
-          <div class="table-responsive">
-            <table class="data-table">
+          <div class="table-scroll-container">
+            <table class="data-table freeze-first">
               <thead>
                 <tr>
                   ${table.schema.slice(0, 7).map(c => `
@@ -792,11 +792,11 @@ const MdmCatalogManager = {
               <tbody>
                 ${table.sampleRows.map(row => `
                   <tr>
-                    <td><strong style="color: #0284c7;">${row.c1 || ''}</strong></td>
+                    <td><strong style="color: #002B8C;">${row.c1 || ''}</strong></td>
                     <td><strong>${row.c2 || ''}</strong></td>
                     <td>${row.c3 || ''}</td>
                     <td>${table.schema[3] && table.schema[3].masked && isMasked ? MdmCatalogManager.maskName(row.c4 || '') : (row.c4 || '')}</td>
-                    <td><code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; border: 1px solid #e2e8f0; color: #0f172a;">${table.schema[4] && table.schema[4].masked && isMasked ? MdmCatalogManager.maskCCCD(row.c5 || '') : (row.c5 || '')}</code></td>
+                    <td><code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; border: 1px solid #cbd5e1; color: #002B8C;">${table.schema[4] && table.schema[4].masked && isMasked ? MdmCatalogManager.maskCCCD(row.c5 || '') : (row.c5 || '')}</code></td>
                     <td>${row.c6 || ''}</td>
                     <td><span class="badge badge-success">${row.c7 || ''}</span></td>
                   </tr>

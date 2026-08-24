@@ -112,6 +112,145 @@ const SystemAnalyticsManager = {
     { id: "LOG-98209", user: "Võ Văn Hoàng", dept: "Phòng Pháp chế", action: "Thẩm định dự thảo Nghị quyết phân cấp nguồn thu và nhiệm vụ chi", ip: "10.79.1.42", time: "2026-08-20 10:20:18", status: "SUCCESS" }
   ],
 
+  // Dữ liệu Lưu vết Lịch sử Điều chỉnh Con số Kế hoạch & Phân bổ vốn (Financial Number Audit Trail)
+  financialAuditTrail: [
+    {
+      id: "ADT-NS-2026-001",
+      target: "Dự toán Thu NSNN toàn tỉnh năm 2026",
+      field: "Dự toán giao đầu năm ➔ Điều chỉnh bổ sung",
+      oldVal: "18.520,6 tỷ đ",
+      newVal: "19.250,0 tỷ đ",
+      delta: "+729,4 tỷ đ (+3,9%)",
+      adjustedBy: "Lê Thị Thu Hằng",
+      dept: "Phòng Kinh tế và Ngân sách",
+      approvedBy: "Châu Ngô Anh Nhân (Giám đốc Sở)",
+      legalDocNumber: "Nghị quyết số 18/NQ-HĐND",
+      docTitle: "Điều chỉnh, bổ sung dự toán thu NSNN và phương án phân bổ ngân sách tỉnh Khánh Hòa năm 2026",
+      timestamp: "2026-07-15 14:30:22",
+      reason: "Tăng thu đột biến từ thuế XNK KKT Vân Phong và thu tiền sử dụng đất khu đô thị",
+      docFileId: "VB-STC-2026-01"
+    },
+    {
+      id: "ADT-DTC-2026-002",
+      target: "Dự án Tuyến đường Vành đai 2 Nha Trang",
+      field: "Kế hoạch vốn Đầu tư công năm 2026",
+      oldVal: "450,0 tỷ đ",
+      newVal: "580,0 tỷ đ",
+      delta: "+130,0 tỷ đ (+28,9%)",
+      adjustedBy: "Phạm Minh Tuấn",
+      dept: "Phòng Quản lý Đầu tư công",
+      approvedBy: "Châu Ngô Anh Nhân (Giám đốc Sở)",
+      legalDocNumber: "Quyết định số 1420/QĐ-UBND",
+      docTitle: "Phê duyệt điều chỉnh kế hoạch vốn đầu tư công năm 2026 (Đợt 2) phục vụ giải phóng mặt bằng",
+      timestamp: "2026-08-05 09:15:10",
+      reason: "Bổ sung kinh phí chi trả bồi thường GPMB tại 12 hộ dân thuộc nút giao Ngọc Hội",
+      docFileId: "VB-STC-2026-02"
+    },
+    {
+      id: "ADT-HCSN-2026-003",
+      target: "Kinh phí tự chủ Bệnh viện Đa khoa tỉnh Khánh Hòa",
+      field: "Dự toán chi thường xuyên NSNN hỗ trợ",
+      oldVal: "45,0 tỷ đ",
+      newVal: "0,0 đ",
+      delta: "-45,0 tỷ đ (Tiết kiệm 100% NS)",
+      adjustedBy: "Ngô Mỹ Linh",
+      dept: "Phòng Tài chính Hành chính sự nghiệp",
+      approvedBy: "Châu Ngô Anh Nhân (Giám đốc Sở)",
+      legalDocNumber: "Quyết định số 890/QĐ-UBND",
+      docTitle: "Giao quyền tự chủ tài chính giai đoạn 2026-2028 cho Bệnh viện Đa khoa tỉnh (Nhóm 2)",
+      timestamp: "2026-08-10 16:40:00",
+      reason: "Đơn vị tự bảo đảm 100% chi thường xuyên theo Nghị định 60/2021/NĐ-CP",
+      docFileId: "VB-STC-2026-03"
+    },
+    {
+      id: "ADT-GCS-2026-004",
+      target: "Cơ sở nhà đất dôi dư số 88 Trần Phú, Nha Trang",
+      field: "Giá trị khởi điểm bán đấu giá tài sản công",
+      oldVal: "185,0 tỷ đ",
+      newVal: "215,5 tỷ đ",
+      delta: "+30,5 tỷ đ (+16,5%)",
+      adjustedBy: "Đặng Quốc Hưng",
+      dept: "Phòng Quản lý Giá và Công sản",
+      approvedBy: "Châu Ngô Anh Nhân (Giám đốc Sở)",
+      legalDocNumber: "Quyết định số 312/QĐ-UBND",
+      docTitle: "Phê duyệt giá khởi điểm bán đấu giá quyền sử dụng đất và tài sản gắn liền với đất",
+      timestamp: "2026-08-12 11:20:45",
+      reason: "Cập nhật bảng giá đất điều chỉnh theo Luật Đất đai 2024 và chứng thư thẩm định giá",
+      docFileId: "VB-STC-2026-02"
+    },
+    {
+      id: "ADT-DN-2026-005",
+      target: "Tổng Công ty Khánh Việt (KHATOCO)",
+      field: "Chỉ tiêu Nộp ngân sách nhà nước giao",
+      oldVal: "3.450,0 tỷ đ",
+      newVal: "3.620,5 tỷ đ",
+      delta: "+170,5 tỷ đ (+4,9%)",
+      adjustedBy: "Vũ Thị Mai",
+      dept: "Phòng Quản lý Doanh nghiệp",
+      approvedBy: "Châu Ngô Anh Nhân (Giám đốc Sở)",
+      legalDocNumber: "Thông báo số 88/TB-STC",
+      docTitle: "Thông báo kết luận đối soát chỉ tiêu tài chính và ước nộp NSNN năm 2026",
+      timestamp: "2026-08-18 10:05:30",
+      reason: "Kết quả kinh doanh 6 tháng đầu năm tăng trưởng tốt, nâng chỉ tiêu ước nộp NS",
+      docFileId: "VB-STC-2026-04"
+    }
+  ],
+
+  // Ma trận Phân quyền Dựa trên Vai trò 3 Lớp (RBAC 3-Layer Access Control Matrix)
+  rbacMatrixData: [
+    {
+      roleName: "Lãnh đạo Sở (Ban Giám đốc)",
+      roleCode: "DIRECTOR",
+      functions: ["Xem toàn bộ", "Phê duyệt số liệu", "Khóa sổ CSDL", "Chỉ đạo điều hành", "Xuất PDF/Excel"],
+      dataScope: "Toàn tỉnh (Toàn bộ 65 xã/phường, 8 phòng ban Sở, 6 nhóm cổng ngoài)",
+      fieldSecurity: "Toàn quyền xem 100% các trường dữ liệu (Gồm cả số liệu Mật, Tối mật và chỉ số nhạy cảm)",
+      badgeClass: "badge-purple"
+    },
+    {
+      roleName: "Trưởng phòng Chuyên môn",
+      roleCode: "DEPT_HEAD",
+      functions: ["Xem", "Nhập liệu", "Sửa số liệu", "Thẩm tra hồ sơ", "Trình duyệt Lãnh đạo", "Xuất báo cáo"],
+      dataScope: "Theo lĩnh vực phụ trách (KTNS, DTC, DTNS, Doanh nghiệp, HCSN, Giá công sản, Pháp chế, Văn phòng)",
+      fieldSecurity: "Xem toàn bộ trường chuyên môn; DDM Masking tự động che mờ số CCCD và thông tin cá nhân",
+      badgeClass: "badge-info"
+    },
+    {
+      roleName: "Chuyên viên Nghiệp vụ",
+      roleCode: "SPECIALIST",
+      functions: ["Xem", "Nhập liệu", "Sửa dự thảo", "Đối soát số liệu", "Xuất báo cáo biểu mẫu"],
+      dataScope: "Theo địa bàn & danh mục hồ sơ được phân công phụ trách",
+      fieldSecurity: "Xem trường phục vụ nghiệp vụ; Không xem số dư tài khoản mật và dữ liệu thanh tra chưa công bố",
+      badgeClass: "badge-info"
+    },
+    {
+      roleName: "Quản trị Hệ thống",
+      roleCode: "ADMIN",
+      functions: ["Xem", "Cấu hình API Gateway", "Quản lý Queue", "Phân quyền RBAC", "Sao lưu / DR Site"],
+      dataScope: "Toàn hệ thống (Hạ tầng, API, Metadata, DDM Masking, Audit Logs)",
+      fieldSecurity: "Quản trị cấu trúc Schema và khóa mã hóa; Không can thiệp sửa đổi con số tài chính nghiệp vụ",
+      badgeClass: "badge-danger"
+    },
+    {
+      roleName: "Doanh nghiệp Kê khai ngoài (Khatoco, Yến Sào, FDI)",
+      roleCode: "EXTERNAL_ENTERPRISE",
+      functions: ["Xem", "Kê khai dự thảo", "Nộp giải trình", "Tải biên bản tiếp nhận"],
+      dataScope: "Chỉ xem dữ liệu của chính doanh nghiệp mình (Entity-Level Scope)",
+      fieldSecurity: "Ẩn hoàn toàn số liệu của doanh nghiệp khác, ẩn chỉ tiêu mật và số liệu thanh tra thuế",
+      badgeClass: "badge-warning"
+    },
+    {
+      roleName: "Cơ quan Cơ sở (UBND cấp xã, BV Đa khoa, Ban QLDA)",
+      roleCode: "EXTERNAL_COMMUNE_HCSN",
+      functions: ["Xem", "Kê khai dự thảo báo cáo", "Nộp hồ sơ tự chủ / giải ngân", "Tra cứu hướng dẫn"],
+      dataScope: "Phạm vi địa bàn xã/phường hoặc đơn vị sự nghiệp trực thuộc",
+      fieldSecurity: "Ẩn các trường điều hành vĩ mô cấp tỉnh và dữ liệu liên ngành ngoài thẩm quyền",
+      badgeClass: "badge-success"
+    }
+  ],
+
+  currentAuditTab: 'financial_numbers',
+
+
   // 1. Màn hình tìm kiếm toàn văn nâng cao
   renderAdvancedSearch(containerId) {
     const container = document.getElementById(containerId);
@@ -336,53 +475,259 @@ const SystemAnalyticsManager = {
     if (window.lucide) window.lucide.createIcons();
   },
 
-  // 4. Màn hình Nhật ký Thao tác (Action Logs)
+  // 4. Màn hình Nhật ký Thao tác & Kiểm soát Lịch sử Số liệu (Audit Trail & RBAC Matrix)
   renderAuditLogs(containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
 
     container.innerHTML = `
-      <div class="card-header">
+      <div class="card-header" style="flex-wrap: wrap; gap: 10px;">
         <div>
-          <h3 class="card-title"><i data-lucide="history"></i> Nhật ký thao tác & giám sát an ninh hệ thống (Audit logs)</h3>
-          <p class="card-subtitle">Ghi vết toàn bộ hành động đăng nhập, tra cứu, phê duyệt và đồng bộ dữ liệu theo Nghị định 356/2025/NĐ-CP</p>
+          <h3 class="card-title"><i data-lucide="shield-alert"></i> Kiểm soát giải trình số liệu tài chính & Phân quyền RBAC 3 lớp</h3>
+          <p class="card-subtitle">Lưu vết lịch sử điều chỉnh con số kế hoạch/phân bổ vốn kèm số hiệu văn bản pháp lý và ma trận phân quyền</p>
         </div>
-        <button class="btn btn-secondary btn-sm" onclick="App.showNotification('Đang kết xuất tệp nhật ký Audit...', 'info')">
-          <i data-lucide="download"></i> Xuất file log
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-secondary btn-sm" onclick="App.showNotification('Đang kết xuất tệp nhật ký kiểm toán toàn diện...', 'info')">
+            <i data-lucide="download"></i> Xuất file Audit (.csv)
+          </button>
+        </div>
+      </div>
+
+      <!-- TABS CHUYỂN ĐỔI SUB-VIEW AUDIT -->
+      <div class="sub-tabs-bar" id="auditSubTabsBar" style="margin-bottom: 16px;">
+        <button class="sub-tab-btn ${this.currentAuditTab === 'financial_numbers' ? 'active' : ''}" onclick="SystemAnalyticsManager.switchAuditTab('financial_numbers')">
+          <i data-lucide="git-commit"></i> 1. Lưu vết lịch sử con số (Financial Number Audit Trail)
+        </button>
+        <button class="sub-tab-btn ${this.currentAuditTab === 'rbac_matrix' ? 'active' : ''}" onclick="SystemAnalyticsManager.switchAuditTab('rbac_matrix')">
+          <i data-lucide="shield-check"></i> 2. Ma trận phân quyền 3 lớp (RBAC Matrix)
+        </button>
+        <button class="sub-tab-btn ${this.currentAuditTab === 'system_actions' ? 'active' : ''}" onclick="SystemAnalyticsManager.switchAuditTab('system_actions')">
+          <i data-lucide="history"></i> 3. Nhật ký thao tác hệ thống (System Action Logs)
         </button>
       </div>
 
-      <div class="table-container">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Mã Log</th>
-              <th>Người Dùng Thực Hiện</th>
-              <th>Phòng Ban</th>
-              <th>Hành Động Nghiệp Vụ</th>
-              <th>Địa Chỉ IP</th>
-              <th>Thời Gian</th>
-              <th>Kết Quả</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${this.auditLogs.map(l => `
-              <tr>
-                <td><strong style="color: #0284c7;">${l.id}</strong></td>
-                <td><strong>${l.user}</strong></td>
-                <td><span class="badge badge-info">${l.dept}</span></td>
-                <td>${l.action}</td>
-                <td><code>${l.ip}</code></td>
-                <td>${l.time}</td>
-                <td><span class="badge badge-success">${l.status}</span></td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      </div>
+      <div id="auditSubViewContainer"></div>
     `;
 
+    this.renderCurrentAuditSubView();
     if (window.lucide) window.lucide.createIcons();
+  },
+
+  switchAuditTab(tabName) {
+    this.currentAuditTab = tabName;
+    document.querySelectorAll('#auditSubTabsBar .sub-tab-btn').forEach(b => b.classList.remove('active'));
+    this.renderCurrentAuditSubView();
+    if (window.lucide) window.lucide.createIcons();
+  },
+
+  renderCurrentAuditSubView() {
+    const container = document.getElementById('auditSubViewContainer');
+    if (!container) return;
+
+    if (this.currentAuditTab === 'financial_numbers') {
+      container.innerHTML = this.renderFinancialAuditTrail();
+    } else if (this.currentAuditTab === 'rbac_matrix') {
+      container.innerHTML = this.renderRbacMatrixView();
+    } else if (this.currentAuditTab === 'system_actions') {
+      container.innerHTML = this.renderSystemActionLogs();
+    }
+    if (window.lucide) window.lucide.createIcons();
+  },
+
+  // -------------------------------------------------------------
+  // 4.1. LƯU VẾT LỊCH SỬ ĐIỀU CHỈNH CON SỐ TÀI CHÍNH (FINANCIAL AUDIT TRAIL)
+  // -------------------------------------------------------------
+  renderFinancialAuditTrail() {
+    return `
+      <!-- BANNER GIẢI TRÌNH PHÁP LÝ -->
+      <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <i data-lucide="file-check" style="color: #002B8C; width: 22px; height: 22px; flex-shrink: 0;"></i>
+          <div>
+            <div style="font-weight: 750; color: #002B8C; font-size: 13.5px;">Kiểm soát tính giải trình tuyệt đối của dữ liệu kinh tế - ngân sách</div>
+            <div style="font-size: 12px; color: #334155;">Mọi biến động con số dự toán, phân bổ vốn và quyết toán đều bắt buộc gắn liền với <strong>Số hiệu Văn bản / Quyết định phê duyệt chính thức</strong>.</div>
+          </div>
+        </div>
+        <span class="badge badge-purple" style="font-size: 11px;">Chuẩn kiểm toán Nhà nước</span>
+      </div>
+
+      <!-- BẢNG LƯU VẾT LỊCH SỬ BIẾN ĐỘNG CON SỐ (BIG DATA TABLE UX) -->
+      <div class="table-fullscreen-wrapper" id="wrapper_financial_audit">
+        ${DeptWorkspaceManager.renderAdminTableToolbar('wrapper_financial_audit', 'table_financial_audit', 'Lưu vết lịch sử điều chỉnh con số kế hoạch & phân bổ vốn')}
+        <div class="table-scroll-container">
+          <table class="data-table freeze-first" id="table_financial_audit">
+            <thead>
+              <tr>
+                <th>Mã Audit</th>
+                <th>Chỉ Tiêu / Đối Tượng Điều Chỉnh</th>
+                <th>Giá Trị Trước ➔ Sau Điều Chỉnh</th>
+                <th>Mức Biến Động</th>
+                <th>Cán Bộ Thực Hiện & Phê Duyệt</th>
+                <th>Căn Cứ Pháp Lý (Số Hiệu Quyết Định / Nghị Quyết)</th>
+                <th>Thời Gian Ghi Nhận</th>
+                <th style="text-align: center;">Hồ Sơ Đính Kèm</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${this.financialAuditTrail.map(a => `
+                <tr>
+                  <td><code style="color: #002B8C; font-weight: 750; font-size: 11px;">${a.id}</code></td>
+                  <td>
+                    <div style="font-weight: 750; color: #0f172a; font-size: 13px;">${a.target}</div>
+                    <div style="font-size: 11.5px; color: #64748b;">${a.field}</div>
+                  </td>
+                  <td>
+                    <div class="audit-diff-container">
+                      <span class="audit-diff-old">${a.oldVal}</span>
+                      <span class="audit-diff-arrow">➔</span>
+                      <span class="audit-diff-new">${a.newVal}</span>
+                    </div>
+                  </td>
+                  <td><strong style="color: ${a.delta.startsWith('+') ? '#15803d' : '#002B8C'}; font-family: 'JetBrains Mono', monospace;">${a.delta}</strong></td>
+                  <td>
+                    <div style="font-weight: 700; color: #0f172a; font-size: 12.5px;">${a.adjustedBy}</div>
+                    <div style="font-size: 11px; color: #002B8C;">${a.dept}</div>
+                    <div style="font-size: 10.5px; color: #15803d; margin-top: 2px;">Duyệt: ${a.approvedBy}</div>
+                  </td>
+                  <td>
+                    <div style="font-weight: 750; color: #002B8C; font-size: 12.5px;">${a.legalDocNumber}</div>
+                    <div style="font-size: 11.5px; color: #475569; line-height: 1.35; margin-top: 2px;">${a.docTitle}</div>
+                    <div style="font-size: 11px; color: #64748b; font-style: italic; margin-top: 2px;">Lý do: "${a.reason}"</div>
+                  </td>
+                  <td><span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; white-space: nowrap;">${a.timestamp}</span></td>
+                  <td style="text-align: center;">
+                    <button class="btn btn-sm btn-outline" onclick="ArchiveManager.viewHistoricalDoc('${a.docFileId}')" title="Xem toàn văn văn bản số hóa">
+                      <i data-lucide="file-text"></i> Xem VB
+                    </button>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  },
+
+  // -------------------------------------------------------------
+  // 4.2. MA TRẬN PHÂN QUYỀN DỰA TRÊN VAI TRÒ 3 LỚP (RBAC MATRIX)
+  // -------------------------------------------------------------
+  renderRbacMatrixView() {
+    return `
+      <!-- TỔNG QUAN MA TRẬN 3 LỚP -->
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 16px;">
+        <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 14px;">
+          <div style="font-weight: 750; color: #002B8C; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+            <i data-lucide="check-square" style="width: 16px; height: 16px;"></i> Lớp 1: Quyền Chức năng (Functional)
+          </div>
+          <div style="font-size: 12px; color: #334155; line-height: 1.45;">
+            Kiểm soát 6 hành động cốt lõi: <strong>Xem (View), Nhập liệu (Create), Sửa (Edit), Duyệt (Approve), Khóa sổ (Lock), Xuất báo cáo (Export)</strong>.
+          </div>
+        </div>
+
+        <div style="background: #f3e8ff; border: 1px solid #d8b4fe; border-radius: 8px; padding: 14px;">
+          <div style="font-weight: 750; color: #6b21a8; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+            <i data-lucide="compass" style="width: 16px; height: 16px;"></i> Lớp 2: Phạm vi Dữ liệu (Data Scope)
+          </div>
+          <div style="font-size: 12px; color: #334155; line-height: 1.45;">
+            Phân vùng giới hạn dữ liệu theo cấp độ: <strong>Toàn tỉnh</strong> (Lãnh đạo Sở), <strong>Theo lĩnh vực phụ trách</strong> (8 phòng chuyên môn), và <strong>Theo đơn vị chủ quản</strong> (Cổng ngoài).
+          </div>
+        </div>
+
+        <div style="background: #fef3c7; border: 1px solid #fde68a; border-radius: 8px; padding: 14px;">
+          <div style="font-weight: 750; color: #92400e; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+            <i data-lucide="eye-off" style="width: 16px; height: 16px;"></i> Lớp 3: Trường Thông tin (Field Security)
+          </div>
+          <div style="font-size: 12px; color: #334155; line-height: 1.45;">
+            Ẩn hoặc <strong>che mờ DDM (Dynamic Data Masking)</strong> các trường nhạy cảm như CCCD, STK ngân hàng, chi tiết nợ thuế, thông tin thanh tra chưa công bố với tài khoản ngoài.
+          </div>
+        </div>
+      </div>
+
+      <!-- BẢNG MA TRẬN PHÂN QUYỀN 3 LỚP TOÀN HỆ THỐNG -->
+      <div class="table-fullscreen-wrapper" id="wrapper_rbac_matrix">
+        ${DeptWorkspaceManager.renderAdminTableToolbar('wrapper_rbac_matrix', 'table_rbac_matrix', 'Ma trận phân quyền kiểm soát truy cập 3 lớp (RBAC Matrix)')}
+        <div class="table-scroll-container">
+          <table class="data-table freeze-first" id="table_rbac_matrix">
+            <thead>
+              <tr>
+                <th>Nhóm Vai Trò Người Dùng</th>
+                <th>Mã Vai Trò</th>
+                <th>Lớp 1: Quyền Chức Năng (Function Layer)</th>
+                <th>Lớp 2: Phạm Vi Dữ Liệu (Data Scope Layer)</th>
+                <th>Lớp 3: Bảo Mật Trường Dữ Liệu (Field Security & DDM)</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${this.rbacMatrixData.map(r => `
+                <tr>
+                  <td>
+                    <strong style="color: #0f172a; font-size: 13px;">${r.roleName}</strong>
+                  </td>
+                  <td>
+                    <span class="badge ${r.badgeClass}" style="font-family: 'JetBrains Mono', monospace;">${r.roleCode}</span>
+                  </td>
+                  <td>
+                    <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+                      ${r.functions.map(fn => `<span class="rbac-layer-tag rbac-tag-function">${fn}</span>`).join('')}
+                    </div>
+                  </td>
+                  <td>
+                    <div style="font-size: 12px; color: #475569; line-height: 1.4;">
+                      <span class="rbac-layer-tag rbac-tag-scope"><i data-lucide="map-pin" style="width: 11px; height: 11px; display: inline;"></i> ${r.dataScope}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div style="font-size: 12px; color: #475569; line-height: 1.4;">
+                      <span class="rbac-layer-tag rbac-tag-field"><i data-lucide="shield" style="width: 11px; height: 11px; display: inline;"></i> ${r.fieldSecurity}</span>
+                    </div>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  },
+
+  // -------------------------------------------------------------
+  // 4.3. NHẬT KÝ THAO TÁC HỆ THỐNG & AN TOÀN (ACTION LOGS)
+  // -------------------------------------------------------------
+  renderSystemActionLogs() {
+    return `
+      <div class="table-fullscreen-wrapper" id="wrapper_system_action_logs">
+        ${DeptWorkspaceManager.renderAdminTableToolbar('wrapper_system_action_logs', 'table_system_action_logs', 'Nhật ký thao tác & giám sát an ninh hệ thống')}
+        <div class="table-scroll-container">
+          <table class="data-table freeze-first" id="table_system_action_logs">
+            <thead>
+              <tr>
+                <th>Mã Log</th>
+                <th>Người Dùng Thực Hiện</th>
+                <th>Phòng Ban</th>
+                <th>Hành Động Nghiệp Vụ</th>
+                <th>Địa Chỉ IP</th>
+                <th>Thời Gian Ghi Nhận</th>
+                <th>Kết Quả</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${this.auditLogs.map(l => `
+                <tr>
+                  <td><code style="color: #002B8C; font-weight: 750;">${l.id}</code></td>
+                  <td><strong>${l.user}</strong></td>
+                  <td><span class="badge badge-info">${l.dept}</span></td>
+                  <td>${l.action}</td>
+                  <td><code style="font-size: 11px;">${l.ip}</code></td>
+                  <td><span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px;">${l.time}</span></td>
+                  <td><span class="badge badge-success">${l.status}</span></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
   },
 
   // 5. Màn hình Kiểm Tra Toàn Vẹn Dữ Liệu & Ma Trận Liên Thông Phân Hệ

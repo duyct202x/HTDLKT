@@ -67,6 +67,11 @@ const ChartsManager = {
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        onClick: (event, elements) => {
+          if (window.DeptWorkspaceManager) {
+            DeptWorkspaceManager.openKpiDrilldownModal('Tổng thu ngân sách nhà nước', 'ktns');
+          }
+        },
         animation: {
           duration: 1000,
           easing: 'easeOutQuart'
@@ -176,6 +181,11 @@ const ChartsManager = {
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        onClick: (event, elements) => {
+          if (window.DeptWorkspaceManager) {
+            DeptWorkspaceManager.openKpiDrilldownModal('Giải ngân vốn đầu tư công', 'dtc');
+          }
+        },
         animation: {
           duration: 1200,
           easing: 'easeOutCubic'

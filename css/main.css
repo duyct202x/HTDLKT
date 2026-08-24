@@ -42,13 +42,13 @@
   --bg-table-header: #f8fafc;
   --bg-table-hover:  #f0f7ff;
 
-  /* High-Contrast Executive Typography Colors */
-  --text-pure:       #0f172a;  /* Slate-900: Crisp Body & Metrics */
-  --text-title:      #002B8C;  /* Oceanic Azure: Key Headings */
-  --text-main:       #1e293b;  /* Slate-800: Regular Body Text */
-  --text-secondary:  #475569;  /* Slate-600: Descriptions & Notes */
-  --text-muted:      #64748b;  /* Slate-500: Subtitles & Labels */
-  --text-dusk:       #3E5D8E;  /* Dusk Blue for specialized labels */
+  /* High-Contrast Executive Typography Colors (WCAG 2.1 AA & AAA Compliant) */
+  --text-pure:       #0f172a;  /* Slate-900: Ultra-Crisp Body & Primary Metrics (Contrast 18:1) */
+  --text-title:      #002B8C;  /* Oceanic Azure: Headings & Key Accents (Contrast 12.5:1) */
+  --text-main:       #0f172a;  /* Slate-900: High-Legibility Primary Body (Contrast 18:1) */
+  --text-secondary:  #334155;  /* Slate-700: High-Contrast Descriptions & Labels (Contrast 9.5:1) */
+  --text-muted:      #475569;  /* Slate-600: High-Legibility Subtitles & Metadata (Contrast 7.0:1) */
+  --text-dusk:       #1e3a8a;  /* Deep Dusk Blue: High-Contrast Specialized Tags (Contrast 10.5:1) */
 
   /* Borders & Dividers */
   --border-subtle:   #e2e8f0;  /* Crisp Slate 200 */
