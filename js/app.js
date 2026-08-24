@@ -5,7 +5,7 @@
 
 const App = {
   currentUser: {
-    name: "Nguyễn Đình Hùng",
+    name: "Châu Ngô Anh Nhân",
     deptId: "lanhdao",
     title: "Giám đốc Sở Tài chính",
     dept: "Lãnh đạo Sở",

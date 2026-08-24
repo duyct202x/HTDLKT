@@ -8,7 +8,7 @@
 const DEPT_CONFIGS = {
   'lanhdao': {
     id: 'lanhdao',
-    name: 'Nguyễn Đình Hùng',
+    name: 'Châu Ngô Anh Nhân',
     title: 'Giám đốc Sở Tài chính',
     deptName: 'Lãnh đạo Sở',
     domainName: 'Điều hành kinh tế tổng thể tỉnh Khánh Hòa',

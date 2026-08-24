@@ -104,7 +104,7 @@ const SystemAnalyticsManager = {
 
   // Dữ liệu nhật ký thao tác hệ thống (Audit Action Logs)
   auditLogs: [
-    { id: "LOG-98214", user: "Nguyễn Đình Hùng", dept: "Lãnh đạo Sở", action: "Phê duyệt Báo cáo chỉ đạo điều hành theo Quyết định số 2071 quý III/2026", ip: "10.79.1.10", time: "2026-08-20 12:10:45", status: "SUCCESS" },
+    { id: "LOG-98214", user: "Châu Ngô Anh Nhân", dept: "Lãnh đạo Sở", action: "Phê duyệt Báo cáo chỉ đạo điều hành theo Quyết định số 2071 quý III/2026", ip: "10.79.1.10", time: "2026-08-20 12:10:45", status: "SUCCESS" },
     { id: "LOG-98213", user: "Hệ thống tự động", dept: "Văn phòng Sở", action: "Đồng bộ tự động 15 API từ CSDL quốc gia và Bộ, ngành", ip: "127.0.0.1", time: "2026-08-20 12:00:00", status: "SUCCESS" },
     { id: "LOG-98212", user: "Lê Thị Thu Hằng", dept: "Phòng Kinh tế và Ngân sách", action: "Xuất dữ liệu cân đối ngân sách nhà nước tháng 8/2026", ip: "10.79.1.24", time: "2026-08-20 11:45:22", status: "SUCCESS" },
     { id: "LOG-98211", user: "Phạm Minh Tuấn", dept: "Phòng Quản lý Đầu tư công", action: "Điều chỉnh tiến độ giải ngân dự án kè chống sạt lở sông Cái", ip: "10.79.1.35", time: "2026-08-20 11:30:10", status: "SUCCESS" },

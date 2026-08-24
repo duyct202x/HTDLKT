@@ -806,4 +806,119 @@
   border-top-color: #bfdbfe !important;
 }
 
+/* 5. GIS Map Overlay Controls & Info Badges */
+.gis-map-canvas {
+  width: 100%;
+  height: 100%;
+  min-height: 440px;
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: #e2e8f0;
+}
+
+.gis-map-info-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(8px);
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #bfdbfe;
+  box-shadow: 0 4px 12px rgba(0, 43, 140, 0.12);
+  pointer-events: none;
+  max-width: 440px;
+  box-sizing: border-box;
+}
+
+.gis-badge-top-row {
+  font-size: 10px;
+  color: #64748b;
+  font-weight: 700;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gis-badge-doc {
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  border: 1px solid #bfdbfe;
+}
+
+.gis-badge-title {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #002B8C;
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
+.gis-badge-lead {
+  font-size: 11px;
+  color: #15803d;
+  font-weight: 700;
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
+.gis-badge-meta {
+  font-size: 10px;
+  color: #64748b;
+  margin-top: 2px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.gis-map-filter-bar {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  z-index: 1000;
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(6px);
+  padding: 4px 6px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.gis-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid #bfdbfe;
+  background: #f0f7ff;
+  color: #002B8C;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.gis-filter-btn:hover,
+.gis-filter-btn.active {
+  background: #002B8C;
+  color: #ffffff;
+  border-color: #002B8C;
+}
+
+.gis-filter-btn i,
+.gis-filter-btn svg {
+  width: 13px;
+  height: 13px;
+}
+
 

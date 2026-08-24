@@ -33,32 +33,32 @@ window.GisMapManager = {
 
     // Tạo cấu trúc khung bản đồ Leaflet
     container.innerHTML = `
-      <div id="${containerId}_leaflet" style="width: 100%; height: 100%; min-height: 390px; position: relative; border-radius: var(--radius-md); overflow: hidden; background: #e2e8f0;"></div>
+      <div id="${containerId}_leaflet" class="gis-map-canvas" style="width: 100%; height: 100%; min-height: 440px; position: relative; border-radius: var(--radius-md); overflow: hidden; background: #e2e8f0;"></div>
       
       <!-- Top Left Layer Badge -->
-      <div id="${containerId}_badge" style="position: absolute; top: 12px; left: 12px; z-index: 1000; background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(8px); padding: 8px 14px; border-radius: 8px; border: 1px solid #bfdbfe; box-shadow: 0 4px 12px rgba(0, 43, 140, 0.12); pointer-events: none;">
-        <div style="font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase; display: flex; align-items: center; gap: 6px;">
-          <span>65 Đơn Vị Cấp Xã (48 Xã, 16 Phường, 01 Đặc khu)</span>
-          <span style="background: #eff6ff; color: #1d4ed8; font-size: 9px; padding: 1px 5px; border-radius: 4px; border: 1px solid #bfdbfe;">NQ 1667/NQ-UBTVQH15</span>
+      <div id="${containerId}_badge" class="gis-map-info-badge">
+        <div class="gis-badge-top-row">
+          <span class="gis-badge-tag">65 Đơn Vị Cấp Xã (48 Xã, 16 Phường, 01 Đặc khu)</span>
+          <span class="gis-badge-doc">NQ 1667/NQ-UBTVQH15</span>
         </div>
-        <div id="${containerId}_layerTitle" style="font-size: 12.5px; font-weight: 800; color: #002B8C; margin-top: 2px;">Thu ngân sách nhà nước theo xã, phường, đặc khu</div>
-        <div id="${containerId}_layerLead" style="font-size: 11px; color: #15803d; font-weight: 700; margin-top: 2px;">Điểm dẫn đầu: 3.850 Tỷ (Phường Nha Trang) & 1.650 Tỷ (Phường Phan Rang)</div>
-        <div style="font-size: 10px; color: #64748b; margin-top: 2px; font-weight: 500;">Diện tích: <strong>8.555,86 km²</strong> • Dân số: <strong>2.243.554 người</strong> • Đánh dấu điểm & Chú thích</div>
+        <div id="${containerId}_layerTitle" class="gis-badge-title">Thu ngân sách nhà nước theo xã, phường, đặc khu</div>
+        <div id="${containerId}_layerLead" class="gis-badge-lead">Điểm dẫn đầu: 3.850 Tỷ (Phường Nha Trang) & 1.650 Tỷ (Phường Phan Rang)</div>
+        <div class="gis-badge-meta">Diện tích: <strong>8.555,86 km²</strong> • Dân số: <strong>2.243.554 người</strong> • Đánh dấu điểm & Chú thích</div>
       </div>
 
       <!-- Floating Controls & Category Filter -->
-      <div style="position: absolute; bottom: 14px; left: 14px; z-index: 1000; display: flex; gap: 5px; flex-wrap: wrap; background: rgba(255,255,255,0.95); backdrop-filter: blur(6px); padding: 5px 8px; border-radius: 8px; border: 1px solid #cbd5e1; box-shadow: 0 4px 12px rgba(0,0,0,0.12);">
-        <button class="btn btn-sm btn-soft-primary" onclick="GisMapManager.resetView('${containerId}')" style="font-size: 11px; font-weight: 700; padding: 4px 8px;">
-          <i data-lucide="compass" style="width: 13px; height: 13px;"></i> Toàn tỉnh (65 Đơn vị)
+      <div class="gis-map-filter-bar">
+        <button class="gis-filter-btn active" id="${containerId}_btnFilter_all" onclick="GisMapManager.resetView('${containerId}')">
+          <i data-lucide="compass"></i> <span>Toàn tỉnh (65 Đơn vị)</span>
         </button>
-        <button class="btn btn-sm btn-soft-primary" onclick="GisMapManager.filterCategory('${containerId}', 'phuong')" style="font-size: 11px; font-weight: 700; padding: 4px 8px;">
-          <i data-lucide="building" style="width: 13px; height: 13px;"></i> 16 Phường đô thị
+        <button class="gis-filter-btn" id="${containerId}_btnFilter_phuong" onclick="GisMapManager.filterCategory('${containerId}', 'phuong')">
+          <i data-lucide="building"></i> <span>16 Phường đô thị</span>
         </button>
-        <button class="btn btn-sm btn-soft-primary" onclick="GisMapManager.filterCategory('${containerId}', 'xa')" style="font-size: 11px; font-weight: 700; padding: 4px 8px;">
-          <i data-lucide="trees" style="width: 13px; height: 13px;"></i> 48 Xã cơ sở
+        <button class="gis-filter-btn" id="${containerId}_btnFilter_xa" onclick="GisMapManager.filterCategory('${containerId}', 'xa')">
+          <i data-lucide="trees"></i> <span>48 Xã cơ sở</span>
         </button>
-        <button class="btn btn-sm btn-soft-primary" onclick="GisMapManager.flyToTruongSa('${containerId}')" style="font-size: 11px; font-weight: 700; padding: 4px 8px; color: #002B8C;">
-          <i data-lucide="anchor" style="width: 13px; height: 13px;"></i> Đặc khu Trường Sa
+        <button class="gis-filter-btn" id="${containerId}_btnFilter_dackhu" onclick="GisMapManager.flyToTruongSa('${containerId}')">
+          <i data-lucide="anchor"></i> <span>Đặc khu Trường Sa</span>
         </button>
       </div>
     `;
@@ -362,6 +362,9 @@ window.GisMapManager = {
   // 6. Lọc hiển thị theo loại đơn vị hành chính
   filterCategory(containerId, cat) {
     this.activeFilter = cat;
+    document.querySelectorAll('.gis-filter-btn').forEach(b => b.classList.remove('active'));
+    const btn = document.getElementById(`${containerId}_btnFilter_${cat}`);
+    if (btn) btn.classList.add('active');
     this.renderChoropleth(containerId, this.currentLayers[containerId] || 'revenue');
     const label = cat === 'phuong' ? '16 Phường đô thị' : cat === 'xa' ? '48 Xã cơ sở' : 'Tất cả 65 đơn vị';
     App.showNotification(`Đang lọc hiển thị: ${label}`, 'info');
@@ -370,6 +373,9 @@ window.GisMapManager = {
   // 7. Đặt lại góc nhìn toàn tỉnh
   resetView(containerId) {
     this.activeFilter = 'all';
+    document.querySelectorAll('.gis-filter-btn').forEach(b => b.classList.remove('active'));
+    const btn = document.getElementById(`${containerId}_btnFilter_all`);
+    if (btn) btn.classList.add('active');
     this.renderChoropleth(containerId, this.currentLayers[containerId] || 'revenue');
     const map = this.maps[containerId];
     if (map) {
@@ -380,6 +386,9 @@ window.GisMapManager = {
 
   // 8. Điều hướng nhanh đến Đặc khu Trường Sa
   flyToTruongSa(containerId) {
+    document.querySelectorAll('.gis-filter-btn').forEach(b => b.classList.remove('active'));
+    const btn = document.getElementById(`${containerId}_btnFilter_dackhu`);
+    if (btn) btn.classList.add('active');
     const map = this.maps[containerId];
     if (map) {
       map.flyTo([10.50, 114.80], 7.5);

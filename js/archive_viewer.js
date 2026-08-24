@@ -340,7 +340,7 @@ const ArchiveManager = {
                   <td><code>WM-KTNS-8812</code></td>
                 </tr>
                 <tr>
-                  <td><strong>Nguyễn Đình Hùng</strong><br><small style="color: #64748b;">Lãnh đạo Sở</small></td>
+                  <td><strong>Châu Ngô Anh Nhân</strong><br><small style="color: #64748b;">Lãnh đạo Sở</small></td>
                   <td>Tải tệp PDF/A-2b [DOC-DN-00062]</td>
                   <td>2026-08-21 14:15<br><small>10.79.1.10</small></td>
                   <td><code>WM-DIR-7701</code></td>
