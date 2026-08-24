@@ -1770,63 +1770,10 @@ const DeptWorkspaceManager = {
   // 1. Màn hình Điều hành Kinh tế Tổng thể (Ban Giám đốc Sở)
   renderLanhDaoContent() {
     if (this.currentTab === 'approvals') {
-      return `
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <h3 class="card-title"><i data-lucide="check-square"></i> Trung tâm phê duyệt báo cáo trình lãnh đạo Sở Tài chính</h3>
-              <p class="card-subtitle">Hồ sơ báo cáo do các phòng chuyên môn và Đơn vị/Doanh nghiệp nộp qua Cổng báo cáo định kỳ</p>
-            </div>
-            <span class="badge badge-warning">Thẩm quyền Giám đốc Sở</span>
-          </div>
-          <div class="table-container">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Mã hồ sơ</th>
-                  <th>Tiêu đề báo cáo</th>
-                  <th>Phòng chuyên môn / Đơn vị trình</th>
-                  <th>Người lập</th>
-                  <th>Thời gian gửi</th>
-                  <th>Trạng thái</th>
-                  <th>Thao tác</th>
-                </tr>
-              </thead>
-              <tbody id="pendingSubmissionsTableBody">
-                ${APP_DATA.pendingSubmissions.map(sub => `
-                  <tr>
-                    <td><strong style="color: #38bdf8;">${sub.id}</strong></td>
-                    <td>
-                      <div style="font-weight: 600; color: #fff;">${sub.title}</div>
-                      <div style="font-size: 11px; color: #94a3b8;">${sub.dept}</div>
-                    </td>
-                    <td><span class="badge badge-info">${sub.type}</span></td>
-                    <td>${sub.submittedBy}</td>
-                    <td>${sub.submittedDate}</td>
-                    <td>
-                      <span class="badge ${sub.status === 'APPROVED' ? 'badge-success' : sub.status === 'REJECTED' ? 'badge-danger' : 'badge-warning'}">
-                        ${sub.status === 'APPROVED' ? 'Đã Phê Duyệt' : sub.status === 'REJECTED' ? 'Từ Chối' : 'Chờ Phê Duyệt'}
-                      </span>
-                    </td>
-                    <td>
-                      ${sub.status === 'PENDING' ? `
-                        <div style="display: flex; gap: 6px;">
-                          <button class="btn btn-success btn-sm" onclick="DataEntryManager.approveSubmission('${sub.id}')">
-                            <i data-lucide="check"></i> Phê duyệt
-                          </button>
-                          <button class="btn btn-danger btn-sm" onclick="DataEntryManager.rejectSubmission('${sub.id}')">
-                            <i data-lucide="x"></i> Trả lại
-                          </button>
-                        </div>
-                      ` : `<span style="font-size: 11px; color: #64748b;">Đã xử lý</span>`}
-                    </td>
-                  </tr>
-                `).join('')}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      `;
+      setTimeout(() => {
+        DataEntryManager.renderDirectorApprovalHub('lanhDaoApprovalsContainer');
+      }, 30);
+      return `<div id="lanhDaoApprovalsContainer"></div>`;
     }
 
     return `
@@ -2350,21 +2297,27 @@ const DeptWorkspaceManager = {
           <table class="data-table freeze-first" id="table_gcs_properties">
             <thead>
               <tr>
-                <th>Mã cơ sở</th>
-                <th>Tên cơ sở nhà đất công</th>
-                <th>Diện tích khuôn viên</th>
-                <th>Phương án xử lý đã phê duyệt</th>
-                <th>Tiến độ thực hiện</th>
+                <th style="width: 120px;">Mã cơ sở</th>
+                <th style="min-width: 260px;">Tên cơ sở nhà đất công</th>
+                <th style="width: 160px;">Diện tích khuôn viên</th>
+                <th style="min-width: 280px;">Phương án xử lý đã phê duyệt</th>
+                <th style="width: 160px;">Tiến độ thực hiện</th>
+                <th style="width: 100px; text-align: center;">Thao tác</th>
               </tr>
             </thead>
             <tbody>
               ${config.properties.map(prop => `
                 <tr>
-                  <td><strong style="color: #002B8C;">${prop.id}</strong></td>
+                  <td><strong style="color: #002B8C; font-family: monospace;">${prop.id}</strong></td>
                   <td><strong>${prop.name}</strong></td>
-                  <td>${prop.area}</td>
+                  <td><span style="font-family: monospace; font-weight: 600;">${prop.area}</span></td>
                   <td><span class="badge badge-info">${prop.plan}</span></td>
                   <td><span class="badge ${prop.status.includes('Đã') || prop.status.includes('Hoàn tất') ? 'badge-success' : 'badge-warning'}">${prop.status}</span></td>
+                  <td style="text-align: center; vertical-align: middle;">
+                    <button class="btn btn-outline btn-xs" onclick="App.showNotification('Đang tải hồ sơ quy hoạch cơ sở ${prop.id}...', 'info')" title="Xem chi tiết hồ sơ tài sản">
+                      <i data-lucide="eye"></i> Xem
+                    </button>
+                  </td>
                 </tr>
               `).join('')}
             </tbody>
@@ -2845,10 +2798,10 @@ const DeptWorkspaceManager = {
   // 17. Màn hình phụ: Giải Quyết Đơn Thư Khiếu Nại, Tố Cáo & Kiến Nghị (complaints)
   renderComplaintsView() {
     const complaints = [
-      { id: 'KNTC-2026-01', sender: 'Công dân Nguyễn Văn Hùng (Nha Trang)', content: 'Kiến nghị rà soát phương án bồi thường, hỗ trợ tái định cư dự án đường vành đai', receiveDate: '2026-08-10', deadline: '2026-09-10', status: 'Đang xử lý', handler: 'Tổ Pháp chế - Phòng Quản lý Giá và Công sản' },
+      { id: 'KNTC-2026-01', sender: 'Công dân Nguyễn Văn Hùng (Phường Lộc Thọ)', content: 'Kiến nghị rà soát phương án bồi thường, hỗ trợ tái định cư dự án đường vành đai', receiveDate: '2026-08-10', deadline: '2026-09-10', status: 'Đang xử lý', handler: 'Tổ Pháp chế - Phòng Quản lý Giá và Công sản' },
       { id: 'KNTC-2026-02', sender: 'Công ty TNHH Xây dựng Thành Đạt', content: 'Phản ánh kết quả đánh giá hồ sơ đề xuất tài chính gói thầu xây lắp trường học', receiveDate: '2026-08-05', deadline: '2026-08-25', status: 'Đã trả lời bằng văn bản', handler: 'Phòng Pháp chế phối hợp Phòng Đầu tư' },
       { id: 'KNTC-2026-03', sender: 'Tập thể hộ dân xã Cam Hải Đông', content: 'Đề nghị giải thích căn cứ áp dụng bảng giá đất tính tiền bồi thường đất nông nghiệp', receiveDate: '2026-08-15', deadline: '2026-09-15', status: 'Đang xử lý', handler: 'Tổ Pháp chế' },
-      { id: 'KNTC-2026-04', sender: 'Công dân Trần Thị Mai (Cam Ranh)', content: 'Tố cáo hành vi thu phụ phí không đúng quy định tại đơn vị sự nghiệp y tế', receiveDate: '2026-07-20', deadline: '2026-08-20', status: 'Đã giải quyết xong', handler: 'Phòng Pháp chế phối hợp HCSN' }
+      { id: 'KNTC-2026-04', sender: 'Công dân Trần Thị Mai (Phường Cam Nghĩa)', content: 'Tố cáo hành vi thu phụ phí không đúng quy định tại đơn vị sự nghiệp y tế', receiveDate: '2026-07-20', deadline: '2026-08-20', status: 'Đã giải quyết xong', handler: 'Phòng Pháp chế phối hợp HCSN' }
     ];
 
     return `

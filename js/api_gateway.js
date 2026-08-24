@@ -492,7 +492,7 @@ const ApiGatewayManager = {
                 <th>Bảng CSDL Đích</th>
                 <th>Tần suất / Lịch Cron</th>
                 <th>Trạng thái</th>
-                <th style="width: 190px; text-align: center;">Thao tác Quản lý</th>
+                <th style="width: 170px; text-align: center;">Thao tác</th>
               </tr>
             </thead>
             <tbody>
@@ -517,18 +517,18 @@ const ApiGatewayManager = {
                       <i class="status-dot"></i> ${api.status === 'HEALTHY' ? 'Đang kết nối' : 'Đang gửi CV'}
                     </span>
                   </td>
-                  <td>
-                    <div style="display: flex; gap: 4px; justify-content: center; flex-wrap: wrap;">
-                      <button class="btn btn-secondary btn-sm" title="Cấu hình tham số kết nối" onclick="ApiGatewayManager.openConfigModal('${api.code}')" style="padding: 4px 8px;">
+                  <td style="text-align: center; vertical-align: middle;">
+                    <div style="display: inline-flex; align-items: center; justify-content: center; gap: 4px; white-space: nowrap; flex-wrap: nowrap;">
+                      <button class="btn btn-outline btn-xs" title="Cấu hình tham số kết nối" onclick="ApiGatewayManager.openConfigModal('${api.code}')" style="padding: 4px 6px; width: 28px; height: 26px; display: inline-flex; align-items: center; justify-content: center;">
                         <i data-lucide="settings" style="width: 13px; height: 13px;"></i>
                       </button>
-                      <button class="btn btn-secondary btn-sm" title="Ánh xạ trường dữ liệu CSDL" onclick="ApiGatewayManager.openFieldMappingModal('${api.code}')" style="padding: 4px 8px;">
+                      <button class="btn btn-outline btn-xs" title="Ánh xạ trường dữ liệu CSDL" onclick="ApiGatewayManager.openFieldMappingModal('${api.code}')" style="padding: 4px 6px; width: 28px; height: 26px; display: inline-flex; align-items: center; justify-content: center;">
                         <i data-lucide="git-merge" style="width: 13px; height: 13px;"></i>
                       </button>
-                      <button class="btn btn-secondary btn-sm" title="Kiểm tra kết nối (Test Ping)" onclick="ApiGatewayManager.testSingleConnection('${api.code}')" style="padding: 4px 8px;">
+                      <button class="btn btn-outline btn-xs" title="Kiểm tra kết nối (Test Ping)" onclick="ApiGatewayManager.testSingleConnection('${api.code}')" style="padding: 4px 6px; width: 28px; height: 26px; display: inline-flex; align-items: center; justify-content: center;">
                         <i data-lucide="activity" style="width: 13px; height: 13px;"></i>
                       </button>
-                      <button class="btn btn-primary btn-sm" title="Đồng bộ ngay" onclick="ApiGatewayManager.triggerSync('${api.code}')" style="padding: 4px 8px;">
+                      <button class="btn btn-outline btn-xs" title="Đồng bộ ngay" onclick="ApiGatewayManager.triggerSync('${api.code}')" style="padding: 4px 6px; width: 28px; height: 26px; display: inline-flex; align-items: center; justify-content: center; color: #002B8C; border-color: #93c5fd;">
                         <i data-lucide="refresh-cw" style="width: 13px; height: 13px;"></i>
                       </button>
                     </div>
@@ -1155,7 +1155,7 @@ Content-Type: application/json
         "timestamp": "2026-08-20T04:30:15Z",
         "data": [
           { "DT": "2026-08-19", "MA_DB": "79", "TEN_DB": "Tỉnh Khánh Hòa", "MA_CNS": "1", "TEN_CNS": "Ngân sách cấp tỉnh", "ICODE": "1001", "INAME": "Thu từ DNNN địa phương", "VAL": 4380500000000 },
-          { "DT": "2026-08-19", "MA_DB": "7901", "TEN_DB": "Phường Lộc Thọ (Nha Trang)", "MA_CNS": "2", "TEN_CNS": "Ngân sách cấp xã", "ICODE": "1002", "INAME": "Thu ngoài quốc doanh", "VAL": 2150200000000 }
+          { "DT": "2026-08-19", "MA_DB": "7901", "TEN_DB": "Phường Lộc Thọ", "MA_CNS": "2", "TEN_CNS": "Ngân sách cấp xã", "ICODE": "1002", "INAME": "Thu ngoài quốc doanh", "VAL": 2150200000000 }
         ],
         "checksum_sha256": "8f4b23c91e0a8d42398ab76dfa514b8a2c1f9e8d7c6b5a4321fedcba09876543"
       };

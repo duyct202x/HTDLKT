@@ -131,17 +131,17 @@ const StateReportingManager = {
     }
   ],
 
-  // Danh sách Chi tiết Đơn vị Nộp Báo cáo (Tracking Matrix)
+  // Danh sách Chi tiết Đơn vị Nộp Báo cáo (Tracking Matrix - Mô hình chính quyền địa phương 2 cấp)
   submissionDetails: [
-    { orgId: "UBND-NTR", orgName: "UBND phường Lộc Thọ (Nha Trang)", campaignId: "REP-2071-Q3-2026", submitDate: "2026-08-18 09:15", status: "APPROVED", approver: "Lãnh đạo Sở Tài chính", score: 98 },
-    { orgId: "UBND-CRH", orgName: "UBND phường Cam Nghĩa (Cam Ranh)", campaignId: "REP-2071-Q3-2026", submitDate: "2026-08-19 14:20", status: "APPROVED", approver: "Lãnh đạo Sở Tài chính", score: 95 },
-    { orgId: "UBND-NHO", orgName: "UBND phường Ninh Hiệp (Ninh Hòa)", campaignId: "REP-2071-Q3-2026", submitDate: "2026-08-20 08:30", status: "PENDING", approver: "Chờ xét duyệt", score: null },
+    { orgId: "UBND-NTR", orgName: "UBND phường Lộc Thọ", campaignId: "REP-2071-Q3-2026", submitDate: "2026-08-18 09:15", status: "APPROVED", approver: "Lãnh đạo Sở Tài chính", score: 98 },
+    { orgId: "UBND-CRH", orgName: "UBND phường Cam Nghĩa", campaignId: "REP-2071-Q3-2026", submitDate: "2026-08-19 14:20", status: "APPROVED", approver: "Lãnh đạo Sở Tài chính", score: 95 },
+    { orgId: "UBND-NHO", orgName: "UBND phường Ninh Hiệp", campaignId: "REP-2071-Q3-2026", submitDate: "2026-08-20 08:30", status: "PENDING", approver: "Chờ xét duyệt", score: null },
     { orgId: "UBND-CLM", orgName: "UBND thị trấn Cam Đức", campaignId: "REP-2071-Q3-2026", submitDate: "2026-08-20 10:15", status: "PENDING", approver: "Chờ xét duyệt", score: null },
     { orgId: "UBND-VNI", orgName: "UBND xã Vạn Thắng", campaignId: "REP-2071-Q3-2026", submitDate: null, status: "OVERDUE", approver: "Chưa nộp báo cáo", score: null },
     { orgId: "UBND-DKH", orgName: "UBND xã Diên Hòa", campaignId: "REP-2071-Q3-2026", submitDate: "2026-08-17 16:45", status: "APPROVED", approver: "Lãnh đạo Sở Tài chính", score: 92 },
     { orgId: "UBND-KVH", orgName: "UBND xã Khánh Phú", campaignId: "REP-2071-Q3-2026", submitDate: null, status: "OVERDUE", approver: "Chưa nộp báo cáo", score: null },
     { orgId: "UBND-KSO", orgName: "UBND xã Sơn Hiệp", campaignId: "REP-2071-Q3-2026", submitDate: "2026-08-19 11:00", status: "APPROVED", approver: "Lãnh đạo Sở Tài chính", score: 90 },
-    { orgId: "UBND-TSA", orgName: "UBND xã đảo Song Tử Tây (Trường Sa)", campaignId: "REP-2071-Q3-2026", submitDate: "2026-08-16 15:30", status: "APPROVED", approver: "Lãnh đạo Sở Tài chính", score: 100 }
+    { orgId: "UBND-TSA", orgName: "UBND xã Song Tử Tây", campaignId: "REP-2071-Q3-2026", submitDate: "2026-08-16 15:30", status: "APPROVED", approver: "Lãnh đạo Sở Tài chính", score: 100 }
   ],
 
   viewMode: 'table', // 'table' or 'grid'
@@ -399,13 +399,13 @@ const StateReportingManager = {
         <table class="data-table">
           <thead>
             <tr>
-              <th>Đơn vị báo cáo</th>
-              <th>Kỳ báo cáo</th>
-              <th>Thời gian nộp</th>
-              <th>Trạng thái</th>
-              <th>Người duyệt</th>
-              <th>Đánh giá</th>
-              <th>Thao tác</th>
+              <th style="min-width: 200px;">Đơn vị báo cáo</th>
+              <th style="width: 140px;">Kỳ báo cáo</th>
+              <th style="width: 140px;">Thời gian nộp</th>
+              <th style="width: 120px;">Trạng thái</th>
+              <th style="width: 180px;">Người duyệt</th>
+              <th style="width: 100px; text-align: center;">Đánh giá</th>
+              <th style="width: 120px; text-align: center;">Thao tác</th>
             </tr>
           </thead>
           <tbody>
@@ -420,19 +420,19 @@ const StateReportingManager = {
                   </span>
                 </td>
                 <td>${sub.approver}</td>
-                <td>${sub.score ? `<strong style="color: #15803d;">${sub.score} / 100</strong>` : '-'}</td>
-                <td>
+                <td style="text-align: center;">${sub.score ? `<strong style="color: #15803d; font-family: monospace;">${sub.score}/100</strong>` : '<span style="color: #94a3b8;">-</span>'}</td>
+                <td style="text-align: center; vertical-align: middle;">
                   ${sub.status === 'PENDING' ? `
-                    <button class="btn btn-success btn-sm" onclick="StateReportingManager.approveReport('${sub.orgId}')">
-                      <i data-lucide="check"></i> Duyệt
+                    <button class="btn btn-outline btn-xs" style="color: #15803d; border-color: #86efac; min-width: 82px; display: inline-flex; align-items: center; justify-content: center; gap: 4px;" onclick="StateReportingManager.approveReport('${sub.orgId}')" title="Phê duyệt báo cáo">
+                      <i data-lucide="check" style="width: 12px; height: 12px;"></i> Duyệt
                     </button>
                   ` : sub.status === 'OVERDUE' ? `
-                    <button class="btn btn-danger btn-sm" onclick="App.showNotification('Đã gửi thông báo đôn đốc tới ${sub.orgName}!', 'warning')">
-                      <i data-lucide="bell"></i> Đôn đốc
+                    <button class="btn btn-outline btn-xs" style="color: #dc2626; border-color: #fca5a5; min-width: 82px; display: inline-flex; align-items: center; justify-content: center; gap: 4px;" onclick="App.showNotification('Đã gửi thông báo đôn đốc tới ${sub.orgName}!', 'warning')" title="Gửi văn bản đôn đốc">
+                      <i data-lucide="bell" style="width: 12px; height: 12px;"></i> Đôn đốc
                     </button>
                   ` : `
-                    <button class="btn btn-soft-primary btn-sm" onclick="App.showNotification('Đang mở chi tiết báo cáo...', 'info')">
-                      <i data-lucide="eye"></i> Chi tiết
+                    <button class="btn btn-outline btn-xs" style="color: #002B8C; border-color: #bfdbfe; min-width: 82px; display: inline-flex; align-items: center; justify-content: center; gap: 4px;" onclick="App.showNotification('Đang mở chi tiết báo cáo...', 'info')" title="Xem chi tiết báo cáo">
+                      <i data-lucide="eye" style="width: 12px; height: 12px;"></i> Chi tiết
                     </button>
                   `}
                 </td>
@@ -490,7 +490,7 @@ const StateReportingManager = {
       },
       {
         orgId: "ORG_UBND_04",
-        orgName: "UBND Phường Cam Nghĩa (Cam Ranh)",
+        orgName: "UBND phường Cam Nghĩa",
         campaignName: "Bộ chỉ số chỉ đạo điều hành Quyết định số 2071 Quý III",
         deptReview: "Phòng Kinh tế và Ngân sách",
         reviewer: "Trưởng phòng KTNS (Đã ký nháy)",

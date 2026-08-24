@@ -135,8 +135,8 @@ const DEPT_CONFIGS = {
       { label: 'Hồ sơ kê khai giá', value: '85 hồ sơ', unit: 'Hàng hóa bình ổn, xi măng', trend: '100% đúng hạn', icon: 'tag', color: 'emerald' }
     ],
     properties: [
-      { id: 'TSC-79-01', name: 'Khu đất trụ sở cũ Cam Ranh', area: '1.450 m²', plan: 'Đấu giá tài sản trên đất và chuyển nhượng QSDĐ', status: 'Đang thẩm định giá' },
-      { id: 'TSC-79-02', name: 'Cơ sở nhà đất số 04 Trần Phú, Nha Trang', area: '3.200 m²', plan: 'Giữ lại tiếp tục sử dụng làm cơ quan hành chính', status: 'Đã duyệt' },
+      { id: 'TSC-79-01', name: 'Khu đất trụ sở cũ Phường Cam Nghĩa', area: '1.450 m²', plan: 'Đấu giá tài sản trên đất và chuyển nhượng QSDĐ', status: 'Đang thẩm định giá' },
+      { id: 'TSC-79-02', name: 'Cơ sở nhà đất số 04 Trần Phú, Phường Lộc Thọ', area: '3.200 m²', plan: 'Giữ lại tiếp tục sử dụng làm cơ quan hành chính', status: 'Đã duyệt' },
       { id: 'TSC-79-03', name: 'Khu đất trạm y tế xã Diên Hòa', area: '680 m²', plan: 'Điều chuyển về UBND xã Diên Hòa quản lý', status: 'Đã điều chuyển' }
     ]
   },

@@ -1152,106 +1152,78 @@ const DataEntryManager = {
   // -------------------------------------------------------------
   // TRUNG TÂM PHÊ DUYỆT & CHỈ ĐẠO ĐIỀU HÀNH DÀNH CHO LÃNH ĐẠO SỞ
   // -------------------------------------------------------------
+  activeApprovalStatus: 'all',
+
   renderDirectorApprovalHub(containerId = 'dynamicDeptFormContainer') {
     const container = document.getElementById(containerId);
     if (!container) return;
 
+    const totalCount = APP_DATA.pendingSubmissions.length;
     const pendingCount = APP_DATA.pendingSubmissions.filter(s => s.status === 'PENDING').length;
-    const approvedCount = APP_DATA.pendingSubmissions.filter(s => s.status === 'APPROVED').length;
+    const approvedCount = APP_DATA.pendingSubmissions.filter(s => s.status === 'APPROVED' || s.status === 'SUBMITTED_UBND').length;
     const rejectedCount = APP_DATA.pendingSubmissions.filter(s => s.status === 'REJECTED').length;
 
     container.innerHTML = `
-      <!-- 1. EXECUTIVE KPI SUMMARY -->
-      <div class="kpi-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 20px;">
-        <div class="kpi-card" style="border-left: 4px solid #f59e0b;">
-          <div class="kpi-header">
-            <span class="kpi-title">Hồ sơ chờ Giám đốc Sở duyệt</span>
-            <div class="kpi-icon-wrapper" style="background: #fef3c7; color: #b45309;"><i data-lucide="clock"></i></div>
-          </div>
-          <div class="kpi-value-row">
-            <div class="kpi-value" style="color: #b45309;">${pendingCount}</div>
-            <span class="badge badge-warning">Cần xử lý trong kỳ</span>
-          </div>
-          <div class="kpi-footer">Từ 8 phòng chuyên môn & đơn vị ngoài</div>
-        </div>
-
-        <div class="kpi-card" style="border-left: 4px solid #16a34a;">
-          <div class="kpi-header">
-            <span class="kpi-title">Đã phê duyệt nạp CSDL</span>
-            <div class="kpi-icon-wrapper" style="background: #dcfce7; color: #15803d;"><i data-lucide="check-circle-2"></i></div>
-          </div>
-          <div class="kpi-value-row">
-            <div class="kpi-value" style="color: #15803d;">${approvedCount}</div>
-            <span class="badge badge-success">Khóa sổ & Đồng bộ</span>
-          </div>
-          <div class="kpi-footer">Đã nạp chính thức vào Kho CSDL Tỉnh</div>
-        </div>
-
-        <div class="kpi-card" style="border-left: 4px solid #0284c7;">
-          <div class="kpi-header">
-            <span class="kpi-title">Tờ trình gửi UBND / HĐND tỉnh</span>
-            <div class="kpi-icon-wrapper" style="background: #e0f2fe; color: #0284c7;"><i data-lucide="send"></i></div>
-          </div>
-          <div class="kpi-value-row">
-            <div class="kpi-value" style="color: #002B8C;">04</div>
-            <span class="badge badge-info">Vượt thẩm quyền Sở</span>
-          </div>
-          <div class="kpi-footer">Dự toán tỉnh, Bảng giá đất, Đề án tự chủ</div>
-        </div>
-
-        <div class="kpi-card" style="border-left: 4px solid #dc2626;">
-          <div class="kpi-header">
-            <span class="kpi-title">Yêu cầu phòng chỉnh lý / giải trình</span>
-            <div class="kpi-icon-wrapper" style="background: #fee2e2; color: #dc2626;"><i data-lucide="rotate-ccw"></i></div>
-          </div>
-          <div class="kpi-value-row">
-            <div class="kpi-value" style="color: #dc2626;">${rejectedCount}</div>
-            <span class="badge badge-danger">Cần bổ sung số liệu</span>
-          </div>
-          <div class="kpi-footer">Đã chuyển trả phòng kèm ý kiến chỉ đạo</div>
-        </div>
-      </div>
-
-      <!-- 2. PHÂN ĐỊNH THẨM QUYỀN BAN GIÁM ĐỐC SỞ -->
-      <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <div style="width: 40px; height: 40px; border-radius: 50%; background: #002B8C; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;">
-            🏛️
-          </div>
+      <!-- 1. UNIFIED EXECUTIVE CARD -->
+      <div class="card" style="margin-bottom: 20px; border: 1px solid #e2e8f0; box-shadow: var(--shadow-xs);">
+        <div class="card-header" style="border-bottom: 1px solid #f1f5f9; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
           <div>
-            <div style="font-size: 14px; font-weight: 750; color: #002B8C;">Thẩm quyền Quyết định & Phê duyệt của Ban Giám đốc Sở Tài chính</div>
-            <div style="font-size: 12px; color: #475569; margin-top: 2px;">
-              Trực tiếp xem xét Tờ trình đã được <strong>Lãnh đạo Phòng chuyên môn thẩm tra</strong> ➔ Ký duyệt nạp CSDL hoặc Ký Tờ trình gửi UBND tỉnh.
-            </div>
+            <h3 class="card-title" style="font-size: 15.5px; font-weight: 800; color: #002B8C; display: flex; align-items: center; gap: 8px;">
+              <i data-lucide="shield-check" style="color: #002B8C; width: 18px; height: 18px;"></i> Trung tâm Phê duyệt & Chỉ đạo Điều hành (Ban Giám đốc Sở)
+            </h3>
+            <p class="card-subtitle" style="margin: 2px 0 0 0; font-size: 12px; color: #64748b;">
+              Thẩm định hồ sơ từ 8 phòng chuyên môn ➔ Ký Quyết định phê duyệt nạp CSDL hoặc ký Tờ trình gửi UBND tỉnh
+            </p>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <button class="btn btn-primary btn-sm" onclick="DataEntryManager.batchApproveAll()" title="Ký duyệt đồng loạt các hồ sơ đã có kết quả thẩm tra Đạt">
+              <i data-lucide="check-check"></i> Ký duyệt đồng loạt hồ sơ đạt chuẩn
+            </button>
           </div>
         </div>
-        <div style="display: flex; gap: 8px;">
-          <button class="btn btn-primary btn-sm" onclick="DataEntryManager.batchApproveAll()" title="Ký duyệt đồng loạt các hồ sơ đã có kết quả thẩm tra Đạt">
-            <i data-lucide="check-check"></i> Ký duyệt đồng loạt hồ sơ đạt chuẩn
+
+        <!-- 2. STATUS FILTER CHIPS BAR -->
+        <div style="padding: 10px 18px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <span style="font-size: 11.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">Bộ lọc trạng thái:</span>
+          
+          <button class="btn btn-xs ${this.activeApprovalStatus === 'all' ? 'btn-primary' : 'btn-outline'}" onclick="DataEntryManager.filterApprovalStatus('all', this)" id="btnAppr_all">
+            Tất cả hồ sơ <span class="badge ${this.activeApprovalStatus === 'all' ? 'badge-white' : 'badge-primary'}" style="margin-left: 4px; padding: 1px 6px;">${totalCount}</span>
+          </button>
+
+          <button class="btn btn-xs ${this.activeApprovalStatus === 'PENDING' ? 'btn-warning' : 'btn-outline'}" onclick="DataEntryManager.filterApprovalStatus('PENDING', this)" id="btnAppr_pending" style="${this.activeApprovalStatus !== 'PENDING' ? 'color: #b45309; border-color: #fde68a;' : ''}">
+            Chờ Giám đốc duyệt <span class="badge badge-warning" style="margin-left: 4px; padding: 1px 6px;">${pendingCount}</span>
+          </button>
+
+          <button class="btn btn-xs ${this.activeApprovalStatus === 'APPROVED' ? 'btn-success' : 'btn-outline'}" onclick="DataEntryManager.filterApprovalStatus('APPROVED', this)" id="btnAppr_approved" style="${this.activeApprovalStatus !== 'APPROVED' ? 'color: #15803d; border-color: #bbf7d0;' : ''}">
+            Đã duyệt nạp CSDL <span class="badge badge-success" style="margin-left: 4px; padding: 1px 6px;">${approvedCount}</span>
+          </button>
+
+          <button class="btn btn-xs ${this.activeApprovalStatus === 'REJECTED' ? 'btn-danger' : 'btn-outline'}" onclick="DataEntryManager.filterApprovalStatus('REJECTED', this)" id="btnAppr_rejected" style="${this.activeApprovalStatus !== 'REJECTED' ? 'color: #dc2626; border-color: #fecaca;' : ''}">
+            Yêu cầu chỉnh lý <span class="badge badge-danger" style="margin-left: 4px; padding: 1px 6px;">${rejectedCount}</span>
           </button>
         </div>
-      </div>
 
-      <!-- 3. BẢNG DANH SÁCH TỜ TRÌNH & HỒ SƠ CHUẨN BIG DATA TABLE UX -->
-      <div class="table-fullscreen-wrapper" id="wrapper_director_approvals">
-        ${DeptWorkspaceManager.renderAdminTableToolbar('wrapper_director_approvals', 'table_director_approvals', 'Danh mục Tờ trình & Hồ sơ trình Ban Giám đốc Sở')}
-        <div class="table-scroll-container">
-          <table class="data-table freeze-first" id="table_director_approvals">
-            <thead>
-              <tr>
-                <th style="width: 140px;">Mã Tờ Trình</th>
-                <th style="min-width: 260px;">Nội Dung Tờ Trình & Căn Cứ</th>
-                <th>Phòng Chuyên Môn Thẩm Tra</th>
-                <th>Thẩm Quyền Xử Lý</th>
-                <th>Ngày Trình</th>
-                <th>Trạng Thái</th>
-                <th style="min-width: 240px; text-align: center;">Thao Tác Giám Đốc Sở</th>
-              </tr>
-            </thead>
-            <tbody id="directorApprovalTableBody">
-              <!-- Rendered rows -->
-            </tbody>
-          </table>
+        <!-- 3. DATA TABLE UX -->
+        <div class="table-fullscreen-wrapper" id="wrapper_director_approvals" style="margin: 0; border: none; border-radius: 0;">
+          ${DeptWorkspaceManager.renderAdminTableToolbar('wrapper_director_approvals', 'table_director_approvals', 'Danh mục Tờ trình & Hồ sơ trình Ban Giám đốc Sở')}
+          <div class="table-scroll-container">
+            <table class="data-table freeze-first" id="table_director_approvals">
+              <thead>
+                <tr>
+                  <th style="width: 120px;">Mã hồ sơ</th>
+                  <th style="min-width: 260px;">Nội dung tờ trình & Căn cứ</th>
+                  <th style="width: 190px;">Phòng chuyên môn thẩm tra</th>
+                  <th style="width: 130px;">Thẩm quyền</th>
+                  <th style="width: 120px;">Ngày trình</th>
+                  <th style="width: 130px;">Trạng thái</th>
+                  <th style="width: 240px; text-align: center;">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="directorApprovalTableBody">
+                <!-- Rendered rows -->
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     `;
@@ -1260,13 +1232,26 @@ const DataEntryManager = {
     if (window.lucide) window.lucide.createIcons();
   },
 
+  filterApprovalStatus(status, btnEl) {
+    this.activeApprovalStatus = status;
+    this.renderDirectorApprovalHub();
+  },
+
   renderDirectorApprovalRows() {
     const tbody = document.getElementById('directorApprovalTableBody');
     if (!tbody) return;
 
-    const submissions = APP_DATA.pendingSubmissions;
+    let submissions = APP_DATA.pendingSubmissions;
+    if (this.activeApprovalStatus && this.activeApprovalStatus !== 'all') {
+      if (this.activeApprovalStatus === 'APPROVED') {
+        submissions = submissions.filter(s => s.status === 'APPROVED' || s.status === 'SUBMITTED_UBND');
+      } else {
+        submissions = submissions.filter(s => s.status === this.activeApprovalStatus);
+      }
+    }
+
     if (submissions.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #64748b; padding: 24px;">Không có tờ trình nào chờ xử lý.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #64748b; padding: 28px;">Không có hồ sơ nào trong trạng thái này.</td></tr>`;
       return;
     }
 
@@ -1280,51 +1265,51 @@ const DataEntryManager = {
 
       return `
         <tr>
-          <td><strong style="color: #002B8C; font-family: monospace;">${sub.id}</strong></td>
+          <td><strong style="color: #002B8C; font-family: monospace; font-size: 12px;">${sub.id}</strong></td>
           <td>
-            <div style="font-weight: 700; color: #0f172a; font-size: 13px;">${sub.title}</div>
-            <div style="font-size: 11px; color: #64748b; margin-top: 2px;">
-              Loại hồ sơ: <span class="badge badge-purple" style="font-size: 10px;">${sub.type}</span>
+            <div style="font-weight: 700; color: #0f172a; font-size: 13px; line-height: 1.35;">${sub.title}</div>
+            <div style="font-size: 11px; color: #64748b; margin-top: 3px;">
+              Loại hồ sơ: <span class="badge badge-purple" style="font-size: 10px; padding: 1px 6px;">${sub.type}</span>
             </div>
           </td>
           <td>
             <div style="font-weight: 600; color: #002B8C; font-size: 12px;">${sub.dept}</div>
             <div style="font-size: 11px; color: #15803d; margin-top: 2px;">
-              <i data-lucide="check" style="width: 11px; height: 11px; display: inline-block;"></i> Lãnh đạo Phòng đã thẩm tra đạt
+              <i data-lucide="check" style="width: 11px; height: 11px; display: inline-block;"></i> Lãnh đạo Phòng đã thẩm tra
             </div>
           </td>
           <td>
-            <span class="badge ${isUBNDAuthority ? 'badge-purple' : 'badge-info'}">
-              ${isUBNDAuthority ? 'Trình UBND tỉnh' : 'Giám đốc Sở ký duyệt'}
+            <span class="badge ${isUBNDAuthority ? 'badge-purple' : 'badge-info'}" style="font-size: 11px;">
+              ${isUBNDAuthority ? 'Trình UBND tỉnh' : 'Giám đốc Sở duyệt'}
             </span>
           </td>
-          <td><span style="font-family: monospace; font-size: 11.5px;">${sub.submittedDate}</span></td>
+          <td><span style="font-family: monospace; font-size: 11.5px; color: #475569;">${sub.submittedDate}</span></td>
           <td>
-            <span class="badge ${isApproved ? 'badge-success' : isSubmittedToUBND ? 'badge-info' : isRejected ? 'badge-danger' : 'badge-warning'}">
-              ${isApproved ? 'Đã phê duyệt nạp CSDL' : isSubmittedToUBND ? 'Đã ký Tờ trình gửi UBND' : isRejected ? 'Yêu cầu chỉnh lý' : 'Chờ Giám đốc Sở duyệt'}
+            <span class="badge ${isApproved ? 'badge-success' : isSubmittedToUBND ? 'badge-info' : isRejected ? 'badge-danger' : 'badge-warning'}" style="font-size: 11px;">
+              ${isApproved ? 'Đã duyệt nạp CSDL' : isSubmittedToUBND ? 'Đã ký trình UBND' : isRejected ? 'Yêu cầu chỉnh lý' : 'Chờ Giám đốc duyệt'}
             </span>
           </td>
-          <td style="text-align: center;">
-            <div style="display: flex; gap: 5px; justify-content: center; flex-wrap: wrap;">
-              <button class="btn btn-soft-primary btn-sm" onclick="DataEntryManager.viewSubmissionDetail('${sub.id}')" title="Xem chi tiết Tờ trình & Bảng số liệu đối soát">
-                <i data-lucide="eye"></i> Xem
+          <td style="text-align: center; vertical-align: middle; white-space: nowrap;">
+            <div style="display: inline-flex; align-items: center; justify-content: center; gap: 4px; white-space: nowrap; flex-wrap: nowrap;">
+              <button class="btn btn-outline btn-xs" onclick="DataEntryManager.viewSubmissionDetail('${sub.id}')" title="Xem chi tiết Tờ trình & Bảng số liệu đối soát" style="height: 26px; padding: 0 8px; font-size: 11px; display: inline-flex; align-items: center; gap: 3px;">
+                <i data-lucide="eye" style="width: 12px; height: 12px;"></i> Xem
               </button>
               
               ${isPending ? (
                 isUBNDAuthority ? `
-                  <button class="btn btn-primary btn-sm" onclick="DataEntryManager.signSubmitToUBND('${sub.id}')" title="Ký Tờ trình của Sở Tài chính gửi UBND tỉnh">
-                    <i data-lucide="send"></i> Ký trình UBND
+                  <button class="btn btn-primary btn-xs" onclick="DataEntryManager.signSubmitToUBND('${sub.id}')" title="Ký Tờ trình của Sở Tài chính gửi UBND tỉnh" style="height: 26px; padding: 0 8px; font-size: 11px; display: inline-flex; align-items: center; gap: 3px;">
+                    <i data-lucide="send" style="width: 12px; height: 12px;"></i> Trình UBND
                   </button>
                 ` : `
-                  <button class="btn btn-success btn-sm" onclick="DataEntryManager.approveSubmission('${sub.id}')" title="Phê duyệt chính thức & Nạp CSDL">
-                    <i data-lucide="check"></i> Phê duyệt
+                  <button class="btn btn-success btn-xs" onclick="DataEntryManager.approveSubmission('${sub.id}')" title="Phê duyệt chính thức & Nạp CSDL" style="height: 26px; padding: 0 8px; font-size: 11px; display: inline-flex; align-items: center; gap: 3px;">
+                    <i data-lucide="check" style="width: 12px; height: 12px;"></i> Duyệt
                   </button>
                 `
               ) : ''}
 
               ${isPending ? `
-                <button class="btn btn-danger btn-sm" onclick="DataEntryManager.rejectSubmission('${sub.id}')" title="Chuyển trả phòng chuyên môn kèm ý kiến chỉ đạo">
-                  <i data-lucide="rotate-ccw"></i> Trả lại
+                <button class="btn btn-danger btn-xs" onclick="DataEntryManager.rejectSubmission('${sub.id}')" title="Chuyển trả phòng chuyên môn kèm ý kiến chỉ đạo" style="height: 26px; padding: 0 8px; font-size: 11px; display: inline-flex; align-items: center; gap: 3px;">
+                  <i data-lucide="rotate-ccw" style="width: 12px; height: 12px;"></i> Trả lại
                 </button>
               ` : ''}
             </div>

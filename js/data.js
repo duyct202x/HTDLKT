@@ -1391,9 +1391,9 @@ const APP_DATA = {
   keyEnterprises: [
     { mst: "4200238910", name: "Tổng công ty Khánh Việt (KHATOCO)", revenue_contribution: 3620.5, sector: "Sản xuất thuốc lá & công nghiệp tiêu dùng", progress_pct: 104.2, status: "Đạt vượt kế hoạch" },
     { mst: "4200429779", name: "Công ty Yến Sào Khánh Hòa", revenue_contribution: 2180.0, sector: "Chế biến yến sào & dịch vụ du lịch", progress_pct: 101.8, status: "Đạt kế hoạch" },
-    { mst: "4500336688", name: "Tập đoàn Năng lượng Trung Nam (Thuận Bắc - Thuận Nam)", revenue_contribution: 1850.0, sector: "Năng lượng tái tạo & hạ tầng cảng Cà Ná", progress_pct: 106.5, status: "Đạt vượt kế hoạch" },
+    { mst: "4500336688", name: "Tập đoàn Năng lượng Trung Nam", revenue_contribution: 1850.0, sector: "Năng lượng tái tạo & hạ tầng cảng Cà Ná", progress_pct: 106.5, status: "Đạt vượt kế hoạch" },
     { mst: "4200789012", name: "Công ty Bia Sài Gòn - Nam Trung Bộ", revenue_contribution: 1450.0, sector: "Đồ uống & thực phẩm", progress_pct: 98.5, status: "Đang theo dõi" },
-    { mst: "4500123456", name: "Công ty CP Cảng Quốc tế Cà Ná (Thuận Nam)", revenue_contribution: 920.0, sector: "Logistics, cảng biển nước sâu & kho bãi", progress_pct: 103.4, status: "Đạt kế hoạch" },
+    { mst: "4500123456", name: "Công ty CP Cảng Quốc tế Cà Ná", revenue_contribution: 920.0, sector: "Logistics, cảng biển nước sâu & kho bãi", progress_pct: 103.4, status: "Đạt kế hoạch" },
     { mst: "4201123456", name: "Công ty CP Điện lực Khánh Hòa (PC Khánh Hòa)", revenue_contribution: 720.0, sector: "Năng lượng & truyền tải điện", progress_pct: 102.0, status: "Đạt kế hoạch" },
     { mst: "4200987654", name: "Công ty CP Thủy sản Nha Trang", revenue_contribution: 510.4, sector: "Chế biến thủy sản xuất khẩu", progress_pct: 96.2, status: "Đang theo dõi" },
     { mst: "4201345678", name: "Công ty CP Cảng Cam Ranh", revenue_contribution: 380.0, sector: "Logistics và cảng biển", progress_pct: 105.1, status: "Đạt vượt kế hoạch" }
