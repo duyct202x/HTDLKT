@@ -685,6 +685,64 @@
     border-radius: 14px !important;
   }
 
+  /* 5.6c. Luồng điều tiết ngân sách (Sankey Flow) Mobile Vertical Flow */
+  .sankey-flow-wrapper {
+    flex-direction: column !important;
+    gap: 10px !important;
+    padding: 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .sankey-col {
+    width: 100% !important;
+    flex: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  .sankey-col.center-col {
+    width: 100% !important;
+    flex: none !important;
+  }
+
+  .sankey-flow-arrow {
+    width: 100% !important;
+    height: 34px !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    margin: 2px 0 !important;
+  }
+
+  .sankey-flow-arrow .flow-line {
+    width: 48px !important;
+    height: 2px !important;
+    background: linear-gradient(90deg, transparent, #93c5fd, transparent) !important;
+  }
+
+  .sankey-flow-arrow .flow-icon-circle {
+    transform: rotate(90deg) !important;
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .sankey-card {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 10px 14px !important;
+  }
+
+  .sankey-center-card {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    height: auto !important;
+    min-height: auto !important;
+    padding: 16px 14px !important;
+  }
+
   /* 5.7. Tabs & Thanh điều hướng phân hệ */
   .sub-tabs-bar,
   .dept-tabs,
