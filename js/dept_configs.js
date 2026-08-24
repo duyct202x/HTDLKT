@@ -16,9 +16,9 @@ const DEPT_CONFIGS = {
     icon: 'layout-dashboard',
     role: 'DIRECTOR',
     stats: [
-      { label: 'Tổng thu ngân sách nhà nước', value: '18.520,6 tỷ đ', unit: 'Đạt 102,3% dự toán năm', trend: '+8,2% cùng kỳ', icon: 'receipt', color: 'emerald' },
-      { label: 'Giải ngân vốn đầu tư công', value: '7.850,4 tỷ đ', unit: 'Đạt 68,38% kế hoạch vốn', trend: '+12,4%', icon: 'hard-hat', color: 'gold' },
-      { label: 'Vốn FDI thu hút lũy kế', value: '485,6 tr USD', unit: '18 dự án cấp mới & tăng vốn', trend: '+15,1%', icon: 'globe', color: 'purple' },
+      { label: 'Tổng thu ngân sách nhà nước', value: '18.520,6 tỷ đồng', unit: 'Đạt 102,3% dự toán năm', trend: '+8,2% cùng kỳ', icon: 'receipt', color: 'emerald' },
+      { label: 'Giải ngân vốn đầu tư công', value: '7.850,4 tỷ đồng', unit: 'Đạt 68,38% kế hoạch vốn', trend: '+12,4%', icon: 'hard-hat', color: 'gold' },
+      { label: 'Vốn FDI thu hút lũy kế', value: '485,6 triệu USD', unit: '18 dự án cấp mới & tăng vốn', trend: '+15,1%', icon: 'globe', color: 'purple' },
       { label: 'Hồ sơ chờ phê duyệt', value: '6 hồ sơ', unit: 'Thẩm tra liên phòng ban', trend: 'Cần duyệt', icon: 'check-square', color: 'rose' }
     ]
   },
@@ -34,16 +34,16 @@ const DEPT_CONFIGS = {
     role: 'SPECIALIST',
     archiveVolume: '15.400 trang A4 / 2,0 mét',
     stats: [
-      { label: 'Dự toán thu NSNN 2026', value: '18.100 tỷ đ', unit: 'Chỉ tiêu HĐND giao', trend: 'Kế hoạch', icon: 'target', color: 'cyan' },
-      { label: 'Thực thu lũy kế', value: '18.520,6 tỷ đ', unit: 'Vượt 420,6 tỷ đ (102,3%)', trend: '+8,45%', icon: 'receipt', color: 'emerald' },
-      { label: 'Thu từ DN trọng điểm', value: '8.340,5 tỷ đ', unit: 'Khatoco, Yến Sào, Bia Sài Gòn', trend: '45,0% tổng thu', icon: 'award', color: 'gold' },
+      { label: 'Dự toán thu NSNN 2026', value: '18.100 tỷ đồng', unit: 'Chỉ tiêu HĐND giao', trend: 'Kế hoạch', icon: 'target', color: 'cyan' },
+      { label: 'Thực thu lũy kế', value: '18.520,6 tỷ đồng', unit: 'Vượt 420,6 tỷ đồng (102,3%)', trend: '+8,45%', icon: 'receipt', color: 'emerald' },
+      { label: 'Thu từ DN trọng điểm', value: '8.340,5 tỷ đồng', unit: 'Khatoco, Yến Sào, Bia Sài Gòn', trend: '45,0% tổng thu', icon: 'award', color: 'gold' },
       { label: 'Tiến độ nộp báo cáo', value: '30 / 34 đơn vị', unit: '88,2% hoàn thành', trend: '4 đơn vị chờ', icon: 'list-checks', color: 'purple' }
     ],
     keyTaxPayers: [
-      { mst: '4200238910', name: 'Tổng Công ty Khánh Việt (KHATOCO)', target: '3.500 tỷ đ', actual: '3.620,5 tỷ đ', rate: '103,4%', status: 'Vượt chỉ tiêu' },
-      { mst: '4200429779', name: 'Công ty Yến Sào Khánh Hòa', target: '2.100 tỷ đ', actual: '2.180,0 tỷ đ', rate: '103,8%', status: 'Vượt chỉ tiêu' },
-      { mst: '4200789012', name: 'Công ty Bia Sài Gòn - Nam Trung Bộ', target: '1.500 tỷ đ', actual: '1.450,0 tỷ đ', rate: '96,7%', status: 'Đang theo dõi' },
-      { mst: '4201123456', name: 'Công ty CP Điện lực Khánh Hòa', target: '700 tỷ đ', actual: '720,0 tỷ đ', rate: '102,8%', status: 'Đạt kế hoạch' }
+      { mst: '4200238910', name: 'Tổng Công ty Khánh Việt (KHATOCO)', target: '3.500 tỷ đồng', actual: '3.620,5 tỷ đồng', rate: '103,4%', status: 'Vượt chỉ tiêu' },
+      { mst: '4200429779', name: 'Công ty Yến Sào Khánh Hòa', target: '2.100 tỷ đồng', actual: '2.180,0 tỷ đồng', rate: '103,8%', status: 'Vượt chỉ tiêu' },
+      { mst: '4200789012', name: 'Công ty Bia Sài Gòn - Nam Trung Bộ', target: '1.500 tỷ đồng', actual: '1.450,0 tỷ đồng', rate: '96,7%', status: 'Đang theo dõi' },
+      { mst: '4201123456', name: 'Công ty CP Điện lực Khánh Hòa', target: '700 tỷ đồng', actual: '720,0 tỷ đồng', rate: '102,8%', status: 'Đạt kế hoạch' }
     ]
   },
 
@@ -58,16 +58,16 @@ const DEPT_CONFIGS = {
     role: 'SPECIALIST',
     archiveVolume: '55,8 mét (chỉnh lý và số hóa)',
     stats: [
-      { label: 'Dự án trong kế hoạch', value: '186 dự án', unit: 'Tổng vốn: 11.480 tỷ đ', trend: 'Đang theo dõi', icon: 'hard-hat', color: 'gold' },
-      { label: 'Đã giải ngân lũy kế', value: '7.850,4 tỷ đ', unit: '68,38% kế hoạch vốn', trend: '+6,2% tuần', icon: 'trending-up', color: 'emerald' },
+      { label: 'Dự án trong kế hoạch', value: '186 dự án', unit: 'Tổng vốn: 11.480 tỷ đồng', trend: 'Đang theo dõi', icon: 'hard-hat', color: 'gold' },
+      { label: 'Đã giải ngân lũy kế', value: '7.850,4 tỷ đồng', unit: '68,38% kế hoạch vốn', trend: '+6,2% tuần', icon: 'trending-up', color: 'emerald' },
       { label: 'Dự án trọng điểm tỉnh', value: '16 dự án', unit: 'Đường ven biển, cảng, kè', trend: 'Real-time', icon: 'star', color: 'cyan' },
       { label: 'Dự án chậm giải ngân', value: '5 dự án', unit: 'Giải ngân dưới 50%', trend: 'Cảnh báo', icon: 'shuffle', color: 'rose' }
     ],
     projects: [
-      { id: 'DA-DTC-001', name: 'Đường Vành đai 2 Nha Trang (giai đoạn 2)', owner: 'Ban QLDA Giao thông Khánh Hòa', budget: '1.450 tỷ đ', disbursed: '1.120 tỷ đ', rate: '77,2%', status: 'Đúng tiến độ' },
-      { id: 'DA-DTC-002', name: 'Kè chống sạt lở bờ sông Cái Nha Trang', owner: 'Ban QLDA Nông nghiệp và PTNT', budget: '620 tỷ đ', disbursed: '480 tỷ đ', rate: '77,4%', status: 'Đúng tiến độ' },
-      { id: 'DA-DTC-003', name: 'Trung tâm Kiểm soát bệnh tật (CDC) tỉnh', owner: 'Ban QLDA Dân dụng và Công nghiệp', budget: '280 tỷ đ', disbursed: '190 tỷ đ', rate: '67,8%', status: 'Đang hoàn thiện' },
-      { id: 'DA-DTC-004', name: 'Hạ tầng CNTT chuyển đổi số kinh tế tỉnh', owner: 'Sở Thông tin và Truyền thông', budget: '150 tỷ đ', disbursed: '125 tỷ đ', rate: '83,3%', status: 'Vận hành' }
+      { id: 'DA-DTC-001', name: 'Đường Vành đai 2 Nha Trang (giai đoạn 2)', owner: 'Ban QLDA Giao thông Khánh Hòa', budget: '1.450 tỷ đồng', disbursed: '1.120 tỷ đồng', rate: '77,2%', status: 'Đúng tiến độ' },
+      { id: 'DA-DTC-002', name: 'Kè chống sạt lở bờ sông Cái Nha Trang', owner: 'Ban QLDA Nông nghiệp và PTNT', budget: '620 tỷ đồng', disbursed: '480 tỷ đồng', rate: '77,4%', status: 'Đúng tiến độ' },
+      { id: 'DA-DTC-003', name: 'Trung tâm Kiểm soát bệnh tật (CDC) tỉnh', owner: 'Ban QLDA Dân dụng và Công nghiệp', budget: '280 tỷ đồng', disbursed: '190 tỷ đồng', rate: '67,8%', status: 'Đang hoàn thiện' },
+      { id: 'DA-DTC-004', name: 'Hạ tầng CNTT chuyển đổi số kinh tế tỉnh', owner: 'Sở Thông tin và Truyền thông', budget: '150 tỷ đồng', disbursed: '125 tỷ đồng', rate: '83,3%', status: 'Vận hành' }
     ]
   },
 
@@ -83,15 +83,15 @@ const DEPT_CONFIGS = {
     archiveVolume: '117,0 mét (900.900 trang A4)',
     stats: [
       { label: 'Dự án đang theo dõi', value: '142 dự án', unit: 'Bao gồm 38 dự án FDI', trend: '+12 mới', icon: 'building-2', color: 'cyan' },
-      { label: 'Tổng vốn đăng ký', value: '86.450 tỷ đ', unit: '3,45 tỷ USD quy đổi', trend: '+18,5%', icon: 'coins', color: 'emerald' },
+      { label: 'Tổng vốn đăng ký', value: '86.450 tỷ đồng', unit: '3,45 tỷ USD quy đổi', trend: '+18,5%', icon: 'coins', color: 'emerald' },
       { label: 'Dự án đang xây dựng', value: '48 dự án', unit: 'Đúng cam kết tiến độ', trend: 'Ổn định', icon: 'activity', color: 'gold' },
       { label: 'Dự án chậm tiến độ', value: '9 dự án', unit: 'Cần đôn đốc xử lý', trend: 'Cảnh báo', icon: 'alert-triangle', color: 'rose' }
     ],
     projects: [
-      { id: 'DA-NNS-001', name: 'Khu đô thị sinh thái Bắc Cam Ranh', investor: 'Tập đoàn Phát triển Đô thị Khánh Hòa', capital: '4.850 tỷ đ', status: 'Đang GPMB', land: '125,4 ha', progress: '35%' },
-      { id: 'DA-NNS-002', name: 'Tổ hợp nghỉ dưỡng và sân golf Vĩnh Hy', investor: 'Công ty CP Đầu tư Biển Xanh', capital: '3.200 tỷ đ', status: 'Xây dựng hạ tầng', land: '88,0 ha', progress: '62%' },
-      { id: 'DA-NNS-003', name: 'Nhà máy chế biến thủy sản FDI', investor: 'Maruha Nichiro Corporation (Nhật Bản)', capital: '1.450 tỷ đ (58 tr USD)', status: 'Chuẩn bị vận hành', land: '15,2 ha', progress: '94%' },
-      { id: 'DA-NNS-004', name: 'Khu du lịch Hòn Tằm mở rộng', investor: 'Công ty CP Hòn Tằm Biển Nha Trang', capital: '980 tỷ đ', status: 'Thủ tục đất đai', land: '22,5 ha', progress: '20%' }
+      { id: 'DA-NNS-001', name: 'Khu đô thị sinh thái Bắc Cam Ranh', investor: 'Tập đoàn Phát triển Đô thị Khánh Hòa', capital: '4.850 tỷ đồng', status: 'Đang GPMB', land: '125,4 ha', progress: '35%' },
+      { id: 'DA-NNS-002', name: 'Tổ hợp nghỉ dưỡng và sân golf Vĩnh Hy', investor: 'Công ty CP Đầu tư Biển Xanh', capital: '3.200 tỷ đồng', status: 'Xây dựng hạ tầng', land: '88,0 ha', progress: '62%' },
+      { id: 'DA-NNS-003', name: 'Nhà máy chế biến thủy sản FDI', investor: 'Maruha Nichiro Corporation (Nhật Bản)', capital: '1.450 tỷ đồng (58 triệu USD)', status: 'Chuẩn bị vận hành', land: '15,2 ha', progress: '94%' },
+      { id: 'DA-NNS-004', name: 'Khu du lịch Hòn Tằm mở rộng', investor: 'Công ty CP Hòn Tằm Biển Nha Trang', capital: '980 tỷ đồng', status: 'Thủ tục đất đai', land: '22,5 ha', progress: '20%' }
     ]
   },
 
@@ -112,9 +112,9 @@ const DEPT_CONFIGS = {
       { label: 'Doanh nghiệp rủi ro', value: '185 DN', unit: 'ROA âm & nợ thuế đất', trend: 'Cảnh báo', icon: 'alert-triangle', color: 'rose' }
     ],
     companies: [
-      { mst: '4201889922', name: 'Công ty CP Năng lượng Tái tạo Khánh Hòa', capital: '850 tỷ đ', revenue: '340 tỷ đ', roa: '8,5%', roe: '14,2%', risk: 'An toàn' },
-      { mst: '4201993344', name: 'Công ty TNHH Logistics Nam Cam Ranh', capital: '220 tỷ đ', revenue: '95 tỷ đ', roa: '4,2%', roe: '7,8%', risk: 'Trung bình' },
-      { mst: '4201662211', name: 'Công ty CP Xây dựng và Thương mại Hải Vân', capital: '150 tỷ đ', revenue: '42 tỷ đ', roa: '-3,1%', roe: '-6,5%', risk: 'Cảnh báo rủi ro' }
+      { mst: '4201889922', name: 'Công ty CP Năng lượng Tái tạo Khánh Hòa', capital: '850 tỷ đồng', revenue: '340 tỷ đồng', roa: '8,5%', roe: '14,2%', risk: 'An toàn' },
+      { mst: '4201993344', name: 'Công ty TNHH Logistics Nam Cam Ranh', capital: '220 tỷ đồng', revenue: '95 tỷ đồng', roa: '4,2%', roe: '7,8%', risk: 'Trung bình' },
+      { mst: '4201662211', name: 'Công ty CP Xây dựng và Thương mại Hải Vân', capital: '150 tỷ đồng', revenue: '42 tỷ đồng', roa: '-3,1%', roe: '-6,5%', risk: 'Cảnh báo rủi ro' }
     ]
   },
 
@@ -154,13 +154,13 @@ const DEPT_CONFIGS = {
     stats: [
       { label: 'Đơn vị sự nghiệp công lập', value: '542 đơn vị', unit: 'Giáo dục, y tế, văn hóa', trend: '100% giao tự chủ', icon: 'graduation-cap', color: 'cyan' },
       { label: 'Đơn vị tự chủ chi TX', value: '68 đơn vị', unit: 'Tiết kiệm ngân sách tỉnh', trend: '+12 đơn vị', icon: 'trending-up', color: 'emerald' },
-      { label: 'Kinh phí chi thường xuyên', value: '7.180 tỷ đ', unit: 'Dự toán năm 2026', trend: 'Đúng định mức', icon: 'wallet', color: 'gold' },
+      { label: 'Kinh phí chi thường xuyên', value: '7.180 tỷ đồng', unit: 'Dự toán năm 2026', trend: 'Đúng định mức', icon: 'wallet', color: 'gold' },
       { label: 'Đã duyệt quyết toán năm', value: '495 / 542 đơn vị', unit: '91,3% tiến độ', trend: '47 đang thẩm tra', icon: 'check-circle', color: 'purple' }
     ],
     units: [
-      { id: 'HCSN-01', name: 'Bệnh viện Đa khoa tỉnh Khánh Hòa', group: 'Nhóm 2 (Tự chủ chi TX)', staff: '1.250 người', revenue: '480 tỷ đ/năm', budget_support: '0 đ' },
-      { id: 'HCSN-02', name: 'Trường Đại học Khánh Hòa', group: 'Nhóm 2 (Tự chủ chi TX)', staff: '280 người', revenue: '95 tỷ đ/năm', budget_support: '12 tỷ đ' },
-      { id: 'HCSN-03', name: 'Trung tâm Bảo trợ xã hội tỉnh', group: 'Nhóm 4 (Nhà nước bảo đảm)', staff: '45 người', revenue: '0 đ', budget_support: '8,5 tỷ đ' }
+      { id: 'HCSN-01', name: 'Bệnh viện Đa khoa tỉnh Khánh Hòa', group: 'Nhóm 2 (Tự chủ chi TX)', staff: '1.250 người', revenue: '480 tỷ đồng/năm', budget_support: '0 đồng' },
+      { id: 'HCSN-02', name: 'Trường Đại học Khánh Hòa', group: 'Nhóm 2 (Tự chủ chi TX)', staff: '280 người', revenue: '95 tỷ đồng/năm', budget_support: '12 tỷ đồng' },
+      { id: 'HCSN-03', name: 'Trung tâm Bảo trợ xã hội tỉnh', group: 'Nhóm 4 (Nhà nước bảo đảm)', staff: '45 người', revenue: '0 đồng', budget_support: '8,5 tỷ đồng' }
     ]
   },
 
@@ -175,8 +175,8 @@ const DEPT_CONFIGS = {
     role: 'SPECIALIST',
     archiveVolume: 'CSDL theo dõi thi hành pháp luật, xử phạt VPHC, đơn thư khiếu nại tố cáo và VBQPPL tài chính',
     stats: [
-      { label: 'Quyết định xử phạt VPHC', value: '42 QĐ', unit: 'Tổng tiền phạt: 2.450 tr đ', trend: 'Giá, hóa đơn, kế toán', icon: 'gavel', color: 'emerald' },
-      { label: 'Số tiền đã nộp phạt KBNN', value: '2.180 tr đ', unit: 'Thu hồi nộp NS: 89%', trend: 'Đúng tiến độ', icon: 'check-circle-2', color: 'cyan' },
+      { label: 'Quyết định xử phạt VPHC', value: '42 QĐ', unit: 'Tổng tiền phạt: 2.450 triệu đồng', trend: 'Giá, hóa đơn, kế toán', icon: 'gavel', color: 'emerald' },
+      { label: 'Số tiền đã nộp phạt KBNN', value: '2.180 triệu đồng', unit: 'Thu hồi nộp NS: 89%', trend: 'Đúng tiến độ', icon: 'check-circle-2', color: 'cyan' },
       { label: 'Đơn thư khiếu nại, tố cáo', value: '28 đơn', unit: 'Đã xử lý: 26 đơn (92,8%)', trend: '100% đúng hạn', icon: 'clipboard-check', color: 'gold' },
       { label: 'Văn bản QPPL hệ thống hóa', value: '342 VB', unit: '186 NQ HĐND & 156 QĐ UBND', trend: 'Đang hiệu lực', icon: 'file-text', color: 'purple' }
     ],

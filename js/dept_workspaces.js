@@ -811,6 +811,26 @@ const DeptWorkspaceManager = {
           const trendIcon = isUp ? 'trending-up' : isAlert ? 'alert-triangle' : 'activity';
           const trendClass = isAlert ? 'trend-alert' : 'trend-positive';
 
+          // Chuẩn hóa và định dạng đơn vị tiền tệ rõ ràng, sang trọng
+          let valDisplay = String(s.value || '')
+            .replace(/tỷ\s*(?:đồngồng|đồng|đ)/gi, 'tỷ đồng')
+            .replace(/(?:triệu|tr)\s*(?:đồngồng|đồng|đ)/gi, 'triệu đồng')
+            .replace(/(?:triệu|tr)\s*USD/gi, 'triệu USD')
+            .replace(/tỷ\s*USD/gi, 'tỷ USD')
+            .replace(/đồngồng+/gi, 'đồng');
+
+          let unitDisplay = String(s.unit || '')
+            .replace(/tỷ\s*(?:đồngồng|đồng|đ)/gi, 'tỷ đồng')
+            .replace(/(?:triệu|tr)\s*(?:đồngồng|đồng|đ)/gi, 'triệu đồng')
+            .replace(/(?:triệu|tr)\s*USD/gi, 'triệu USD')
+            .replace(/tỷ\s*USD/gi, 'tỷ USD')
+            .replace(/đồngồng+/gi, 'đồng');
+
+          const valMatch = valDisplay.match(/^([\d.,\s/+\-%]+)\s+(.+)$/);
+          const formattedMetricHtml = (valMatch && valMatch[2])
+            ? `<span class="metric-val">${valMatch[1].trim()}</span> <span class="metric-unit">${valMatch[2].trim()}</span>`
+            : `<span class="metric-val">${valDisplay}</span>`;
+
           return `
             <div class="kpi-card">
               <div class="kpi-top-row">
@@ -820,10 +840,10 @@ const DeptWorkspaceManager = {
                 </div>
               </div>
               
-              <div class="kpi-main-metric">${s.value}</div>
+              <div class="kpi-main-metric">${formattedMetricHtml}</div>
 
               <div class="kpi-footer-row">
-                <span class="kpi-context-text" title="${s.unit}">${s.unit}</span>
+                <span class="kpi-context-text" title="${unitDisplay}">${unitDisplay}</span>
                 ${s.trend ? `
                   <span class="kpi-trend-pill ${trendClass}">
                     <i data-lucide="${trendIcon}"></i> ${s.trend}

@@ -188,7 +188,7 @@ const AdvancedVizManager = {
         labels: weeks,
         datasets: [
           {
-            label: 'Kế hoạch vốn giao đầu năm (Tỷ đ)',
+            label: 'Kế hoạch vốn giao đầu năm (Tỷ đồng)',
             data: [1200, 2400, 3900, 5200, 6800, 8500, 10200, 11800, 13400, 14800, 15800, 16240],
             borderColor: '#94a3b8',
             borderDash: [5, 5],
@@ -226,7 +226,7 @@ const AdvancedVizManager = {
           legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11, family: "'Be Vietnam Pro', sans-serif" } } },
           tooltip: {
             callbacks: {
-              label: (ctx) => ` ${ctx.dataset.label}: ${ctx.raw ? ctx.raw.toLocaleString('vi-VN') + ' Tỷ đ' : 'Chưa đến kỳ'}`
+              label: (ctx) => ` ${ctx.dataset.label}: ${ctx.raw ? ctx.raw.toLocaleString('vi-VN') + ' Tỷ đồng' : 'Chưa đến kỳ'}`
             }
           }
         },
