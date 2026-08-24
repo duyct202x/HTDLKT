@@ -631,50 +631,52 @@ const MdmCatalogManager = {
           </div>
         </div>
 
-        <!-- 26 TABLES MASTER DIRECTORY -->
-        <div class="table-responsive">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th style="width: 40px;">STT</th>
-                <th style="width: 190px;">Mã Bảng Master Data</th>
-                <th style="min-width: 240px;">Tên Bảng Dữ Liệu Chủ</th>
-                <th>Nhóm Nghiệp Vụ</th>
-                <th>Cơ Quan Cung Cấp / CSDL Nguồn</th>
-                <th style="text-align: right;">Số Bản Ghi</th>
-                <th>Tần Suất Nạp</th>
-                <th>Bảo Vệ DDM</th>
-                <th style="width: 110px; text-align: center;">Thao Tác</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${tables.map((t, idx) => `
+        <!-- 26 TABLES MASTER DIRECTORY CHUẨN BIG DATA TABLE UX -->
+        <div class="table-fullscreen-wrapper" id="wrapper_mdm_catalog_list">
+          ${DeptWorkspaceManager.renderAdminTableToolbar('wrapper_mdm_catalog_list', 'table_mdm_catalog_list', 'Danh bạ 26 Bảng Dữ liệu chủ (MDM) tỉnh Khánh Hòa')}
+          <div class="table-scroll-container">
+            <table class="data-table freeze-first" id="table_mdm_catalog_list">
+              <thead>
                 <tr>
-                  <td style="text-align: center; color: #94a3b8; font-size: 11px;">${idx + 1}</td>
-                  <td><code style="font-weight: 700; color: #0284c7; font-size: 11px;">${t.code}</code></td>
-                  <td>
-                    <div style="font-weight: 700; color: var(--text-pure); font-size: 13px;">${t.name}</div>
-                    <div style="font-size: 11px; color: #64748b;">${t.description}</div>
-                  </td>
-                  <td><span class="badge badge-purple" style="font-size: 10px;">${t.group}</span></td>
-                  <td style="font-size: 11.5px; color: #334155;">${t.provider}</td>
-                  <td style="text-align: right; font-weight: 700; color: #15803d;">${t.recordsCount}</td>
-                  <td style="font-size: 11px; color: #64748b;">${t.frequency}</td>
-                  <td>
-                    <span class="badge ${t.ddmMasked.includes('Masked') ? 'badge-warning' : 'badge-info'}" style="font-size: 9.5px;">
-                      ${t.ddmMasked}
-                    </span>
-                  </td>
-                  <td style="text-align: center;">
-                    <button class="btn btn-primary btn-sm" onclick="MdmCatalogManager.viewTableDetail('${t.code}')" style="padding: 4px 8px; font-size: 11px;">
-                      <i data-lucide="eye"></i> Xem Schema
-                    </button>
-                  </td>
+                  <th style="width: 40px;">STT</th>
+                  <th style="width: 190px;">Mã Bảng Master Data</th>
+                  <th style="min-width: 240px;">Tên Bảng Dữ Liệu Chủ</th>
+                  <th>Nhóm Nghiệp Vụ</th>
+                  <th>Cơ Quan Cung Cấp / CSDL Nguồn</th>
+                  <th style="text-align: right;">Số Bản Ghi</th>
+                  <th>Tần Suất Nạp</th>
+                  <th>Bảo Vệ DDM</th>
+                  <th style="width: 110px; text-align: center;">Thao Tác</th>
                 </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                ${tables.map((t, idx) => `
+                  <tr>
+                    <td style="text-align: center; color: #94a3b8; font-size: 11px;">${idx + 1}</td>
+                    <td><code style="font-weight: 700; color: #0284c7; font-size: 11px;">${t.code}</code></td>
+                    <td>
+                      <div style="font-weight: 700; color: var(--text-pure); font-size: 13px;">${t.name}</div>
+                      <div style="font-size: 11px; color: #64748b;">${t.description}</div>
+                    </td>
+                    <td><span class="badge badge-purple" style="font-size: 10px;">${t.group}</span></td>
+                    <td style="font-size: 11.5px; color: #334155;">${t.provider}</td>
+                    <td style="text-align: right; font-weight: 700; color: #15803d;">${t.recordsCount}</td>
+                    <td style="font-size: 11px; color: #64748b;">${t.frequency}</td>
+                    <td>
+                      <span class="badge ${t.ddmMasked.includes('Masked') ? 'badge-warning' : 'badge-info'}" style="font-size: 9.5px;">
+                        ${t.ddmMasked}
+                      </span>
+                    </td>
+                    <td style="text-align: center;">
+                      <button class="btn btn-primary btn-sm" onclick="MdmCatalogManager.viewTableDetail('${t.code}')" style="padding: 4px 8px; font-size: 11px;">
+                        <i data-lucide="eye"></i> Schema
+                      </button>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
       </div>
     `;
   },
@@ -775,13 +777,11 @@ const MdmCatalogManager = {
           </div>
         </div>
 
-        <!-- 2. DỮ LIỆU MẪU (SAMPLE DATA) -->
-        <div>
-          <h4 style="font-size: 13.5px; font-weight: 700; color: #0f172a; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-            <i data-lucide="table" style="color: #10b981; width: 16px; height: 16px;"></i> 2. Trích Xuất Dữ Liệu Mẫu (Sample Records Extracted)
-          </h4>
+        <!-- 2. DỮ LIỆU MẪU (SAMPLE DATA) CHUẨN BIG DATA TABLE UX -->
+        <div class="table-fullscreen-wrapper" id="wrapper_mdm_sample_records">
+          ${DeptWorkspaceManager.renderAdminTableToolbar('wrapper_mdm_sample_records', 'table_mdm_sample_records', 'Trích xuất Dữ liệu mẫu - ' + table.name)}
           <div class="table-scroll-container">
-            <table class="data-table freeze-first">
+            <table class="data-table freeze-first" id="table_mdm_sample_records">
               <thead>
                 <tr>
                   ${table.schema.slice(0, 7).map(c => `

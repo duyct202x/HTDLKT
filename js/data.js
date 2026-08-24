@@ -1,7 +1,68 @@
 /**
  * HỆ THỐNG DỮ LIỆU KINH TẾ TỈNH KHÁNH HÒA
- * MÔ HÌNH DỮ LIỆU & BỘ DỮ LIỆU MẪU CHUẨN NGHIỆP VỤ SỞ TÀI CHÍNH
+ * GLOBAL STATE STORE & EVENT BUS (Single Source of Truth)
  */
+const AppState = {
+  state: {
+    year: '2026',
+    period: 'all',
+    deptId: 'lanhdao',
+    region: 'all',
+    sector: 'all',
+    query: '',
+    activeProjectId: null,
+    activeDistrict: null,
+    mdmCache: {},
+    tableControls: {
+      stickyCol: false,
+      isFullscreen: false
+    }
+  },
+  listeners: {},
+
+  get(key) {
+    return key ? this.state[key] : this.state;
+  },
+
+  set(key, value, silent = false) {
+    if (this.state[key] === value) return;
+    this.state[key] = value;
+    if (!silent) {
+      this.emit(key, value);
+    }
+  },
+
+  update(obj, silent = false) {
+    Object.assign(this.state, obj);
+    if (!silent) {
+      Object.keys(obj).forEach(k => this.emit(k, obj[k]));
+    }
+  },
+
+  subscribe(key, callback) {
+    if (!this.listeners[key]) {
+      this.listeners[key] = [];
+    }
+    this.listeners[key].push(callback);
+    return () => {
+      this.listeners[key] = this.listeners[key].filter(fn => fn !== callback);
+    };
+  },
+
+  emit(key, value) {
+    if (this.listeners[key]) {
+      this.listeners[key].forEach(fn => {
+        try { fn(value, this.state); } catch (e) { console.error('AppState listener error:', e); }
+      });
+    }
+    if (this.listeners['*']) {
+      this.listeners['*'].forEach(fn => {
+        try { fn(key, value, this.state); } catch (e) { console.error('AppState wildcard error:', e); }
+      });
+    }
+  }
+};
+window.AppState = AppState;
 
 const APP_DATA = {
   // 1. Chỉ số Kinh tế Vĩ mô Tỉnh Khánh Hòa

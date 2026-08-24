@@ -337,7 +337,7 @@ window.GisMapManager = {
     return '#0F52BA';
   },
 
-  // 5. Cập nhật thông tin chi tiết địa bàn lên sidebar
+  // 5. Cập nhật thông tin chi tiết địa bàn lên sidebar và đồng bộ bộ lọc
   selectDistrict(districtId) {
     const geoData = window.khanhHoa65UnitsGeoJson || window.khanhHoaRealGeoJson;
     if (!geoData) return;
@@ -355,7 +355,16 @@ window.GisMapManager = {
     if (dtcEl) dtcEl.innerText = `${d.dtc_rate}% (${d.dtc_amount})`;
     if (projEl) projEl.innerText = `${d.enterprises.toLocaleString('vi-VN')} DN/Hộ KD (K = ${d.land_k})`;
 
-    App.showNotification(`Đã chọn: ${d.name} (${d.type} trực thuộc tỉnh)`, 'info');
+    // ĐỒNG BỘ 2 CHIỀU: Đẩy thông tin sang AppState & kích hoạt bộ lọc bảng dữ liệu
+    if (window.AppState) {
+      AppState.set('region', districtId);
+      AppState.set('activeDistrict', d);
+    }
+    if (window.DeptWorkspaceManager && typeof DeptWorkspaceManager.applyRegionFilter === 'function') {
+      DeptWorkspaceManager.applyRegionFilter(districtId);
+    }
+
+    App.showNotification(`Đã liên kết dữ liệu bản đồ: ${d.name} (${d.type} trực thuộc tỉnh)`, 'info');
   },
 
   // 6. Lọc hiển thị theo loại đơn vị hành chính
@@ -369,7 +378,7 @@ window.GisMapManager = {
     App.showNotification(`Đang lọc hiển thị: ${label}`, 'info');
   },
 
-  // 7. Đặt lại góc nhìn toàn tỉnh
+  // 7. Đặt lại góc nhìn toàn tỉnh & Xóa bộ lọc địa bàn
   resetView(containerId) {
     this.activeFilter = 'all';
     document.querySelectorAll('.gis-filter-btn').forEach(b => b.classList.remove('active'));
@@ -379,6 +388,9 @@ window.GisMapManager = {
     const map = this.maps[containerId];
     if (map) {
       map.flyTo([11.95, 109.00], 8.5);
+      if (window.DeptWorkspaceManager && typeof DeptWorkspaceManager.applyRegionFilter === 'function') {
+        DeptWorkspaceManager.applyRegionFilter('all');
+      }
       App.showNotification("Đã đặt lại góc nhìn toàn bộ 65 đơn vị cấp xã tỉnh Khánh Hòa", "info");
     }
   },
@@ -398,7 +410,78 @@ window.GisMapManager = {
     }
   },
 
-  // 9. Kích hoạt hiệu ứng Radar Pulse thời gian thực
+  // 9. TƯƠNG TÁC 2 CHIỀU BẢNG ➔ BẢN ĐỒ (Highlight & Zoom dự án)
+  highlightProject(projectId) {
+    const project = (APP_DATA && APP_DATA.investmentProjects) ? APP_DATA.investmentProjects.find(p => p.id === projectId) : null;
+    if (!project) return;
+
+    const activeMapId = Object.keys(this.maps)[0];
+    const map = activeMapId ? this.maps[activeMapId] : null;
+    if (!map) return;
+
+    const projCoords = {
+      'DA_DTC_01': [12.245, 109.185], // Nút giao Ngọc Hội - Nha Trang
+      'DA_DTC_02': [12.235, 109.165], // Đường Vành đai 2 Nha Trang
+      'DA_DTC_03': [12.250, 109.190], // Bệnh viện Ung bướu
+      'DA_DTC_04': [11.890, 109.140], // Đường liên vùng Cam Ranh
+      'DA_DTC_05': [12.690, 109.220], // Tuyến ven biển Vạn Ninh (Vân Phong)
+      'DA_DTC_06': [11.330, 108.880], // Tuyến giao thông kết nối Cà Ná
+      'DA_DTC_07': [10.500, 114.800]  // Cảng cá Đặc khu Trường Sa
+    };
+
+    const center = projCoords[projectId] || [12.245, 109.185];
+
+    this.resetHighlight();
+
+    const highlightIcon = L.divIcon({
+      className: 'gis-project-highlight-marker',
+      html: `
+        <div class="gis-project-pin-animated">
+          <div class="pin-icon"><i data-lucide="hard-hat"></i></div>
+          <div class="pin-sonar-ring"></div>
+        </div>
+      `,
+      iconSize: [36, 36],
+      iconAnchor: [18, 18]
+    });
+
+    this.currentProjectHighlight = L.marker(center, { icon: highlightIcon, zIndexOffset: 1000 }).addTo(map);
+    if (window.lucide) window.lucide.createIcons();
+
+    const popupHtml = `
+      <div style="font-family: 'Be Vietnam Pro', sans-serif; min-width: 220px; padding: 2px;">
+        <div style="font-size: 10px; font-weight: 700; color: #002B8C; text-transform: uppercase;">${project.code || projectId}</div>
+        <div style="font-size: 13px; font-weight: 700; color: #0f172a; margin: 2px 0 4px 0;">${project.name}</div>
+        <div style="font-size: 11.5px; color: #64748b;">Chủ đầu tư: <strong>${project.owner}</strong></div>
+        <div style="font-size: 11.5px; color: #15803d; margin-top: 4px;">
+          Tổng mức vốn: <strong>${project.totalInvestment} Tỷ</strong> • Giải ngân: <strong>${project.disbursedRate}%</strong>
+        </div>
+      </div>
+    `;
+    this.currentProjectHighlight.bindPopup(popupHtml).openPopup();
+  },
+
+  resetHighlight() {
+    const activeMapId = Object.keys(this.maps)[0];
+    const map = activeMapId ? this.maps[activeMapId] : null;
+    if (map && this.currentProjectHighlight) {
+      try {
+        map.removeLayer(this.currentProjectHighlight);
+      } catch (e) {}
+      this.currentProjectHighlight = null;
+    }
+  },
+
+  focusProject(projectId) {
+    this.highlightProject(projectId);
+    const activeMapId = Object.keys(this.maps)[0];
+    const map = activeMapId ? this.maps[activeMapId] : null;
+    if (map && this.currentProjectHighlight) {
+      map.flyTo(this.currentProjectHighlight.getLatLng(), 13, { animate: true, duration: 0.8 });
+    }
+  },
+
+  // 10. Kích hoạt hiệu ứng Radar Pulse thời gian thực
   triggerRealtimeMarker(containerId, districtCode, eventData) {
     const map = this.maps[containerId];
     const geoData = window.khanhHoa65UnitsGeoJson || window.khanhHoaRealGeoJson;

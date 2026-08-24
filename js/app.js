@@ -15,6 +15,50 @@ const App = {
   init() {
     DeptWorkspaceManager.init();
     this.initResponsiveSidebar();
+    this.initIconObserver();
+    this.refreshIcons();
+  },
+
+  refreshIcons() {
+    if (window.lucide && typeof window.lucide.createIcons === 'function') {
+      try {
+        window.lucide.createIcons();
+      } catch (err) {
+        console.warn('Lucide icon rendering warning:', err);
+      }
+    }
+  },
+
+  initIconObserver() {
+    // Tự động quét và vẽ icon cho mọi phần tử DOM được thêm mới động
+    let timeout = null;
+    const observer = new MutationObserver((mutations) => {
+      let hasNewIcons = false;
+      for (const m of mutations) {
+        if (m.addedNodes.length > 0) {
+          for (const node of m.addedNodes) {
+            if (node.nodeType === 1) { // ELEMENT_NODE
+              if (node.hasAttribute('data-lucide') || node.querySelector('[data-lucide]')) {
+                hasNewIcons = true;
+                break;
+              }
+            }
+          }
+        }
+        if (hasNewIcons) break;
+      }
+      if (hasNewIcons) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          this.refreshIcons();
+        }, 30);
+      }
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
   },
 
   initResponsiveSidebar() {
@@ -25,13 +69,17 @@ const App = {
     const openSidebar = () => {
       if (sidebar) sidebar.classList.add('mobile-open');
       if (backdrop) backdrop.classList.add('active');
+      if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'true');
       document.body.style.overflow = 'hidden';
+      this.refreshIcons();
     };
 
     const closeSidebar = () => {
       if (sidebar) sidebar.classList.remove('mobile-open');
       if (backdrop) backdrop.classList.remove('active');
+      if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
       document.body.style.overflow = '';
+      this.refreshIcons();
     };
 
     if (toggleBtn) {
@@ -89,7 +137,6 @@ const App = {
     toast.className = `card`;
     toast.style.padding = '12px 18px';
     toast.style.minWidth = '280px';
-    toast.style.boxShadow = '0 10px 30px rgba(0,0,0,0.5)';
     toast.style.border = type === 'success' ? '1px solid #bbf7d0' : type === 'warning' ? '1px solid #fef08a' : '1px solid #bfdbfe';
     toast.style.background = '#ffffff';
     toast.style.boxShadow = '0 10px 25px -5px rgba(15, 23, 42, 0.15)';
@@ -108,7 +155,7 @@ const App = {
     `;
 
     container.appendChild(toast);
-    if (window.lucide) window.lucide.createIcons();
+    this.refreshIcons();
 
     setTimeout(() => {
       toast.style.opacity = '0';
@@ -121,13 +168,14 @@ const App = {
     const modal = document.getElementById(modalId);
     if (modal) {
       modal.classList.add('active');
-      if (window.lucide) window.lucide.createIcons();
+      this.refreshIcons();
     }
   },
 
   closeModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) modal.classList.remove('active');
+    this.refreshIcons();
   }
 };
 
@@ -141,7 +189,7 @@ document.addEventListener('keydown', (e) => {
       const btn = fullscreenTable.querySelector('.btn-fullscreen-toggle');
       if (btn) {
         btn.innerHTML = `<i data-lucide="maximize-2"></i> <span>Toàn màn hình</span>`;
-        if (window.lucide) window.lucide.createIcons();
+        App.refreshIcons();
       }
       App.showNotification('Đã thoát chế độ toàn màn hình', 'info');
     } else {

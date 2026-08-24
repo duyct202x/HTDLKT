@@ -155,6 +155,7 @@ const RealtimeEngine = {
 
     this.updateLiveTickerContent(newEvt);
     this.refreshRealtimeViews();
+    this.triggerPriorityAlertToast(newEvt);
 
     // Dispatch realtime update to Active Charts & Maps
     if (window.ChartsManager && typeof ChartsManager.onRealtimeEvent === 'function') {
@@ -174,6 +175,49 @@ const RealtimeEngine = {
         kpiCards[1].classList.add('kpi-metric-flash');
         setTimeout(() => kpiCards[1].classList.remove('kpi-metric-flash'), 1300);
       }
+    }
+  },
+
+  lastToastTime: 0,
+  toastCounter: 0,
+
+  triggerPriorityAlertToast(newEvt) {
+    const now = Date.now();
+    // Only fire toast alert once every 14 seconds to maintain professional executive UX
+    if (now - this.lastToastTime < 14000) return;
+    this.lastToastTime = now;
+    this.toastCounter++;
+
+    const alertScenarios = [
+      {
+        message: "📋 Tổng Công ty Khánh Việt (KHATOCO) vừa nộp dự thảo Báo cáo Tài chính & Thu nộp Ngân sách Quý III/2026",
+        type: "info"
+      },
+      {
+        message: "⚠️ Cảnh báo ĐTC: Dự án Đường Vành đai 2 Nha Trang giải ngân chậm mức 1 (Đạt 28,4% kế hoạch năm)",
+        type: "warning"
+      },
+      {
+        message: "⚡ Đồng bộ thành công 1.450 bản ghi từ KBNN TABMIS KV XIV (Độ trễ: 42ms, Chuẩn LGSP 2.0)",
+        type: "success"
+      },
+      {
+        message: "📋 Công ty Yến Sào Khánh Hòa đã hoàn tất nộp Báo cáo Giám sát Tài chính Doanh nghiệp Nhà nước",
+        type: "info"
+      },
+      {
+        message: "⚠️ Cảnh báo Ngân sách: Xã Cam Lâm thu tiền sử dụng đất chậm tiến độ (Đạt 35,2% dự toán HĐND)",
+        type: "warning"
+      },
+      {
+        message: "⚡ Hệ thống Thuế TMS: Đối soát tự động 3.820 hóa đơn điện tử phát sinh trong ngày trên toàn tỉnh",
+        type: "success"
+      }
+    ];
+
+    const alert = alertScenarios[this.toastCounter % alertScenarios.length];
+    if (window.App && typeof App.showNotification === 'function') {
+      App.showNotification(alert.message, alert.type);
     }
   },
 

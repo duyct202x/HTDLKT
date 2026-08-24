@@ -15,6 +15,16 @@ const DeptWorkspaceManager = {
     query: ''
   },
 
+  refreshIcons() {
+    if (window.lucide && typeof window.lucide.createIcons === 'function') {
+      try {
+        window.lucide.createIcons();
+      } catch (err) {
+        console.warn('Lucide icon rendering warning:', err);
+      }
+    }
+  },
+
   renderGlobalFilterBar() {
     const f = this.currentFilters;
     return `
@@ -134,11 +144,54 @@ const DeptWorkspaceManager = {
     if (regionEl) this.currentFilters.region = regionEl.value;
     if (sectorEl) this.currentFilters.sector = sectorEl.value;
 
-    const yearText = yearEl ? yearEl.options[yearEl.selectedIndex].text.split('(')[0].trim() : 'Năm 2026';
-    const periodText = periodEl ? periodEl.options[periodEl.selectedIndex].text : 'Cả năm';
-    const regionText = regionEl ? regionEl.options[regionEl.selectedIndex].text : 'Toàn tỉnh';
+    if (window.AppState) {
+      AppState.set('year', this.currentFilters.year);
+      AppState.set('period', this.currentFilters.period);
+      AppState.set('region', this.currentFilters.region);
+      AppState.set('sector', this.currentFilters.sector);
+    }
+
+    this.filterTablesByRegion(this.currentFilters.region);
 
     App.showNotification(`Đã áp dụng bộ lọc: ${yearText} • ${periodText} • ${regionText}`, 'info');
+  },
+
+  applyRegionFilter(regionCode) {
+    this.currentFilters.region = regionCode;
+    const regionEl = document.getElementById('filterRegionSelect');
+    if (regionEl) {
+      regionEl.value = regionCode;
+    }
+    if (window.AppState) {
+      AppState.set('region', regionCode, true);
+    }
+    this.filterTablesByRegion(regionCode);
+  },
+
+  filterTablesByRegion(regionCode) {
+    let regionName = '';
+    const geoData = window.khanhHoa65UnitsGeoJson || window.khanhHoaRealGeoJson;
+    if (geoData && regionCode !== 'all') {
+      const feat = geoData.features.find(f => f.properties.id === regionCode);
+      if (feat) {
+        regionName = feat.properties.name;
+      }
+    }
+
+    const rows = document.querySelectorAll('.data-table tbody tr');
+    rows.forEach(row => {
+      if (!regionCode || regionCode === 'all') {
+        row.style.display = '';
+      } else {
+        const text = row.innerText.toLowerCase();
+        const cleanName = regionName.replace(/^(Phường|Xã|Đặc khu)\s+/i, '').toLowerCase();
+        if (text.includes(regionName.toLowerCase()) || text.includes(cleanName)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      }
+    });
   },
 
   handleSearchInput(val) {
@@ -977,6 +1030,7 @@ const DeptWorkspaceManager = {
 
     // 4. Load nội dung màn hình làm việc của phòng / Cổng
     this.loadWorkspace(deptId);
+    this.refreshIcons();
 
     App.showNotification(`Đã chuyển sang: ${config.domainName}`, 'info');
   },
@@ -1371,6 +1425,7 @@ const DeptWorkspaceManager = {
     document.querySelectorAll('#dynamicSidebarNav .nav-item').forEach(item => item.classList.remove('active'));
     if (navItem) navItem.classList.add('active');
     this.loadWorkspace(this.currentDeptId);
+    this.refreshIcons();
   },
 
   loadWorkspace(deptId) {
@@ -1768,6 +1823,7 @@ const DeptWorkspaceManager = {
       if (this.currentTab === 'entry' || this.currentTab === 'survey') {
         if (window.DataEntryManager) DataEntryManager.init();
       }
+      this.refreshIcons();
     }, 100);
   },
 
@@ -2135,7 +2191,7 @@ const DeptWorkspaceManager = {
                 </thead>
                 <tbody>
                   ${config.projects.map(p => `
-                    <tr>
+                    <tr data-project-id="${p.id}" onmouseenter="if(window.GisMapManager) GisMapManager.highlightProject('${p.id}')" onmouseleave="if(window.GisMapManager) GisMapManager.resetHighlight()" onclick="if(window.GisMapManager) GisMapManager.focusProject('${p.id}')" style="cursor: pointer;" title="Bấm hoặc rê chuột để định vị dự án trên bản đồ GIS">
                       <td><strong style="color: #002B8C;">${p.id}</strong></td>
                       <td><strong>${p.name}</strong></td>
                       <td>${p.owner}</td>
@@ -3323,5 +3379,113 @@ const DeptWorkspaceManager = {
 
     App.openModal('modalGeneric');
     if (window.lucide) window.lucide.createIcons();
+  },
+
+  // -------------------------------------------------------------
+  // 23. UNIVERSAL BIG DATA TABLE CONTROLS & EXPORT TOOLBAR
+  // -------------------------------------------------------------
+  renderAdminTableToolbar(wrapperId, tableId, title, exportTitle) {
+    return `
+      <div class="data-table-toolbar">
+        <div class="toolbar-left">
+          <div class="toolbar-title"><i data-lucide="table"></i> ${title || 'Bảng dữ liệu'}</div>
+          <div class="table-search-inline">
+            <i data-lucide="search" class="search-icon-sm"></i>
+            <input type="text" class="table-search-input-sm" placeholder="Tìm nhanh trong bảng..." oninput="DeptWorkspaceManager.filterTableRows('${tableId}', this.value)" />
+          </div>
+        </div>
+        <div class="toolbar-right">
+          <button class="btn btn-xs btn-outline btn-sticky-toggle" onclick="DeptWorkspaceManager.toggleStickyColumn('${tableId}', this)" title="Cố định / Bỏ cố định cột đầu tiên khi cuộn ngang">
+            <i data-lucide="pin"></i> <span>Cố định cột đầu</span>
+          </button>
+          <button class="btn btn-xs btn-primary" onclick="DeptWorkspaceManager.exportTableToExcel('${tableId}', '${exportTitle || title}')" title="Xuất dữ liệu bảng ra file Excel (.xlsx)">
+            <i data-lucide="file-spreadsheet"></i> <span>Xuất Excel</span>
+          </button>
+          <button class="btn btn-xs btn-outline" onclick="DeptWorkspaceManager.exportTableToPdf('${tableId}', '${exportTitle || title}')" title="In / Xuất báo cáo PDF">
+            <i data-lucide="printer"></i> <span>In PDF</span>
+          </button>
+          <button class="btn btn-xs btn-outline btn-fullscreen-toggle" onclick="DeptWorkspaceManager.toggleTableFullscreen('${wrapperId}', this)" title="Xem toàn màn hình (Phím tắt ESC để thoát)">
+            <i data-lucide="maximize-2"></i> <span>Toàn màn hình</span>
+          </button>
+        </div>
+      </div>
+    `;
+  },
+
+  filterTableRows(tableId, query) {
+    const table = document.getElementById(tableId);
+    if (!table) return;
+    const normalized = (query || '').trim().toLowerCase();
+    const rows = table.querySelectorAll('tbody tr');
+    rows.forEach(row => {
+      const text = row.innerText.toLowerCase();
+      if (!normalized || text.includes(normalized)) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  },
+
+  toggleStickyColumn(tableId, btn) {
+    const table = document.getElementById(tableId);
+    if (!table) return;
+    const isSticky = table.classList.toggle('freeze-first') || table.classList.toggle('table-sticky-col');
+    if (btn) {
+      btn.classList.toggle('active', isSticky);
+      const span = btn.querySelector('span');
+      if (span) span.innerText = isSticky ? 'Đã cố định cột' : 'Cố định cột đầu';
+    }
+    App.showNotification(isSticky ? 'Đã cố định cột đầu tiên khi cuộn ngang' : 'Đã bỏ cố định cột đầu', 'info');
+  },
+
+  toggleTableFullscreen(wrapperId, btn) {
+    const wrapper = document.getElementById(wrapperId);
+    if (!wrapper) return;
+    const isFull = wrapper.classList.toggle('is-fullscreen');
+    document.body.style.overflow = isFull ? 'hidden' : '';
+    if (btn) {
+      btn.innerHTML = isFull ? `<i data-lucide="minimize-2"></i> <span>Thu nhỏ</span>` : `<i data-lucide="maximize-2"></i> <span>Toàn màn hình</span>`;
+      if (window.lucide) window.lucide.createIcons();
+    }
+    App.showNotification(isFull ? 'Đã chuyển sang chế độ Xem toàn màn hình (Nhấn ESC để thoát)' : 'Đã thoát chế độ toàn màn hình', 'info');
+  },
+
+  exportTableToExcel(tableId, reportTitle) {
+    const table = document.getElementById(tableId);
+    if (!table) {
+      App.showNotification('Không tìm thấy dữ liệu bảng để xuất', 'warning');
+      return;
+    }
+    let csvContent = '\uFEFF'; // UTF-8 BOM
+    csvContent += `SỞ TÀI CHÍNH TỈNH KHÁNH HÒA\r\n`;
+    csvContent += `${(reportTitle || 'BÁO CÁO DỮ LIỆU TÀI CHÍNH').toUpperCase()}\r\n`;
+    csvContent += `Thời gian xuất: ${new Date().toLocaleString('vi-VN')}\r\n\r\n`;
+
+    const headers = Array.from(table.querySelectorAll('thead th')).map(th => `"${th.innerText.replace(/"/g, '""').trim()}"`);
+    csvContent += headers.join(',') + '\r\n';
+
+    const rows = table.querySelectorAll('tbody tr');
+    rows.forEach(r => {
+      if (r.style.display !== 'none') {
+        const cols = Array.from(r.querySelectorAll('td')).map(td => `"${td.innerText.replace(/"/g, '""').trim()}"`);
+        csvContent += cols.join(',') + '\r\n';
+      }
+    });
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `${(reportTitle || 'Bao_Cao').replace(/\s+/g, '_')}_${new Date().toISOString().slice(0,10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    App.showNotification(`Đã xuất bảng tính Excel: ${reportTitle}`, 'success');
+  },
+
+  exportTableToPdf(tableId, reportTitle) {
+    window.print();
   }
 };
