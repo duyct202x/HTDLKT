@@ -158,8 +158,14 @@
   }
 
   .app-topbar {
+    height: var(--topbar-height) !important;
+    min-height: var(--topbar-height) !important;
     padding: 0 14px;
     gap: 10px;
+  }
+
+  .app-container {
+    margin-top: var(--topbar-height) !important;
   }
 
   .topbar-left {
@@ -225,7 +231,9 @@
   .app-main {
     margin-left: 0 !important;
     width: 100% !important;
-    padding: 16px 14px;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding: 16px 14px !important;
   }
 
   /* 4.4. Bố cục Cột chuyển thành 100% */
@@ -272,14 +280,23 @@
     gap: 8px;
   }
 
-  /* 4.7. Bản đồ GIS Tablet */
+  /* 4.7. Bản đồ GIS Tablet & Mobile */
   .khanhhoa-map-wrapper {
-    flex-direction: column;
-    min-height: auto;
+    flex-direction: column !important;
+    min-height: auto !important;
+    width: 100% !important;
   }
 
   .map-svg-area {
-    min-height: 260px;
+    min-height: 260px !important;
+    width: 100% !important;
+  }
+
+  .map-district-sidebar {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin-top: 12px !important;
   }
 }
 
@@ -288,7 +305,7 @@
    ========================================================================== */
 @media (max-width: 768px) {
   :root {
-    --topbar-height: 58px;
+    --topbar-height: 64px;
   }
 
   body {
@@ -310,8 +327,15 @@
   }
 
   .app-topbar {
-    padding: 0 8px;
+    height: var(--topbar-height) !important;
+    min-height: var(--topbar-height) !important;
+    padding: 0 10px !important;
     gap: 6px;
+  }
+
+  .app-container {
+    margin-top: var(--topbar-height) !important;
+    padding-top: 6px !important;
   }
 
   .topbar-left {
@@ -402,7 +426,11 @@
 
   /* 5.2. Khung nội dung chính */
   .app-main {
-    padding: 10px 8px !important;
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding: 12px 10px !important;
   }
 
   /* 5.3. Lưới KPI CARDS 2 CỘT GỌN GÀNG (2x2 Grid) */
@@ -529,19 +557,27 @@
 
   /* 5.5. Domain Header Banner thu gọn */
   .domain-header-banner {
-    padding: 10px 12px !important;
-    margin-bottom: 10px !important;
+    padding: 12px 14px !important;
+    margin-top: 0 !important;
+    margin-bottom: 12px !important;
     border-radius: 10px !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   .banner-left {
     gap: 8px !important;
+    width: 100% !important;
   }
 
   .banner-icon {
     width: 32px !important;
     height: 32px !important;
     border-radius: 8px !important;
+    flex-shrink: 0 !important;
   }
 
   .banner-icon i,
@@ -559,24 +595,50 @@
     font-size: 10.5px !important;
   }
 
+  .domain-header-banner .badge {
+    white-space: normal !important;
+    word-break: break-word !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    line-height: 1.4 !important;
+    max-width: 100% !important;
+    font-size: 11.5px !important;
+    padding: 6px 10px !important;
+  }
+
   /* 5.6. Chart Containers */
   .chart-container {
     height: 220px !important;
   }
 
   /* 5.7. Tabs & Thanh điều hướng phân hệ */
+  .sub-tabs-bar,
   .dept-tabs,
   .nav-tabs,
   .sub-nav-tabs,
-  .tab-nav {
+  .tab-nav,
+  .tabs-nav {
     display: flex !important;
     overflow-x: auto !important;
     flex-wrap: nowrap !important;
     -webkit-overflow-scrolling: touch !important;
     gap: 6px !important;
-    padding-bottom: 4px !important;
+    padding: 4px !important;
+    margin-bottom: 12px !important;
+    scrollbar-width: none !important;
   }
 
+  .sub-tabs-bar::-webkit-scrollbar,
+  .dept-tabs::-webkit-scrollbar,
+  .nav-tabs::-webkit-scrollbar,
+  .sub-nav-tabs::-webkit-scrollbar,
+  .tab-nav::-webkit-scrollbar,
+  .tabs-nav::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .sub-tab-btn,
   .tab-btn,
   .dept-tab-item {
     white-space: nowrap !important;

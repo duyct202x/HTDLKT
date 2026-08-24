@@ -181,7 +181,7 @@ const ExternalPortalManager = {
     }
 
     // 2. Sync top horizontal tabs
-    const topTabs = document.querySelectorAll('#portalNavTabs .tab-btn');
+    const topTabs = document.querySelectorAll('#portalNavTabs .sub-tab-btn, #portalNavTabs .tab-btn');
     topTabs.forEach(b => b.classList.remove('active'));
     if (tabMap[tabName] !== undefined && topTabs[tabMap[tabName]]) {
       topTabs[tabMap[tabName]].classList.add('active');
@@ -205,35 +205,33 @@ const ExternalPortalManager = {
           <div class="banner-icon">
             <i data-lucide="${entity.type.includes('ENTERPRISE') ? 'building-2' : 'landmark'}"></i>
           </div>
-          <div class="banner-title" style="margin-bottom: 0;">
+          <div class="banner-title-group">
             <h2>Cổng tiếp nhận và nộp báo cáo trực tuyến</h2>
-            <p style="font-size: 12px; color: #64748b; margin-top: 2px;">Tiếp nhận nhiệm vụ, kê khai biểu mẫu và theo dõi kết quả thẩm tra số liệu</p>
+            <p>Tiếp nhận nhiệm vụ, kê khai biểu mẫu và theo dõi kết quả thẩm tra số liệu</p>
           </div>
         </div>
 
-        <div>
-          <span class="badge ${entity.type.includes('ENTERPRISE') ? 'badge-purple' : 'badge-info'}" style="font-size: 12.5px; padding: 7px 14px; font-weight: 600;">
+        <div style="margin-top: 6px; width: 100%;">
+          <span class="badge ${entity.type.includes('ENTERPRISE') ? 'badge-purple' : 'badge-info'}" style="font-size: 12px; padding: 6px 12px; font-weight: 600; white-space: normal; line-height: 1.4; max-width: 100%; word-break: break-word; display: inline-block;">
             <span class="pulse-dot"></span> ${entity.name} (${entity.badge})
           </span>
         </div>
       </div>
 
       <!-- PORTAL NAVIGATION TABS -->
-      <div class="card" style="margin-bottom: 16px; padding: 6px 12px;">
-        <div class="tabs-nav" id="portalNavTabs" style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">
-          <button class="tab-btn ${this.currentTab === 'tasks' ? 'active' : ''}" onclick="ExternalPortalManager.switchPortalTab('tasks', this)">
-            <i data-lucide="clipboard-list"></i> Nhiệm vụ báo cáo (${entity.assignedTasks.length})
-          </button>
-          <button class="tab-btn ${this.currentTab === 'fill_form' ? 'active' : ''}" onclick="ExternalPortalManager.switchPortalTab('fill_form', this)">
-            <i data-lucide="edit-3"></i> Kê khai & nộp báo cáo
-          </button>
-          <button class="tab-btn ${this.currentTab === 'history' ? 'active' : ''}" onclick="ExternalPortalManager.switchPortalTab('history', this)">
-            <i data-lucide="history"></i> Lịch sử nộp & Kết quả
-          </button>
-          <button class="tab-btn ${this.currentTab === 'guidance' ? 'active' : ''}" onclick="ExternalPortalManager.switchPortalTab('guidance', this)">
-            <i data-lucide="book-open"></i> Quy định & Biểu mẫu
-          </button>
-        </div>
+      <div class="sub-tabs-bar" id="portalNavTabs" style="margin-bottom: 16px;">
+        <button class="sub-tab-btn ${this.currentTab === 'tasks' ? 'active' : ''}" onclick="ExternalPortalManager.switchPortalTab('tasks', this)">
+          <i data-lucide="clipboard-list"></i> Nhiệm vụ báo cáo (${entity.assignedTasks.length})
+        </button>
+        <button class="sub-tab-btn ${this.currentTab === 'fill_form' ? 'active' : ''}" onclick="ExternalPortalManager.switchPortalTab('fill_form', this)">
+          <i data-lucide="edit-3"></i> Kê khai & nộp báo cáo
+        </button>
+        <button class="sub-tab-btn ${this.currentTab === 'history' ? 'active' : ''}" onclick="ExternalPortalManager.switchPortalTab('history', this)">
+          <i data-lucide="history"></i> Lịch sử nộp & Kết quả
+        </button>
+        <button class="sub-tab-btn ${this.currentTab === 'guidance' ? 'active' : ''}" onclick="ExternalPortalManager.switchPortalTab('guidance', this)">
+          <i data-lucide="book-open"></i> Quy định & Biểu mẫu
+        </button>
       </div>
 
       <!-- PORTAL BODY CONTENT -->
@@ -253,7 +251,7 @@ const ExternalPortalManager = {
     if (this.currentTab === 'tasks') {
       // Tab 1: Task Inbox
       container.innerHTML = `
-        <div class="card-header">
+        <div class="card-header" style="flex-wrap: wrap; gap: 8px;">
           <div>
             <h3 class="card-title"><i data-lucide="clipboard-check"></i> Danh sách chế độ báo cáo định kỳ cần thực hiện</h3>
             <p class="card-subtitle">Báo cáo theo quy định của Bộ Tài chính và UBND tỉnh Khánh Hòa phục vụ công tác điều hành ngân sách và kinh tế</p>
@@ -261,7 +259,7 @@ const ExternalPortalManager = {
           <span class="badge badge-info">Theo quy định pháp luật</span>
         </div>
 
-        <div class="api-service-grid" style="grid-template-columns: 1fr;">
+        <div class="api-service-grid" style="grid-template-columns: 1fr; gap: 12px;">
           ${entity.assignedTasks.map(t => {
             const isDone = t.status === 'SUBMITTED_APPROVED' || t.status === 'COMPLETED';
             const isPending = t.status === 'PENDING_APPROVAL';
@@ -272,31 +270,38 @@ const ExternalPortalManager = {
             const badgeClass = isDone ? 'badge-success' : isPending ? 'badge-info' : isDraft ? 'badge-warning' : 'badge-danger';
 
             return `
-              <div class="card" style="padding: 18px; background: #ffffff; border-left: 4px solid ${isDone ? '#10b981' : isPending ? '#0284c7' : isDraft ? '#f59e0b' : '#ef4444'}; margin-bottom: 12px;">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px;">
-                  <div>
-                    <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
-                      <span class="badge ${badgeClass}">${badgeText}</span>
-                      <span class="badge badge-purple">${t.authority || 'UBND tỉnh'}</span>
-                      <span style="font-size: 11.5px; color: #b45309; font-weight: 600;"><i data-lucide="clock"></i> Hạn chót nộp: <strong>${t.deadline}</strong></span>
-                    </div>
-                    <h4 style="font-size: 15px; font-weight: 700; color: #0f172a; line-height: 1.35;">${t.title}</h4>
-                    <div style="font-size: 12px; color: #475569; margin-top: 6px;">
-                      <span>Ý kiến phản hồi từ Sở Tài chính:</span> <em style="color: #0284c7; font-weight: 600;">"${t.feedback}"</em>
-                    </div>
+              <div class="card" style="padding: 16px; background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid ${isDone ? '#10b981' : isPending ? '#0284c7' : isDraft ? '#f59e0b' : '#ef4444'}; margin-bottom: 12px;">
+                <!-- Hàng 1: Huy hiệu trạng thái + Cơ quan giao + Hạn chót nộp -->
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 8px;">
+                  <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                    <span class="badge ${badgeClass}">${badgeText}</span>
+                    <span class="badge badge-purple">${t.authority || 'UBND tỉnh'}</span>
                   </div>
+                  <span style="font-size: 11.5px; color: #b45309; font-weight: 600; font-family: 'JetBrains Mono', monospace; display: flex; align-items: center; gap: 4px;">
+                    <i data-lucide="clock" style="width: 13px; height: 13px;"></i> Hạn chót: <strong>${t.deadline}</strong>
+                  </span>
+                </div>
 
-                  <div style="display: flex; gap: 8px;">
-                    ${!isDone ? `
-                      <button class="btn btn-primary btn-sm" onclick="ExternalPortalManager.openFormToFill('${t.campaignId}')">
-                        <i data-lucide="edit-3"></i> Kê khai & nộp báo cáo
-                      </button>
-                    ` : `
-                      <button class="btn btn-secondary btn-sm" onclick="App.showNotification('Đang tải văn bản báo cáo đã nộp...', 'info')">
-                        <i data-lucide="eye"></i> Xem lại bản đã nộp
-                      </button>
-                    `}
-                  </div>
+                <!-- Hàng 2: Tiêu đề chế độ báo cáo (chiếm trọn 100% bề ngang) -->
+                <h4 style="font-size: 14.5px; font-weight: 700; color: #0f172a; line-height: 1.35; margin: 0 0 8px 0;">${t.title}</h4>
+
+                <!-- Hàng 3: Ý kiến phản hồi / Hướng dẫn từ Sở Tài chính -->
+                <div style="font-size: 12px; color: #475569; margin-bottom: 10px; line-height: 1.45; background: #f8fafc; padding: 8px 12px; border-radius: 6px; border: 1px dashed #cbd5e1;">
+                  <span style="color: #64748b; font-weight: 600;">Ý kiến phản hồi từ Sở Tài chính:</span>
+                  <div style="color: #002B8C; font-weight: 600; margin-top: 2px;">"${t.feedback}"</div>
+                </div>
+
+                <!-- Hàng 4: Thao tác nộp / xem lại -->
+                <div style="display: flex; justify-content: flex-end; align-items: center; gap: 8px; border-top: 1px solid #f1f5f9; padding-top: 8px;">
+                  ${!isDone ? `
+                    <button class="btn btn-primary btn-sm" onclick="ExternalPortalManager.openFormToFill('${t.campaignId}')">
+                      <i data-lucide="edit-3"></i> Kê khai & nộp báo cáo
+                    </button>
+                  ` : `
+                    <button class="btn btn-secondary btn-sm" onclick="App.showNotification('Đang tải văn bản báo cáo đã nộp...', 'info')">
+                      <i data-lucide="eye"></i> Xem lại bản đã nộp
+                    </button>
+                  `}
                 </div>
               </div>
             `;

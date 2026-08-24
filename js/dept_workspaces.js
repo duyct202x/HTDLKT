@@ -493,6 +493,7 @@ const DeptWorkspaceManager = {
   },
 
   loadWorkspace(deptId) {
+    window.scrollTo({ top: 0, behavior: 'instant' });
     const container = document.getElementById('departmentWorkspaceContainer');
     if (!container) return;
 

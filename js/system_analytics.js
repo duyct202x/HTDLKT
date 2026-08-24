@@ -181,14 +181,14 @@ const SystemAnalyticsManager = {
 
       <div class="api-service-grid" style="grid-template-columns: 1fr;">
         ${matchedDocs.map(d => `
-          <div class="card" style="padding: 14px; background: #ffffff; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e2e8f0;">
-            <div>
-              <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 4px;">
+          <div class="card" style="padding: 14px; background: #ffffff; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border: 1px solid #e2e8f0; margin-bottom: 10px;">
+            <div style="flex: 1; min-width: 220px;">
+              <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 4px;">
                 <span class="badge badge-purple">${d.docId}</span>
                 <span class="badge badge-info">${d.dept}</span>
                 <span style="font-size: 11px; color: #475569;">${d.issueDate}</span>
               </div>
-              <h4 style="color: #0f172a; font-size: 14px; font-weight: 700;">${d.title}</h4>
+              <h4 style="color: #0f172a; font-size: 14px; font-weight: 700; margin: 4px 0 2px 0;">${d.title}</h4>
               <div style="font-size: 11.5px; color: #475569; margin-top: 2px;">
                 Số văn bản: <strong style="color: #0f172a;">${d.regNumber}</strong> • Ban hành: <span style="color: #334155; font-weight: 600;">${d.issueDate}</span>
               </div>
@@ -200,13 +200,13 @@ const SystemAnalyticsManager = {
         `).join('')}
 
         ${matchedTaxpayers.map(t => `
-          <div class="card" style="padding: 14px; background: #ffffff; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e2e8f0;">
-            <div>
-              <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 4px;">
+          <div class="card" style="padding: 14px; background: #ffffff; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border: 1px solid #e2e8f0; margin-bottom: 10px;">
+            <div style="flex: 1; min-width: 220px;">
+              <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 4px;">
                 <span class="badge badge-success">Doanh Nghiệp Trọng Điểm</span>
                 <span style="font-size: 11px; color: #475569;">MST: ${t.mst}</span>
               </div>
-              <h4 style="color: #0f172a; font-size: 14px; font-weight: 700;">${t.name}</h4>
+              <h4 style="color: #0f172a; font-size: 14px; font-weight: 700; margin: 4px 0 2px 0;">${t.name}</h4>
               <div style="font-size: 11.5px; color: #475569; margin-top: 2px;">
                 Chỉ tiêu: ${t.target} • Thực thu: <strong style="color: #0284c7;">${t.actual}</strong> (${t.rate})
               </div>
@@ -234,7 +234,7 @@ const SystemAnalyticsManager = {
     if (!container) return;
 
     container.innerHTML = `
-      <div class="card-header">
+      <div class="card-header" style="flex-wrap: wrap; gap: 10px;">
         <div>
           <h3 class="card-title"><i data-lucide="alert-triangle"></i> Trung tâm giám sát và cảnh báo sớm kinh tế tỉnh Khánh Hòa</h3>
           <p class="card-subtitle">Hệ thống tự động quét và kích hoạt quy tắc cảnh báo dự án chậm giải ngân, doanh nghiệp rủi ro thuế và nhà đất quá hạn</p>
@@ -244,27 +244,37 @@ const SystemAnalyticsManager = {
         </button>
       </div>
 
-      <div class="api-service-grid" style="grid-template-columns: 1fr;">
+      <div class="api-service-grid" style="grid-template-columns: 1fr; gap: 12px;">
         ${this.warningRules.map(w => `
-          <div class="card" style="padding: 16px; background: #ffffff; border-left: 4px solid ${w.level === 'HIGH' ? '#ef4444' : w.level === 'MEDIUM' ? '#f59e0b' : '#3b82f6'}; margin-bottom: 10px; border: 1px solid #e2e8f0; border-left-width: 4px;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
-              <div style="display: flex; gap: 8px; align-items: center;">
+          <div class="card" style="padding: 16px; background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid ${w.level === 'HIGH' ? '#ef4444' : w.level === 'MEDIUM' ? '#f59e0b' : '#3b82f6'}; margin-bottom: 12px;">
+            <!-- Hàng 1: Huy hiệu mức độ + Lĩnh vực + Ngày tháng -->
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 8px;">
+              <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
                 <span class="badge ${w.level === 'HIGH' ? 'badge-danger' : w.level === 'MEDIUM' ? 'badge-warning' : 'badge-info'}">
                   ${w.level === 'HIGH' ? 'Mức nguy cơ cao' : w.level === 'MEDIUM' ? 'Mức cảnh báo' : 'Theo dõi'}
                 </span>
                 <span class="badge badge-purple">${w.category}</span>
-                <strong style="color: #0f172a; font-size: 14.5px;">${w.title}</strong>
               </div>
-              <span style="font-size: 11.5px; color: #64748b; font-weight: 500;">${w.date}</span>
+              <span style="font-size: 11.5px; color: #64748b; font-weight: 500; font-family: 'JetBrains Mono', monospace;">${w.date}</span>
             </div>
 
-            <div style="font-size: 12.5px; color: #334155; margin: 6px 0;">
+            <!-- Hàng 2: Tiêu đề cảnh báo (riêng biệt, rõ ràng, không bị ép ngang) -->
+            <h4 style="color: #0f172a; font-size: 14.5px; font-weight: 700; margin: 0 0 6px 0; line-height: 1.35;">${w.title}</h4>
+
+            <!-- Hàng 3: Đối tượng ảnh hưởng -->
+            <div style="font-size: 12.5px; color: #334155; margin-bottom: 6px; line-height: 1.4;">
               <strong>Đối tượng ảnh hưởng:</strong> <span style="color: #002B8C; font-weight: 600;">${w.target}</span>
             </div>
-            <p style="font-size: 12px; color: #475569; line-height: 1.4;">${w.detail}</p>
+
+            <!-- Hàng 4: Chi tiết mô tả -->
+            <p style="font-size: 12px; color: #475569; line-height: 1.45; margin-bottom: 10px;">${w.detail}</p>
             
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 8px; border-top: 1px solid #f1f5f9;">
-              <div style="font-size: 11.5px; color: #15803d; font-weight: 600;"><i data-lucide="check-circle-2"></i> ${w.action}</div>
+            <!-- Hàng 5: Hành động đề xuất + Nút xử lý -->
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; padding-top: 10px; border-top: 1px solid #f1f5f9;">
+              <div style="font-size: 11.5px; color: #15803d; font-weight: 600; display: flex; align-items: center; gap: 5px; flex: 1; min-width: 180px;">
+                <i data-lucide="check-circle-2" style="width: 14px; height: 14px; flex-shrink: 0;"></i> 
+                <span>${w.action}</span>
+              </div>
               <button class="btn btn-primary btn-sm" onclick="App.showNotification('Đang mở quy trình phối hợp xử lý cho [${w.id}]...', 'info')">
                 <i data-lucide="external-link"></i> Xử lý cảnh báo
               </button>
