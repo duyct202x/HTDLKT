@@ -39,7 +39,6 @@ window.GisMapManager = {
       <div id="${containerId}_badge" class="gis-map-info-badge">
         <div class="gis-badge-top-row">
           <span class="gis-badge-tag">65 Đơn Vị Cấp Xã (48 Xã, 16 Phường, 01 Đặc khu)</span>
-          <span class="gis-badge-doc">NQ 1667/NQ-UBTVQH15</span>
         </div>
         <div id="${containerId}_layerTitle" class="gis-badge-title">Thu ngân sách nhà nước theo xã, phường, đặc khu</div>
         <div id="${containerId}_layerLead" class="gis-badge-lead">Điểm dẫn đầu: 3.850 Tỷ (Phường Nha Trang) & 1.650 Tỷ (Phường Phan Rang)</div>
@@ -222,7 +221,7 @@ window.GisMapManager = {
             <span style="font-size: 9.5px; font-weight: 700; padding: 2px 7px; border-radius: 4px; background: ${p.type === 'Phường' ? '#eff6ff' : p.type === 'Đặc khu' ? '#f0fdf4' : '#f8fafc'}; color: ${p.type === 'Phường' ? '#1d4ed8' : p.type === 'Đặc khu' ? '#0F52BA' : '#15803d'}; border: 1px solid currentColor;">${p.type}</span>
           </div>
           <div style="font-size: 10.5px; color: #64748b; margin-bottom: 6px; border-bottom: 1px solid #f1f5f9; padding-bottom: 4px;">
-            Đơn vị hành chính cấp cơ sở (NQ 1667/NQ-UBTVQH15)
+            Đơn vị hành chính cấp cơ sở (trực thuộc tỉnh)
           </div>
           <div style="font-size: 11.5px; display: flex; flex-direction: column; gap: 3.5px;">
             <div><span style="color: #64748b;">Thu NSNN:</span> <strong style="color: #002B8C;">${p.revenue.toLocaleString('vi-VN')} Tỷ (${p.revenue_rate})</strong></div>
